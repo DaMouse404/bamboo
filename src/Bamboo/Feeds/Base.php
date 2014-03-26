@@ -7,26 +7,44 @@ use Bamboo\Feeds\ClientFake;
 
 class Base {
 
-    public static $_baseUrl = "http://d.bbc.co.uk/";
-    public static $_version = "ibl/v1/";
-    public static $params;
-
-    public $defaultParams = array(
+    private $_baseUrl = "http://d.bbc.co.uk/";
+    private $_version = "ibl/v1/";
+    private $_params;
+    private $_client;
+    private $_defaultParams = array(
                                 "api_key" => "",
                                 "availability" => "all",
                                 "lang" => "en",
                                 "rights" => "web"
             );
 
+    public static $instance;
+
     public function __construct() {
-        $client = self::getClient();
+        $this->_client = $this->_getClient();
+    }
+
+    public static function getInstance() {
+        if (!self::$instance) {
+        self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    public function setConfig($params) {
+        $this->_params = $params;
+    }
+
+    public function request($feed) {
+        $params = array_merge($this->_defaultParams, $this->_params);
 
         try {
-          $request = $client->get(self::$_version . $feed . ".json", 
+          $request = $this->_client->get($this->_version . $feed . ".json", 
               array(), 
               array(
                 'query' => $params,
-                'proxy' =>  '',
+                'proxy' =>  'tcp://www-cache.reith.bbc.co.uk:80',
               )
           );
         } catch (RequestException $e) {
@@ -36,14 +54,6 @@ class Base {
         $object = $this->_parseResponse($request);
 
         return $object;
-    }
-
-    public static function getInstance() {
-        if (!self::$instance) {
-        self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 
     private function _parseResponse($request) {
@@ -57,22 +67,10 @@ class Base {
         return $object;
     }
 
-    public function setConfig($params) {
-        die('1');
-        self::$params = $params;
-    }
-    public static function getClient() {
-        if (!self::$_client) {    
-          $client = self::setClient();
-          self::$_client = $client;
-        }
-        return self::$_client;
-    }
-
-    public static function setClient() {
+    private function _getClient() {
         if (isset($_GET['_fake'])) {
-        return new ClientFake();
+            return new ClientFake();
         } 
-        return new Client(self::$_baseUrl);
+        return new Client($this->_baseUrl);
     }
 }
