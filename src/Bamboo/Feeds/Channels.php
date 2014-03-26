@@ -1,16 +1,17 @@
 <?php
 
-namespace Guzzle\Http;
+//namespace Guzzle\Http;
 namespace Bamboo\Feeds;
 
-use Bamboo\Models\Episode;
+//include('../../../webapp/php/lib/vendor/bbc/bamboo2/src/Feeds/Base.php');
+
+//use Bamboo\Models\Episode;
 //so Bamboo_Models_Episode as new Episode()
 
 class Channels extends Base {
-    $_feed = 'channels';
+    public $_feed = 'channels';
 
     public function __construct() {
-        die('1');
         parent::__construct();
     }
 

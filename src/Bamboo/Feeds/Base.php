@@ -9,6 +9,7 @@ class Base {
 
     public static $_baseUrl = "http://d.bbc.co.uk/";
     public static $_version = "ibl/v1/";
+    public static $params;
 
     public $defaultParams = array(
                                 "api_key" => "",
@@ -19,6 +20,7 @@ class Base {
 
     public function __construct() {
         $client = self::getClient();
+
         try {
           $request = $client->get(self::$_version . $feed . ".json", 
               array(), 
@@ -36,6 +38,14 @@ class Base {
         return $object;
     }
 
+    public static function getInstance() {
+        if (!self::$instance) {
+        self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
     private function _parseResponse($request) {
         $response = $request->send();
         $response->getBody();
@@ -45,6 +55,11 @@ class Base {
         $object = json_decode($json);
 
         return $object;
+    }
+
+    public function setConfig($params) {
+        die('1');
+        self::$params = $params;
     }
     public static function getClient() {
         if (!self::$_client) {    
