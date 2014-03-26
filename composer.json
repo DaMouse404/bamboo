@@ -1,0 +1,20 @@
+{
+    "name": "bbc/bamboo2",
+    "type": "library",
+    "description": "PHP client library for iBL",
+    "license": "BSD",
+    "require": {
+        "guzzle/guzzle": "v3.8.1"
+    },
+    "require-dev": {
+        "ext-curl": "*",
+        "psr/log": "~1",
+        "phpunit/phpunit": "4.*"
+    },
+    "config": {
+       "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "classmap": ["src"]
+    }
+}
