@@ -37,6 +37,7 @@ class Client {
     }
 
     public function request($feed, $params) {
+
         $params = array_merge($this->_defaultParams, $this->_params, $params);
 
         try {
@@ -50,8 +51,8 @@ class Client {
         } catch (RequestException $e) {
 
         }
-        $response = $request->send();
 
+        $response = $request->send();
         $object = $this->_parseResponse($response);
 
         return $object;

@@ -4,10 +4,6 @@ namespace Bamboo\Models;
 
 class Channel extends Base {
 
-	public function __construct($object) {
-		parent::__construct($object);
-	}
-
 	public function getUnregionalisedID() {
       if (preg_match('/(bbc_[a-z]+)(_.+)/i', $this->id, $matches)) {
           return $matches[1];

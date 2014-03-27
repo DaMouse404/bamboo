@@ -4,16 +4,10 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Channel;
 
-class Channels {
+class Channels extends Base {
 
-    private $_feed = 'channels';
-    private $_response;
-
-    public function __construct($params = array()) {
- 	    $this->_response = Client::getInstance()->request(
- 	    	$this->_feed, $params
- 	    );
-    }
+    protected $_feed = 'channels';
+    protected $_response;
 
     /*
      * Return array of Channel models
