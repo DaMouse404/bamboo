@@ -98,11 +98,11 @@ class Episode extends Elements {
      */
     public function getPriorityVersion($preference = null) {
         if (isset($this->versions[0])) {
-            $result = $this->versions[0];
+            $result = new Version($this->versions[0]);
             if ($preference) {
                 foreach ($this->versions as $version) {
                     if ($version->kind === $preference) {
-                        $result = $version;
+                        $result = new Version($version);
                     }
                 }
             }
@@ -201,12 +201,63 @@ class Episode extends Elements {
     }
 
     public function getPriorityDuration($version) {
-    {
         if (isset($this->duration->text)) {
             return $this->duration->text;
         }
         return "";
     }
 
-  }
+    /**
+     * Checks if we need to show version flags
+     *
+     * @return bool
+     */
+    public function showFlags()
+    {
+        // if the episode has any versions at all
+        if (isset($this->versions[0])) {
+            $version = new Version($this->versions[0]);
+            // we won't need version flags in this scenario: there's only the original version and has no HD
+            if ((count($this->versions) === 1) &&
+                ($version->getKind() === 'original') &&
+                !($version->isHD())) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if HD exists on any version
+     *
+     * @return bool
+     */
+    public function hasHD()
+    {
+        if (isset($this->versions[0])) {
+            foreach ($this->versions as $version) {
+                $version = new Version($version);
+                if ($version->isHD()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Get the versions attached to this episode. Returns an array of {@link BBC_Service_Bamboo_Models_Version} objects
+     *
+     * @return array
+     */
+    public function getVersions() {
+        $versions = array();
+        foreach ($this->versions as $version) {
+          $versions[] = new Version($version);
+        }
+        return $versions;
+    }
+
 }

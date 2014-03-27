@@ -2,7 +2,6 @@
 
 namespace Bamboo\Feeds;
 
-
 class Base {
 
     public function __construct($params = array()) {

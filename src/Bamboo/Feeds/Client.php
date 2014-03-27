@@ -26,7 +26,7 @@ class Client {
 
     public static function getInstance() {
         if (!self::$instance) {
-        self::$instance = new self();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -49,9 +49,9 @@ class Client {
               )
           );
         } catch (RequestException $e) {
-
+            die($e->getMessage());
         }
-
+//var_dump($request->getUrl());die;
         $response = $request->send();
         $object = $this->_parseResponse($response);
 

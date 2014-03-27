@@ -13,6 +13,8 @@ class Large extends Elements {
     public $stacked;
     public $count = 0;
 
+    private $_broadcastType = 'broadcast';
+
     /**
      * @todo Not sure this is relevant any longer
      */
@@ -20,7 +22,7 @@ class Large extends Elements {
         // @codingStandardsIgnoreStart
         $episodes = array();
         foreach ($this->initial_children as $episode) {
-            if ($episode->type === 'broadcast') {
+            if ($episode->type === $this->_broadcastType) {
                 $object = new Broadcast($episode);
             } else {
                 $object = new Episode($episode);
