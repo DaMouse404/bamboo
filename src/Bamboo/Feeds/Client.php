@@ -2,10 +2,10 @@
 
 namespace Bamboo\Feeds;
 
-use Guzzle\Http\Client;
+use Guzzle\Http;
 use Bamboo\Feeds\ClientFake;
 
-class Base {
+class Client {
 
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
@@ -36,8 +36,8 @@ class Base {
         $this->_params = $params;
     }
 
-    public function request($feed) {
-        $params = array_merge($this->_defaultParams, $this->_params);
+    public function request($feed, $params) {
+        $params = array_merge($this->_defaultParams, $this->_params, $params);
 
         try {
           $request = $this->_client->get($this->_version . $feed . ".json", 
@@ -50,14 +50,15 @@ class Base {
         } catch (RequestException $e) {
 
         }
+        $response = $request->send();
 
-        $object = $this->_parseResponse($request);
+        $object = $this->_parseResponse($response);
 
         return $object;
     }
 
-    private function _parseResponse($request) {
-        $response = $request->send();
+    private function _parseResponse($response) {
+        
         $response->getBody();
         $array = $response->json();
 
@@ -71,6 +72,6 @@ class Base {
         if (isset($_GET['_fake'])) {
             return new ClientFake();
         } 
-        return new Client($this->_baseUrl);
+        return new Http\Client($this->_baseUrl);
     }
 }
