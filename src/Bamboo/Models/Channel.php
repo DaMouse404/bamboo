@@ -20,7 +20,7 @@ class Channel extends Base {
    * @return bool
    */
   public function isChildrens() {
-      return $this->_id == 'cbbc' || $this->_id == 'cbeebies';
+      return $this->id == 'cbbc' || $this->id == 'cbeebies';
   }
   
 }
