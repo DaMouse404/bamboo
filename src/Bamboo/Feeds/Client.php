@@ -9,8 +9,8 @@ class Client {
 
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
-    private $_params;
-    private $_client;
+    private $_config;
+    private $_httpClient;
     private $_defaultParams = array(
                                 "api_key" => "",
                                 "availability" => "all",
@@ -20,10 +20,6 @@ class Client {
 
     public static $instance;
 
-    public function __construct() {
-        $this->_client = $this->_getClient();
-    }
-
     public static function getInstance() {
         if (!self::$instance) {
             self::$instance = new self();
@@ -32,16 +28,20 @@ class Client {
         return self::$instance;
     }
 
-    public function setConfig($params) {
-        $this->_params = $params;
+    public function setHttpClient(Client $httpClient) {
+        $this->_httpClient = $httpClient;
+    }
+
+    public function setConfig($config) {
+        $this->_config = $config;
     }
 
     public function request($feed, $params) {
-
-        $params = array_merge($this->_defaultParams, $this->_params, $params);
+        $client = $this->_getClient();
+        $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
-          $request = $this->_client->get($this->_version . $feed . ".json", 
+          $request = $client->get($this->_version . $feed . ".json", 
               array(), 
               array(
                 'query' => $params,
@@ -59,10 +59,8 @@ class Client {
     }
 
     private function _parseResponse($response) {
-        
-        $response->getBody();
+    
         $array = $response->json();
-
         $json = json_encode($array);
         $object = json_decode($json);
 
@@ -70,9 +68,9 @@ class Client {
     }
 
     private function _getClient() {
-        if (isset($_GET['_fake'])) {
-            return new ClientFake();
-        } 
+        if ($this->_httpClient) {
+            return $this->_httpClient;
+        }
         return new Http\Client($this->_baseUrl);
     }
 }
