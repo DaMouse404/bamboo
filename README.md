@@ -2,8 +2,12 @@
 
 Setup dependencies.
 
-     composer install
-     
+    composer install
+
+Run Unit tests.
+
+	./vendor/bin/phpunit
+
 Usage
 
     try {
