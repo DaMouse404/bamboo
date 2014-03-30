@@ -2,14 +2,17 @@
 
 namespace Bamboo\Tests;
 
+use \Bamboo\Feeds\Client;
+use \Bamboo\Feeds\HttpFake;
+
 /**
  * Base testcase class for all Bamboo testcases.
  */
 abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 {
-	public function setFakeClient() {
-        Bamboo\Feeds\Client::getInstance()->setHttpClient(
-            new Bamboo\Feeds\HttpClient
+	protected function setup() {
+        Client::getInstance()->setHttpClient(
+            new HttpFake
         );
 	}
 }

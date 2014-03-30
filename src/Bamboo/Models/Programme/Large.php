@@ -8,8 +8,8 @@ use Bamboo\Models\Episode;
 class Large extends Elements {
   
      // @codingStandardsIgnoreStart
-    protected $initial_children = array();
-    protected $count = 0;
+    protected $_initial_children = array();
+    protected $_count = 0;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -29,7 +29,7 @@ class Large extends Elements {
     public function getEpisodes() {
         // @codingStandardsIgnoreStart
         $list = array();
-        foreach ($this->initial_children as $item) {
+        foreach ($this->_initial_children as $item) {
             $list[] = new Episode($item);
         }
         //return $this->initial_children;
@@ -42,7 +42,7 @@ class Large extends Elements {
      */
     public function getTotalEpisodeCount() {
         // @codingStandardsIgnoreStart
-        return $this->count;
+        return $this->_count;
         // @codingStandardsIgnoreEnd
     }
 
@@ -60,8 +60,8 @@ class Large extends Elements {
      */
     public function getLatestAvailableEpisode() {
         // @codingStandardsIgnoreStart
-        if (isset($this->initial_children[0])) {
-            return new Episode($this->initial_children[0]);
+        if (isset($this->_initial_children[0])) {
+            return new Episode($this->_initial_children[0]);
         }
         return "";
         // @codingStandardsIgnoreEnd

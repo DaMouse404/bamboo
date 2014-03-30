@@ -4,9 +4,9 @@ namespace Bamboo\Models;
 
 class Promotion extends Elements {
 
-    public $url = "";
-    public $subtitle = "";
-    public $labels;
+    protected $url = "";
+    protected $subtitle = "";
+    protected $labels;
 
 
     /**
@@ -16,7 +16,7 @@ class Promotion extends Elements {
      * @return string
      */
     public function getSubtitle() {
-        return $this->subtitle;
+        return $this->_subtitle;
     }
 
     /**
@@ -26,8 +26,8 @@ class Promotion extends Elements {
      * @return string
      */
     public function getDescription() {
-        if (isset($this->synopses->small)) {
-            return $this->synopses->small;
+        if (isset($this->_synopses->small)) {
+            return $this->_synopses->small;
         }
         return "";
     }
@@ -39,8 +39,8 @@ class Promotion extends Elements {
      * @return string
      */
     public function getPromotionLabel() {
-        if (isset($this->labels->promotion)) {
-            return $this->labels->promotion;
+        if (isset($this->_labels->promotion)) {
+            return $this->_labels->promotion;
         }
         return "";
     }
@@ -52,7 +52,7 @@ class Promotion extends Elements {
      * @return string
      */
     public function getUrl() {
-        return $this->url;
+        return $this->_url;
     }
 
 }

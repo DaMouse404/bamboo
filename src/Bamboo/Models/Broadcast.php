@@ -4,20 +4,10 @@ namespace Bamboo\Models;
 
 class Broadcast extends Elements {
 
-    public $type = "";
-    public $start_time = "";
-    public $end_time = "";
-    public $duration = array();
-    public $episode = "";
-
-    /**
-     * Get type 
-     * 
-     * @return string
-     */
-    public function getType() {
-        return $this->type;
-    }
+    protected $_start_time = "";
+    protected $_end_time = "";
+    protected $_duration;
+    protected $_episode;
 
     /**
      * Get start time from episode
@@ -25,7 +15,7 @@ class Broadcast extends Elements {
      * @return string
      */
     public function getStartTime() {
-        return $this->start_time;
+        return $this->_start_time;
     }
 
     /**
@@ -34,7 +24,7 @@ class Broadcast extends Elements {
      * @return string
      */
     public function getEndTime() {
-        return $this->end_time;
+        return $this->_end_time;
     }
 
     /**
@@ -43,7 +33,7 @@ class Broadcast extends Elements {
      * @return BBC_Service_Bamboo_Models_Episode
      */
     public function getEpisode() {
-        $episodeModel = new Episode($this->episode);
+        $episodeModel = new Episode($this->_episode);
         return $episodeModel;
     }
 }

@@ -5,19 +5,19 @@ namespace Bamboo\Models;
 class Version extends Base
 {
     // Standard version properties
-    public $kind = "";
-    public $availability;
-    public $type = "";
-    public $hd = false;
-    public $download = false;
-    public $duration;
-    public $rrc;
-    public $guidance;
+    protected $_kind = "";
+    protected $_availability;
+    protected $_type = "";
+    protected $_hd = false;
+    protected $_download = false;
+    protected $_duration;
+    protected $_rrc;
+    protected $_guidance;
     // @codingStandardsIgnoreStart
-    public $credits_timestamp = "";
-    public $first_broadcast = '';
+    protected $_credits_timestamp = "";
+    protected $_first_broadcast = '';
     // @codingStandardsIgnoreEnd
-    public $events;
+    protected $_events;
 
     /**
      * Returns the 2 letter abbreviation used for a version
@@ -47,8 +47,8 @@ class Version extends Base
      * @return string
      */
     public function getAvailability($type = 'end') {
-        if (isset($this->availability->$type)) {
-            return $this->availability->$type;
+        if (isset($this->_availability->$type)) {
+            return $this->_availability->$type;
         }
         return "";
     }
@@ -59,7 +59,7 @@ class Version extends Base
      * @return string
      */
     public function getOnwardJourneyTime() {
-        foreach ($this->events as $event) {
+        foreach ($this->_events as $event) {
             if ($event->kind == 'onward_journey') {
                 // @codingStandardsIgnoreStart
                 return $event->time_offset_seconds;
@@ -76,8 +76,8 @@ class Version extends Base
      */
     public function getRemainingAvailability()
     {
-        if (isset($this->availability->remaining)) {
-            return $this->availability->remaining->text;
+        if (isset($this->_availability->remaining)) {
+            return $this->_availability->remaining->text;
         }
         return "";
     }
@@ -89,8 +89,8 @@ class Version extends Base
      */
     public function getDuration()
     {
-        if (isset($this->duration->text)) {
-            return $this->duration->text;
+        if (isset($this->_duration->text)) {
+            return $this->_duration->text;
         }
         return "";
     }
@@ -101,7 +101,7 @@ class Version extends Base
      * @return string
      */
     public function getKind() {
-        return $this->kind;
+        return $this->_kind;
     }
 
     /**
@@ -110,7 +110,7 @@ class Version extends Base
      * @return stdClass
      */
     public function getRRC() {
-        return $this->rrc;
+        return $this->_rrc;
     }
 
     /**
@@ -119,8 +119,8 @@ class Version extends Base
      * @return string
      */
     public function getRRCShort() {
-        if (isset($this->rrc->description) && isset($this->rrc->description->small)) {
-            return $this->rrc->description->small;
+        if (isset($this->_rrc->description) && isset($this->_rrc->description->small)) {
+            return $this->_rrc->description->small;
         }
 
         return '';
@@ -132,8 +132,8 @@ class Version extends Base
      * @return string
      */
     public function getRRCLong() {
-        if (isset($this->rrc->description) && isset($this->rrc->description->large)) {
-            return $this->rrc->description->large;
+        if (isset($this->_rrc->description) && isset($this->_rrc->description->large)) {
+            return $this->_rrc->description->large;
         }
 
         return '';
@@ -145,8 +145,8 @@ class Version extends Base
      * @return string
      */
     public function getRRCURL() {
-        if (isset($this->rrc->url)) {
-            return $this->rrc->url;
+        if (isset($this->_rrc->url)) {
+            return $this->_rrc->url;
         }
 
         return '';
@@ -158,7 +158,7 @@ class Version extends Base
      * @return stdClass
      */
     public function getGuidanceObj() {
-        return $this->guidance;
+        return $this->_guidance;
     }
 
     /**
@@ -169,7 +169,7 @@ class Version extends Base
      */
     public function getFirstBroadcast() {
         // @codingStandardsIgnoreStart
-        return $this->first_broadcast;
+        return $this->_first_broadcast;
         // @codingStandardsIgnoreEnd
     }
 
@@ -183,8 +183,8 @@ class Version extends Base
      * @return string
      */
     public function getSmallGuidance() {
-        if (isset($this->guidance->text) && isset($this->guidance->text->small)) {
-            return $this->guidance->text->small;
+        if (isset($this->_guidance->text) && isset($this->_guidance->text->small)) {
+            return $this->_guidance->text->small;
         }
         return '';
     }
@@ -195,8 +195,8 @@ class Version extends Base
      * @return string
      */
     public function getMediumGuidance() {
-        if (isset($this->guidance->text) && isset($this->guidance->text->medium)) {
-            return $this->guidance->text->medium;
+        if (isset($this->_guidance->text) && isset($this->_guidance->text->medium)) {
+            return $this->_guidance->text->medium;
         }
         return '';
     }
@@ -207,8 +207,8 @@ class Version extends Base
      * @return string
      */
     public function getLargeGuidance() {
-        if (isset($this->guidance->text) && isset($this->guidance->text->large)) {
-            return $this->guidance->text->large;
+        if (isset($this->_guidance->text) && isset($this->_guidance->text->large)) {
+            return $this->_guidance->text->large;
         }
         return '';
     }
@@ -219,8 +219,8 @@ class Version extends Base
      * @return string
      */
     public function getGuidanceID() {
-        if (isset($this->guidance->id)) {
-            return $this->guidance->id;
+        if (isset($this->_guidance->id)) {
+            return $this->_guidance->id;
         }
 
         return '';
@@ -232,7 +232,7 @@ class Version extends Base
      * @return bool
      */
     public function isDownload() {
-        return !!$this->download;
+        return !!$this->_download;
     }
 
     /**
@@ -241,7 +241,7 @@ class Version extends Base
      * @return bool
      */
     public function isHD() {
-        return !!$this->hd;
+        return !!$this->_hd;
     }
 
     /**
@@ -251,7 +251,7 @@ class Version extends Base
      * @return string
      */
     public function getSlug() {
-        switch ($this->kind) {
+        switch ($this->_kind) {
             case 'signed':
                 $slug = 'sign';
                 break;

@@ -4,11 +4,11 @@ namespace Bamboo\Models;
 
 class Category extends Base {
 
-  public $kind = "";
-  public $child_episode_count = 0;
+  protected $_kind = "";
+  protected $_child_episode_count = 0;
 
   public function getKind() {
-      return $this->kind;
+      return $this->_kind;
   }
 
   /**
@@ -17,7 +17,7 @@ class Category extends Base {
    * @return int
    */
   public function getChildEpisodeCount() {
-      return $this->child_episode_count;
+      return $this->_child_episode_count;
   }
 
 
@@ -26,7 +26,7 @@ class Category extends Base {
    * @return bool
    */
   public function isChildrens() {
-      return $this->id == 'cbbc' || $this->id == 'cbeebies';
+      return $this->_id == 'cbbc' || $this->_id == 'cbeebies';
   }
   
 }

@@ -4,23 +4,22 @@ namespace Bamboo\Models;
 
 class Episode extends Elements {
 
-  public $title;
-  public $subtitle;
-  public $versions;
-  public $labels;
-  public $release_date;
-  public $duration;
+  protected $_subtitle;
+  protected $_versions = array();
+  protected $_labels;
+  protected $_release_date;
+  protected $_duration;
 
   public function getTimelinessLabel() {
-      if (isset($this->labels->time)) {
-          return $this->labels->time;
+      if (isset($this->_labels->time)) {
+          return $this->_labels->time;
       }
       return "";
   }
 
 
   public function getCompleteTitle() {
-      return $this->title . ($this->subtitle ? ' - ' . $this->subtitle : '');
+      return $this->_title . ($this->_subtitle ? ' - ' . $this->_subtitle : '');
   }
 
   public function getSlug() {
@@ -75,7 +74,7 @@ class Episode extends Elements {
      * @return string
      */
     public function getVersionSlug($version) {
-        switch ($version->kind) {
+        switch ($version->getKind()) {
             case 'signed':
                 $slug = 'sign';
                 break;
@@ -97,10 +96,10 @@ class Episode extends Elements {
      * @return string
      */
     public function getPriorityVersion($preference = null) {
-        if (isset($this->versions[0])) {
-            $result = new Version($this->versions[0]);
+        if (isset($this->_versions[0])) {
+            $result = new Version($this->_versions[0]);
             if ($preference) {
-                foreach ($this->versions as $version) {
+                foreach ($this->_versions as $version) {
                     if ($version->kind === $preference) {
                         $result = new Version($version);
                     }
@@ -111,13 +110,8 @@ class Episode extends Elements {
         return "";
     }
 
-
-    public function getTitle() {
-      return $this->title;
-    }
-
     public function getSubtitle() {
-      return $this->subtitle;
+      return $this->_subtitle;
     }
 
 
@@ -127,8 +121,8 @@ class Episode extends Elements {
      * @return string
      */
     public function getEditorialLabel() {
-        if (isset($this->labels->editorial)) {
-            return $this->labels->editorial;
+        if (isset($this->_labels->editorial)) {
+            return $this->_labels->editorial;
         }
         return "";
     }
@@ -196,13 +190,13 @@ class Episode extends Elements {
      */
     public function getReleaseDate() {
         // @codingStandardsIgnoreStart
-        return $this->release_date;
+        return $this->_release_date;
         // @codingStandardsIgnoreEnd
     }
 
     public function getPriorityDuration($version) {
-        if (isset($this->duration->text)) {
-            return $this->duration->text;
+        if (isset($this->_duration->text)) {
+            return $this->_duration->text;
         }
         return "";
     }
@@ -215,10 +209,10 @@ class Episode extends Elements {
     public function showFlags()
     {
         // if the episode has any versions at all
-        if (isset($this->versions[0])) {
-            $version = new Version($this->versions[0]);
+        if (isset($this->_versions[0])) {
+            $version = new Version($this->_versions[0]);
             // we won't need version flags in this scenario: there's only the original version and has no HD
-            if ((count($this->versions) === 1) &&
+            if ((count($this->_versions) === 1) &&
                 ($version->getKind() === 'original') &&
                 !($version->isHD())) {
                 return false;
@@ -235,8 +229,8 @@ class Episode extends Elements {
      */
     public function hasHD()
     {
-        if (isset($this->versions[0])) {
-            foreach ($this->versions as $version) {
+        if (isset($this->_versions[0])) {
+            foreach ($this->_versions as $version) {
                 $version = new Version($version);
                 if ($version->isHD()) {
                     return true;
@@ -254,7 +248,7 @@ class Episode extends Elements {
      */
     public function getVersions() {
         $versions = array();
-        foreach ($this->versions as $version) {
+        foreach ($this->_versions as $version) {
           $versions[] = new Version($version);
         }
         return $versions;

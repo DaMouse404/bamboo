@@ -4,13 +4,13 @@ namespace Bamboo\Models;
 
 class Elements extends Base {
   
-    public $type = '';
-    public $synopses = array();
-    public $images = array();
+    protected $_type = '';
+    protected $_synopses;
+    protected $_images;
     // @codingStandardsIgnoreStart
-    public $master_brand = array();
+    protected $_master_brand;
     // @codingStandardsIgnoreEnd
-    public $status = "";
+    protected $_status = "";
 
     /**
      * Get the short synopsis (if available)
@@ -18,8 +18,8 @@ class Elements extends Base {
      * @return string
      */
     public function getShortSynopsis() {
-        if (isset($this->synopses->small)) {
-            return $this->synopses->small;
+        if (isset($this->_synopses->small)) {
+            return $this->_synopses->small;
         }
         return "";
     }
@@ -30,8 +30,8 @@ class Elements extends Base {
      * @return string
      */
     public function getMediumSynopsis() {
-        if (isset($this->synopses->medium)) {
-            return $this->synopses->medium;
+        if (isset($this->_synopses->medium)) {
+            return $this->_synopses->medium;
         }
         return "";
     }
@@ -42,8 +42,8 @@ class Elements extends Base {
      * @return string
      */
     public function getLargeSynopsis() {
-        if (isset($this->synopses->large)) {
-            return $this->synopses->large;
+        if (isset($this->_synopses->large)) {
+            return $this->_synopses->large;
         }
         return "";
     }
@@ -58,8 +58,8 @@ class Elements extends Base {
      * @return string
      */
     public function getStandardImage($width = 336, $height = 189) {
-        if (isset($this->images->standard)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->images->standard);
+        if (isset($this->_images->standard)) {
+            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->standard);
         }
         return "";
     }
@@ -70,8 +70,8 @@ class Elements extends Base {
      * @return string
      */
     public function getStandardImageRecipe() {
-        if (isset($this->images->standard)) {
-            return $this->images->standard;
+        if (isset($this->_images->standard)) {
+            return $this->_images->standard;
         }
         return "";
     }
@@ -86,8 +86,8 @@ class Elements extends Base {
      * @return string
      */
     public function getPortraitImage($width = 336, $height = 581) {
-        if (isset($this->images->portrait)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->images->portrait);
+        if (isset($this->_images->portrait)) {
+            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->portrait);
         }
         return "";
     }
@@ -98,8 +98,8 @@ class Elements extends Base {
      * @return string
      */
     public function getPortraitImageRecipe() {
-        if (isset($this->images->portrait)) {
-            return $this->images->portrait;
+        if (isset($this->_images->portrait)) {
+            return $this->_images->portrait;
         }
         return "";
     }
@@ -115,8 +115,8 @@ class Elements extends Base {
      * @return string
      */
     public function getImage($type = 'standard', $width = 336, $height = 581) {
-        if (isset($this->images->$type)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->images->$type);
+        if (isset($this->_images->$type)) {
+            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->$type);
         }
         return "";
     }
@@ -128,8 +128,8 @@ class Elements extends Base {
      * @return string
      */
     public function getImageRecipe($type) {
-        if (isset($this->images->$type)) {
-            return $this->images->portrait;
+        if (isset($this->_images->$type)) {
+            return $this->_images->portrait;
         }
         return "";
     }
@@ -141,8 +141,8 @@ class Elements extends Base {
      */
     public function getMasterBrand() {
         // @codingStandardsIgnoreStart
-        if (isset($this->master_brand->titles)) {
-            $titles = $this->master_brand->titles;
+        if (isset($this->_master_brand->titles)) {
+            $titles = $this->_master_brand->titles;
             if (isset($titles->small)) {
                 return $titles->small;
             }
@@ -158,8 +158,8 @@ class Elements extends Base {
      */
     public function getMasterBrandId() {
         // @codingStandardsIgnoreStart
-        if (isset($this->master_brand->id)) {
-            return $this->master_brand->id;
+        if (isset($this->_master_brand->id)) {
+            return $this->_master_brand->id;
         }
         // @codingStandardsIgnoreEnd
         return "";
@@ -172,8 +172,8 @@ class Elements extends Base {
      */
     public function getMediumMasterBrand() {
         // @codingStandardsIgnoreStart
-        if (isset($this->master_brand->titles)) {
-            $titles = $this->master_brand->titles;
+        if (isset($this->_master_brand->titles)) {
+            $titles = $this->_master_brand->titles;
             if (isset($titles->medium)) {
                 return $titles->medium;
             }
@@ -189,8 +189,8 @@ class Elements extends Base {
      */
     public function getMasterBrandAttribution() {
         // @codingStandardsIgnoreStart
-        if (isset($this->master_brand->attribution)) {
-            return $this->master_brand->attribution;
+        if (isset($this->_master_brand->attribution)) {
+            return $this->_master_brand->attribution;
         }
         // @codingStandardsIgnoreEnd
         return "";
@@ -202,7 +202,7 @@ class Elements extends Base {
      * @return string
      */
     public function getType() {
-        return $this->type;
+        return $this->_type;
     }
 
     /**
@@ -211,7 +211,7 @@ class Elements extends Base {
      * @return String
      */
     public function getStatus() {
-        return $this->status;
+        return $this->_status;
     }
 
     /**
@@ -220,7 +220,7 @@ class Elements extends Base {
      * @return bool
      */
     public function isComingSoon() {
-        return $this->status === 'unavailable';
+        return $this->_status === 'unavailable';
     }
 
     public function isFutureDate($date) {

@@ -2,13 +2,13 @@
 
 namespace Bamboo\Models;
 
-class Channel extends Base {
+class Channel extends Elements {
 
 	public function getUnregionalisedID() {
-    if (preg_match('/(bbc_[a-z]+)(_.+)/i', $this->id, $matches)) {
+    if (preg_match('/(bbc_[a-z]+)(_.+)/i', $this->_id, $matches)) {
         return $matches[1];
     }
-    return $this->id;
+    return $this->_id;
 	}
 
   public function getSlug() {
@@ -20,7 +20,7 @@ class Channel extends Base {
    * @return bool
    */
   public function isChildrens() {
-      return $this->id == 'cbbc' || $this->id == 'cbeebies';
+      return $this->_id == 'cbbc' || $this->_id == 'cbeebies';
   }
-  
+
 }

@@ -8,10 +8,10 @@ use Bamboo\Models\Episode;
 
 class Large extends Elements {
   
-    public $initial_children;
-    public $pisodes;
-    public $stacked;
-    public $count = 0;
+    protected $_initial_children;
+    protected $_episodes;
+    protected $_stacked;
+    protected $_count = 0;
 
     private $_broadcastType = 'broadcast';
 
@@ -21,7 +21,7 @@ class Large extends Elements {
     public function getEpisodes() {
         // @codingStandardsIgnoreStart
         $episodes = array();
-        foreach ($this->initial_children as $episode) {
+        foreach ($this->_initial_children as $episode) {
             if ($episode->type === $this->_broadcastType) {
                 $object = new Broadcast($episode);
             } else {
@@ -45,7 +45,7 @@ class Large extends Elements {
      */
     public function getTotalEpisodeCount() {
         // @codingStandardsIgnoreStart
-        return $this->count;
+        return $this->_count;
         // @codingStandardsIgnoreEnd
     }
 
@@ -55,6 +55,6 @@ class Large extends Elements {
      * @return boolean
      */
     public function isStacked() {
-        return !!$this->stacked;
+        return !!$this->_stacked;
     }
 }

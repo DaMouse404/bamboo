@@ -9,7 +9,7 @@ class Client {
 
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
-    private $_config;
+    private $_config = array();
     private $_httpClient;
     private $_defaultParams = array(
                                 "api_key" => "",
@@ -28,7 +28,7 @@ class Client {
         return self::$instance;
     }
 
-    public function setHttpClient(Client $httpClient) {
+    public function setHttpClient($httpClient) {
         $this->_httpClient = $httpClient;
     }
 
@@ -36,7 +36,7 @@ class Client {
         $this->_config = $config;
     }
 
-    public function request($feed, $params) {
+    public function request($feed, $params = array()) {
         $client = $this->_getClient();
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
@@ -45,7 +45,7 @@ class Client {
               array(), 
               array(
                 'query' => $params,
-                'proxy' =>  'tcp://www-cache.reith.bbc.co.uk:80',
+                //'proxy' =>  'tcp://www-cache.reith.bbc.co.uk:80',
               )
           );
         } catch (RequestException $e) {
@@ -59,7 +59,6 @@ class Client {
     }
 
     private function _parseResponse($response) {
-    
         $array = $response->json();
         $json = json_encode($array);
         $object = json_decode($json);
