@@ -18,13 +18,29 @@ class Base
         $count = 0;
         foreach ($words as $word) {
             if ($count > 0) {
-              $return .=  "\\" . mb_strtoupper(trim($word), "UTF-8");
+              $return .=  "\\" . $this->_convertString($word);
             } else {
-              $return .=  mb_strtoupper(trim($word), "UTF-8");
+              $return .=  $this->_convertString($word);
             }
             $count++;
         }
         return $return;
+    }
+
+    private function _convertString($string) {
+        $encoding = "UTF-8";
+
+        return mb_strtoupper(
+                    mb_substr($string, 0, 1, $encoding), 
+                    $encoding
+                ) . 
+                mb_strtolower(
+                    mb_substr(
+                        $string, 1, mb_strlen($string), 
+                        $encoding
+                    ),
+                    $encoding
+                );
     }
 
 }
