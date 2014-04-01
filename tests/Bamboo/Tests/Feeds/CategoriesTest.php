@@ -5,7 +5,8 @@ namespace Bamboo\Tests\Feeds;
 use Bamboo\Tests\BambooTestCase;
 use Bamboo\Feeds\Categories;
 
-class CategoriesTest extends BambooTestCase {
+class CategoriesTest extends BambooTestCase
+{
 
   private $_category;
   private $_categories;

@@ -5,7 +5,9 @@ namespace Bamboo\Tests\Models;
 use Bamboo\Tests\BambooTestCase;
 use Bamboo\Models\Base;
 
-class BaseTest extends BambooTestCase {
+class BaseTest extends BambooTestCase
+{
+  
   private $_base;
 
   public function setup() {

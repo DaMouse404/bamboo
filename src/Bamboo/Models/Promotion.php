@@ -2,11 +2,12 @@
 
 namespace Bamboo\Models;
 
-class Promotion extends Elements {
+class Promotion extends Elements
+{
 
-    protected $url = "";
-    protected $subtitle = "";
-    protected $labels;
+    protected $_url = "";
+    protected $_subtitle = "";
+    protected $_labels;
 
 
     /**

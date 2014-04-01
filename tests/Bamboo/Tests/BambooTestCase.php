@@ -10,9 +10,9 @@ use \Bamboo\Feeds\HttpFake;
  */
 abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 {
-	protected function setup() {
+    protected function setup() {
         Client::getInstance()->setHttpClient(
             new HttpFake
         );
-	}
+    }
 }

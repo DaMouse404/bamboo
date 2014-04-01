@@ -5,7 +5,8 @@ namespace Bamboo\Models\Programme;
 use Bamboo\Models\Elements;
 use Bamboo\Models\Episode;
 
-class Large extends Elements {
+class Large extends Elements
+{
   
      // @codingStandardsIgnoreStart
     protected $_initial_children = array();

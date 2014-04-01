@@ -2,7 +2,8 @@
 
 namespace Bamboo\Models;
 
-class Elements extends Base {
+class Elements extends Base
+{
   
     protected $_type = '';
     protected $_synopses;
@@ -59,7 +60,10 @@ class Elements extends Base {
      */
     public function getStandardImage($width = 336, $height = 189) {
         if (isset($this->_images->standard)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->standard);
+            return str_replace(
+                '{recipe}', $this->_getRecipe($width, $height), 
+                $this->_images->standard
+            );
         }
         return "";
     }
@@ -87,7 +91,11 @@ class Elements extends Base {
      */
     public function getPortraitImage($width = 336, $height = 581) {
         if (isset($this->_images->portrait)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->portrait);
+            return str_replace(
+                '{recipe}', 
+                $this->_getRecipe($width, $height), 
+                $this->_images->portrait
+            );
         }
         return "";
     }
@@ -116,7 +124,11 @@ class Elements extends Base {
      */
     public function getImage($type = 'standard', $width = 336, $height = 581) {
         if (isset($this->_images->$type)) {
-            return str_replace('{recipe}', $this->_getRecipe($width, $height), $this->_images->$type);
+            return str_replace(
+                '{recipe}', 
+                $this->_getRecipe($width, $height), 
+                $this->_images->$type
+            );
         }
         return "";
     }

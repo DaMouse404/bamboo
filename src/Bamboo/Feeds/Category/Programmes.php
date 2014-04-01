@@ -6,7 +6,8 @@ use Bamboo\Feeds\Base;
 use Bamboo\Models;
 use Bamboo\Models\Episode;
 
-class Programmes extends Base {
+class Programmes extends Base
+{
 
     protected $_feed = 'categories/{id}/programmes';
     protected $_response;
@@ -16,18 +17,18 @@ class Programmes extends Base {
         parent::__construct($params);
     }
 
-	private function _setId($id) {
-		$this->_feed = str_replace("{id}", $id, $this->_feed); 
-	}
+    private function _setId($id) {
+        $this->_feed = str_replace("{id}", $id, $this->_feed); 
+    }
 
     public function getElements() {
-    	$elements = array();
-    	foreach ($this->_response->category_programmes->elements as $item) {
-    		$className = $this->_className($item->type);
-    		$elements[] = new $className($item);
-    	}
+        $elements = array();
+        foreach ($this->_response->category_programmes->elements as $item) {
+            $className = $this->_className($item->type);
+            $elements[] = new $className($item);
+        }
         
-    	return $elements;
+        return $elements;
     }
 
     public function getCategory() {

@@ -2,10 +2,13 @@
 
 namespace Bamboo\Models;
 
-class Category extends Base {
+class Category extends Base
+{
 
   protected $_kind = "";
+  // @codingStandardsIgnoreStart
   protected $_child_episode_count = 0;
+  // @codingStandardsIgnoreEnd
 
   public function getKind() {
       return $this->_kind;
@@ -17,7 +20,9 @@ class Category extends Base {
    * @return int
    */
   public function getChildEpisodeCount() {
+      // @codingStandardsIgnoreStart
       return $this->_child_episode_count;
+      // @codingStandardsIgnoreEnd
   }
 
 

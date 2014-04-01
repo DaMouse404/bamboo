@@ -2,12 +2,15 @@
 
 namespace Bamboo\Models;
 
-class Episode extends Elements {
+class Episode extends Elements
+{
 
   protected $_subtitle;
   protected $_versions = array();
   protected $_labels;
+  // @codingStandardsIgnoreStart
   protected $_release_date;
+  // @codingStandardsIgnoreEnd
   protected $_duration;
 
   public function getTimelinessLabel() {
@@ -48,9 +51,10 @@ class Episode extends Elements {
 
 
     /**
-     * Gets the priority version and returns its slug. If no version exists it returns an empty string. An optional
-     * preference can be specified in which case the version of that kind will be returned if it exists, else the
-     * version with highest priority is returned.
+     * Gets the priority version and returns its slug. 
+     * If no version exists it returns an empty string. 
+     * An optional preference can be specified, which case the version of that kind is returned 
+     * if it exists, else the version with highest priority is returned.
      *
      * @param string $preference a specific version to return
      *
@@ -88,8 +92,9 @@ class Episode extends Elements {
     }
 
       /**
-     * Gets the version with highest priority attached to the episode. A preference can be provided to override the
-     * default. If the preference is not found then the default will be returned instead.
+     * Gets the version with highest priority attached to the episode. 
+     * A preference can be provided to override the default. 
+     * If the preference is not found then the default will be returned instead.
      *
      * @param string $preference a specific version to look for
      *
@@ -171,7 +176,8 @@ class Episode extends Elements {
     }
 
     /**
-     * Get the duration of the highest priority version. If the episode has no version return an empty string.
+     * Get the duration of the highest priority version.
+     * If the episode has no version return an empty string.
      *
      * @return string
      */
@@ -211,7 +217,8 @@ class Episode extends Elements {
         // if the episode has any versions at all
         if (isset($this->_versions[0])) {
             $version = new Version($this->_versions[0]);
-            // we won't need version flags in this scenario: there's only the original version and has no HD
+            // we won't need version flags in this scenario: 
+            //  there's only the original version and has no HD
             if ((count($this->_versions) === 1) &&
                 ($version->getKind() === 'original') &&
                 !($version->isHD())) {
@@ -242,7 +249,8 @@ class Episode extends Elements {
     }
 
     /**
-     * Get the versions attached to this episode. Returns an array of {@link BBC_Service_Bamboo_Models_Version} objects
+     * Get the versions attached to this episode. 
+     * Returns an array of {@link BBC_Service_Bamboo_Models_Version} objects
      *
      * @return array
      */

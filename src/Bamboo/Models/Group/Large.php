@@ -6,9 +6,11 @@ use Bamboo\Models\Elements;
 use Bamboo\Models\Broadcast;
 use Bamboo\Models\Episode;
 
-class Large extends Elements {
-  
+class Large extends Elements
+{
+    // @codingStandardsIgnoreStart
     protected $_initial_children;
+    // @codingStandardsIgnoreEnd
     protected $_episodes;
     protected $_stacked;
     protected $_count = 0;

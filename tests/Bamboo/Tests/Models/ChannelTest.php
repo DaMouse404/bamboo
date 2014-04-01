@@ -5,7 +5,9 @@ namespace Bamboo\Tests\Models;
 use Bamboo\Tests\BambooTestCase;
 use Bamboo\Models\Channel;
 
-class ChannelTest extends BambooTestCase {
+class ChannelTest extends BambooTestCase
+{
+
   private $_channel;
 
   public function setup() {
@@ -15,28 +17,28 @@ class ChannelTest extends BambooTestCase {
 
   public function testGetType() {
     $this->assertEquals(
-      $this->_channel->getType(),
-      'channel'
+        $this->_channel->getType(),
+        'channel'
     );
   }
 
   public function testGetUnregionalisedID() {
     $this->assertEquals(
-      $this->_channel->getUnregionalisedID(),
-      'bbc_one'
+        $this->_channel->getUnregionalisedID(),
+        'bbc_one'
     );
   }
 
   public function testGetSlug() {
     $this->assertEquals(
-      $this->_channel->getSlug(),
-      'bbcone'
+        $this->_channel->getSlug(),
+        'bbcone'
     );
   }
 
   public function testIsChildrens() {
     $this->assertFalse(
-      $this->_channel->isChildrens()
+        $this->_channel->isChildrens()
     );
   }
 

@@ -2,11 +2,11 @@
 
 namespace Bamboo\Feeds;
 
-class Exception {
+class Exception
+{
 
     public function __construct($params = array()) {
 
     }
-
 
 }

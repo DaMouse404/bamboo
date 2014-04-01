@@ -5,7 +5,8 @@ namespace Bamboo\Feeds;
 use Guzzle\Http;
 use Bamboo\Feeds\ClientFake;
 
-class Client {
+class Client
+{
 
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
@@ -41,7 +42,8 @@ class Client {
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
-          $request = $client->get($this->_version . $feed . ".json", 
+          $request = $client->get(
+              $this->_version . $feed . ".json", 
               array(), 
               array(
                 'query' => $params,

@@ -2,7 +2,8 @@
 
 namespace Bamboo\Models;
 
-class Base {
+class Base
+{
 
   protected $_id;
   protected $_title;
