@@ -10,6 +10,7 @@ class Client
 
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
+    private $_proxy = "";
     private $_config = array();
     private $_httpClient;
     private $_defaultParams = array(
@@ -37,6 +38,10 @@ class Client
         $this->_config = $config;
     }
 
+    public function setProxy($proxy) {
+        $this->_proxy = $proxy;
+    }
+
     public function request($feed, $params = array()) {
         $client = $this->_getClient();
         $params = array_merge($this->_defaultParams, $this->_config, $params);
@@ -47,13 +52,14 @@ class Client
               array(), 
               array(
                 'query' => $params,
-                //'proxy' =>  'tcp://www-cache.reith.bbc.co.uk:80',
+                'proxy' =>  $this->_proxy,
               )
           );
         } catch (RequestException $e) {
+            //$request->getUrl()
             die($e->getMessage());
         }
-//var_dump($request->getUrl());die;
+ 
         $response = $request->send();
         $object = $this->_parseResponse($response);
 
