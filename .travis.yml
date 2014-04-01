@@ -1,0 +1,15 @@
+language: php
+
+install:
+    - pyrus install pear/PHP_CodeSniffer
+    - phpenv rehash
+    - composer install
+
+php:
+  - 5.3
+
+before_script:
+    - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+script:
+    - make test

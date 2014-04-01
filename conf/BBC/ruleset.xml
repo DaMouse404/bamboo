@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="BBC">
+ <description>BBC Coding Standards rules</description>
+
+<rule ref="Zend" >
+    <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman" />
+</rule>
+
+<rule ref="Squiz.Debug.JSLint" />
+
+<rule ref="Generic.Files.LineLength">
+    <properties>
+        <property name="lineLimit" value="100"/>
+        <property name="absoluteLineLimit" value="120"/>
+    </properties>
+</rule>
+
+</ruleset>
