@@ -1,6 +1,6 @@
 #PHP client library for iBL
 
-[![Build Status](https://secure.travis-ci.org/craigtaub/bamboo2?branch=master)](http://travis-ci.org/craigtaub/bamboo2)
+[![Build Status](https://travis-ci.org/craigtaub/bamboo2.svg?branch=develop)](https://travis-ci.org/craigtaub/bamboo2)
 
 Setup dependencies.
 
