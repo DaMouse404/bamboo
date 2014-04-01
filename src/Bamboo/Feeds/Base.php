@@ -18,16 +18,16 @@ class Base
         $count = 0;
         foreach ($words as $word) {
             if ($count > 0) {
-              $return .=  "\\" . $this->_convertString($word);
+              $return .=  "\\" . $this->_ucFirstChar($word);
             } else {
-              $return .=  $this->_convertString($word);
+              $return .=  $this->_ucFirstChar($word);
             }
             $count++;
         }
         return $return;
     }
 
-    private function _convertString($string) {
+    private function _ucFirstChar($string) {
         $encoding = "UTF-8";
 
         return mb_strtoupper(
