@@ -29,7 +29,7 @@ class HttpFake
         //return body of fixture, return array of data
 
         // Split file so header is ignored
-        $response = explode('UTF-8',$this->_response);
+        $response = explode('UTF-8', $this->_response);
         if ($response[1]) {
             return json_decode($response[1], true);
         }

@@ -110,8 +110,7 @@ class Client
         // Log Error
         $req = $e->getRequest();
         $resp = $e->getResponse();
-        Log::err("Bamboo error with request : $req. 
-            Response : $resp");
+        Log::err("Bamboo error - Request : $req , Response : $resp");
 
         // Throw Exception
         $exception = new $errorClass(
