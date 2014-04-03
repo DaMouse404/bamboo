@@ -69,14 +69,14 @@ class Client
               )
           );
         } catch (ServerErrorResponseException $e) {
-            $this->_logAndThrowError("ServerError", $e);
+            $this->_logAndThrowError("ServerError", $e, $feed);
         } catch (ClientErrorResponseException $e) {
-            $this->_logAndThrowError("ClientError", $e);
+            $this->_logAndThrowError("ClientError", $e, $feed);
         } catch (BadResponseException $e) {
-            $this->_logAndThrowError("BadResponse", $e);
+            $this->_logAndThrowError("BadResponse", $e, $feed);
         } catch(\Exception $e){
             // General Exception
-            $this->_logAndThrowError("Exception", $e);
+            $this->_logAndThrowError("Exception", $e, $feed);
         }
  
         $response = $request->send();
@@ -106,11 +106,9 @@ class Client
         return new Http\Client($this->_baseUrl);
     }
 
-    private function _logAndThrowError($errorClass, $e = "") {
+    private function _logAndThrowError($errorClass, $e, $feed) {
         // Log Error
-        $req = $e->getRequest();
-        $resp = $e->getResponse();
-        Log::err("Bamboo error - Request : $req , Response : $resp");
+        Log::err("Bamboo error on feed $feed.");
 
         // Throw Exception
         $exception = new $errorClass(
