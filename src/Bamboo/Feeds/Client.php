@@ -21,7 +21,7 @@ class Client
     private $_version = "ibl/v1/";
     private $_proxy = "";
     private $_config = array();
-    private $_httpClient;
+    private $_fakeHttpClient;
     private $_defaultParams = array(
                                 "api_key" => "",
                                 "availability" => "all",
@@ -39,8 +39,8 @@ class Client
         return self::$instance;
     }
 
-    public function setHttpClient($httpClient) {
-        $this->_httpClient = $httpClient;
+    public function setFakeHttpClient($fakeHttpClient) {
+        $this->_fakeHttpClient = $fakeHttpClient;
     }
 
     public function setConfig($config) {
@@ -56,7 +56,7 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params = array()) {
-        $client = $this->_getClient();
+        $client = $this->_getClient($feed);
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
@@ -99,11 +99,49 @@ class Client
         return $object;
     }
 
-    private function _getClient() {
-        if ($this->_httpClient) {
-            return $this->_httpClient;
+    /* 
+     * Return Client to use for this request.
+     */
+    private function _getClient($feed) {
+        $fakeHttpClient = $this->_fakeHttpClient;
+
+        if ($this->useFixture($feed) && $fakeHttpClient) {
+            return $fakeHttpClient;
         }
         return new Http\Client($this->_baseUrl);
+
+    }
+    
+    /*
+     * Check if this request needs to use a fixture.
+     * Does part before @ match current Feed?
+     */
+    public function useFixture($feed) {
+        // Strip unnecessary values from feed
+        $feed = str_replace("ibl/v1/", "", $feed);
+        $feed = str_replace(".json", "", $feed);
+        $feed = str_replace("/", "_", $feed);
+
+        if (!isset($_GET['_fake'])) {
+            return false;
+        }
+
+        $fakePath = $_GET['_fake'];
+        $exploded = explode('@', $fakePath);
+        if (isset($exploded[1])) {
+            // Grab just fixture filename
+            $fakedFeed = $exploded[0];
+        } else {
+            // No @ so use whole fixture
+            $fakedFeed = $fakePath;
+        }
+
+        preg_match('/' . $fakedFeed . '/', $feed, $matches);
+        if (count($matches) > 0) {
+            // matches, so use the fixtureFile
+            return true;          
+        }
+        return false;
     }
 
     private function _logAndThrowError($errorClass, $e, $feed) {

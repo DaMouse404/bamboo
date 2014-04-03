@@ -5,49 +5,105 @@ namespace Bamboo\Models;
 class Episode extends Elements
 {
 
-  protected $_subtitle;
-  protected $_versions = array();
-  protected $_labels;
-  // @codingStandardsIgnoreStart
-  protected $_release_date;
-  // @codingStandardsIgnoreEnd
-  protected $_duration;
+    protected $_subtitle;
+    protected $_versions = array();
+    protected $_labels;
+    // @codingStandardsIgnoreStart
+    protected $_release_date;
+    protected $_tleo_id;
+    protected $_tleo_type;
+    // @codingStandardsIgnoreEnd
+    protected $_duration;
+    protected $_film = false;
+    protected $_href;
+    protected $_stacked;
+    protected $_guidance;
 
-  public function getTimelinessLabel() {
-      if (isset($this->_labels->time)) {
+    /**
+     * Is the episode stacked
+     *
+     * @access public
+     * @return void
+     */
+    public function isStacked() {
+        return !!$this->_stacked;
+    }
+    
+    /**
+     * Get the episode HREF
+     *
+     * @return string
+     */
+    public function getHref() {
+        return $this->_href;
+    }
+
+    /**
+     * Is the episode a film
+     *
+     * @return bool
+     */
+    public function isFilm() {
+        return !!$this->_film;
+    }
+
+    /**
+     * Get the episode TLEO pid
+     *
+     * @return string
+     */
+    public function getTleoId() {
+        // @codingStandardsIgnoreStart
+        return $this->_tleo_id;
+        // @codingStandardsIgnoreEnd
+    }
+
+    /**
+     * Get the type of the TLEO
+     *
+     * @return string
+     */
+    public function getTleoType() {
+        // @codingStandardsIgnoreStart
+        return $this->_tleo_type;
+        // @codingStandardsIgnoreEnd
+    }
+
+    public function getTimelinessLabel() {
+        if (isset($this->_labels->time)) {
           return $this->_labels->time;
-      }
-      return "";
-  }
+        }
+        return "";
+    }
 
 
-  public function getCompleteTitle() {
-      return $this->_title . ($this->_subtitle ? ' - ' . $this->_subtitle : '');
-  }
+    public function getCompleteTitle() {
+        return $this->_title . ($this->_subtitle ? ' - ' . $this->_subtitle : '');
+    }
 
-  public function getSlug() {
-      // Use title - subtitle and remove leading and trailing whitespace
-      $title = trim($this->getCompleteTitle());
-      // Replace accented characters with unaccented equivalent
-      $title = $this->_unaccent($title);
-      // Lowercase the title
-      $title = mb_strtolower($title);
-      // Remove non-alphanumeric-or-whitespace characters
-      $title = preg_replace('/[^\w\s]/', '', $title);
-      // Reduce multiple spaces to a single hyphen
-      $title = preg_replace('/\s\s*/', '-', $title);
-      return $title;
-  }
+    public function getSlug() {
+        // Use title - subtitle and remove leading and trailing whitespace
+        $title = trim($this->getCompleteTitle());
+        // Replace accented characters with unaccented equivalent
+        $title = $this->_unaccent($title);
+        // Lowercase the title
+        $title = mb_strtolower($title);
+        // Remove non-alphanumeric-or-whitespace characters
+        $title = preg_replace('/[^\w\s]/', '', $title);
+        // Reduce multiple spaces to a single hyphen
+        $title = preg_replace('/\s\s*/', '-', $title);
+        return $title;
+    }
 
-  // Convert accented characters to their 'normal' alternative
-  private function _unaccent($string) {
-      //If locale is "0", the current setting is returned.
-      $oldLocale = setlocale(LC_ALL, 0);
-      setlocale(LC_ALL, 'en_GB');
-      $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-      setlocale(LC_ALL, $oldLocale);
-      return $string;
-  }
+    // Convert accented characters to their 'normal' alternative
+    private function _unaccent($string) {
+        //If locale is "0", the current setting is returned.
+        $oldLocale = setlocale(LC_ALL, 0);
+        setlocale(LC_ALL, 'en_GB');
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+        setlocale(LC_ALL, $oldLocale);
+        return $string;
+    }
 
 
     /**
