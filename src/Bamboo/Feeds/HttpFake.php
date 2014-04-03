@@ -51,7 +51,12 @@ class HttpFake
         $feed = str_replace("/", "_", $feed);
 
         // Map _fake to fixture file
-        $fakePath = $_GET['_fake'];
+        $this->_path =  $this->_fixtureLocation . $this->_fixtureFile($feed) . '.json';
+    }
+
+    private function _fixtureFile($feed) {
+        $fakePath = (isset($_GET['_fake'])) ? $_GET['_fake'] : '';
+
         $exploded = explode('@', $fakePath);
         if (isset($exploded[1])) {
             $fakedFeed = $exploded[0];
@@ -75,8 +80,6 @@ class HttpFake
             //no match, use feeds fixture
             $file = $feed;
         }
-
-        $jsonFile = $file . '.json';
-        $this->_path = $this->_fixtureLocation . $jsonFile;
+        return $file;
     }
 }
