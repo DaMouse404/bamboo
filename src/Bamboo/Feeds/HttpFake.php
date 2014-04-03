@@ -30,7 +30,7 @@ class HttpFake
 
         // Split file so header is ignored
         $response = explode('UTF-8', $this->_response);
-        if ($response[1]) {
+        if (isset($response[1])) {
             return json_decode($response[1], true);
         }
         // No header found
