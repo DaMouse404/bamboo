@@ -7,12 +7,11 @@ use Bamboo\Feeds\Categories;
 
 class CategoriesTest extends BambooTestCase
 {
-
   private $_category;
   private $_categories;
 
   public function setup() {
-    parent::setup();
+    parent::setup("categories");
     $feedObject = new Categories();
     $this->_categories = $feedObject->getCategories();
   }

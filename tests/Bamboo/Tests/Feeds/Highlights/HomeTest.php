@@ -11,7 +11,7 @@ class HomeTest extends BambooTestCase
   private $_elements;
 
   public function setup() {
-    parent::setup();
+    parent::setup("highlights@home_highlights");
     $feedObject = new Home();
     $this->_elements = $feedObject->getElements();
   }

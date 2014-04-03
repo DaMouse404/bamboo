@@ -105,18 +105,19 @@ class Client
     private function _getClient($feed) {
         $fakeHttpClient = $this->_fakeHttpClient;
 
-        if ($this->useFixture($feed) && $fakeHttpClient) {
+        if ($this->_useFixture($feed) && $fakeHttpClient) {
             return $fakeHttpClient;
         }
+
         return new Http\Client($this->_baseUrl);
 
     }
     
     /*
      * Check if this request needs to use a fixture.
-     * Does part before @ match current Feed?
+     * Does part before @ pattern match current Feed?
      */
-    public function useFixture($feed) {
+    private function _useFixture($feed) {
         // Strip unnecessary values from feed
         $feed = str_replace("ibl/v1/", "", $feed);
         $feed = str_replace(".json", "", $feed);
