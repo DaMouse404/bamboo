@@ -6,12 +6,10 @@ use Guzzle\Http;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Http\Exception\BadResponseException;
-use Bamboo\Feeds\ClientFake;
+use Bamboo\Feeds\HttpFail;
 use Bamboo\Feeds\Log;
+use Bamboo\Feeds\Counter;
 use Bamboo\Feeds\Exception;
-use Bamboo\Feeds\Exception\ServerError;
-use Bamboo\Feeds\Exception\ClientError;
-use Bamboo\Feeds\Exception\BadResponse;
 use Bamboo\Feeds\Exception\EmptyFeed;
 
 class Client
@@ -60,26 +58,42 @@ class Client
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
-          $request = $client->get(
-              $this->_version . $feed . ".json", 
-              array(), 
-              array(
-                'query' => $params,
-                'proxy' =>  $this->_proxy,
-              )
-          );
+            $request = $client->get(
+                $this->_version . $feed . ".json", 
+                array(), 
+                array(
+                    'query' => $params,
+                    'proxy' =>  $this->_proxy,
+                )
+            );
+            $response = $request->send();
         } catch (ServerErrorResponseException $e) {
-            $this->_logAndThrowError("ServerError", $e, $feed);
+            $this->_logAndThrowError(
+                "Bamboo\Feeds\Exception\ServerError", 
+                "BAMBOO_SERVERERROR", 
+                $e, $feed
+            );
         } catch (ClientErrorResponseException $e) {
-            $this->_logAndThrowError("ClientError", $e, $feed);
+            $this->_logAndThrowError(
+                "Bamboo\Feeds\Exception\ClientError", 
+                "BAMBOO_NOTFOUND", 
+                $e, $feed
+            );
         } catch (BadResponseException $e) {
-            $this->_logAndThrowError("BadResponse", $e, $feed);
+            $this->_logAndThrowError(
+                "Bamboo\Feeds\Exception\BadResponse", 
+                "BAMBOO_BADREQUEST", 
+                $e, $feed
+            );
         } catch(\Exception $e){
             // General Exception
-            $this->_logAndThrowError("Exception", $e, $feed);
+            $this->_logAndThrowError(
+                "Exception", 
+                "BAMBOO_OTHER", 
+                $e, $feed
+            );
         }
  
-        $response = $request->send();
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
@@ -103,10 +117,13 @@ class Client
      * Return Client to use for this request.
      */
     private function _getClient($feed) {
-        $fakeHttpClient = $this->_fakeHttpClient;
 
-        if ($this->_useFixture($feed) && $fakeHttpClient) {
-            return $fakeHttpClient;
+        if ($this->_useFixture($feed)) {
+            return $this->_fakeHttpClient;
+        }
+
+        if ($this->_useFailure($feed)) {
+            return new HttpFail();
         }
 
         return new Http\Client($this->_baseUrl);
@@ -114,18 +131,35 @@ class Client
     }
     
     /*
+     * Check if the current feed matches ?_fail one
+     */
+    private function _useFailure($feed) {
+        if (!isset($_GET['_fail'])) {
+            return false;
+        }
+
+        $feed = $this->_parseFeed($feed);
+
+        $fakedFeed = $_GET['_fail'];
+
+        if ($this->_doesHaveMatches($feed, $fakedFeed)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /*
      * Check if this request needs to use a fixture.
      * Does part before @ pattern match current Feed?
      */
     private function _useFixture($feed) {
-        // Strip unnecessary values from feed
-        $feed = str_replace("ibl/v1/", "", $feed);
-        $feed = str_replace(".json", "", $feed);
-        $feed = str_replace("/", "_", $feed);
 
         if (!isset($_GET['_fake'])) {
             return false;
         }
+
+        $feed = $this->_parseFeed($feed);
 
         $fakePath = $_GET['_fake'];
         $exploded = explode('@', $fakePath);
@@ -137,17 +171,37 @@ class Client
             $fakedFeed = $fakePath;
         }
 
+        if ($this->_doesHaveMatches($feed, $fakedFeed)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function _parseFeed($feed) {
+        // Strip unnecessary values from feed
+        $feed = str_replace("ibl/v1/", "", $feed);
+        $feed = str_replace(".json", "", $feed);
+        $feed = str_replace("/", "_", $feed);
+
+        return $feed;
+    }
+
+    private function _doesHaveMatches($feed, $fakedFeed) {
         preg_match('/' . $fakedFeed . '/', $feed, $matches);
         if (count($matches) > 0) {
             // matches, so use the fixtureFile
             return true;          
         }
-        return false;
     }
-
-    private function _logAndThrowError($errorClass, $e, $feed) {
+    /*
+     * Logs the error, throws 
+     */
+    private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
         // Log Error
         Log::err("Bamboo error on feed $feed.");
+
+        // Increment Counter
+        Counter::increment($counterName);
 
         // Throw Exception
         $exception = new $errorClass(
