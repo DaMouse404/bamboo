@@ -158,13 +158,13 @@ class Client
      */
     private function _useFixture($feed) {
 
-        if (!isset($_GET[self::PARAM_FAKE])) {
+        if (!isset($_GET[self::PARAM_DEGRADE])) {
             return false;
         }
 
         $feed = $this->_parseFeed($feed);
 
-        $fakePath = $_GET[self::PARAM_FAKE];
+        $fakePath = $_GET[self::PARAM_DEGRADE];
         $exploded = explode('@', $fakePath);
         if (isset($exploded[1])) {
             // Grab just fixture filename
