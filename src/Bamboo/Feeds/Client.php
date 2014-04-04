@@ -15,6 +15,9 @@ use Bamboo\Feeds\Exception\EmptyFeed;
 class Client
 {
 
+    const PARAM_DEGRADE = '_fake';
+    const PARAM_FAIL = '_fail';
+
     private $_baseUrl = "http://d.bbc.co.uk/";
     private $_version = "ibl/v1/";
     private $_proxy = "";
@@ -134,13 +137,13 @@ class Client
      * Check if the current feed matches ?_fail one
      */
     private function _useFailure($feed) {
-        if (!isset($_GET['_fail'])) {
+        if (!isset($_GET[self::PARAM_FAIL])) {
             return false;
         }
 
         $feed = $this->_parseFeed($feed);
 
-        $fakedFeed = $_GET['_fail'];
+        $fakedFeed = $_GET[self::PARAM_FAIL];
 
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {
             return true;
@@ -155,13 +158,13 @@ class Client
      */
     private function _useFixture($feed) {
 
-        if (!isset($_GET['_fake'])) {
+        if (!isset($_GET[self::PARAM_FAKE])) {
             return false;
         }
 
         $feed = $this->_parseFeed($feed);
 
-        $fakePath = $_GET['_fake'];
+        $fakePath = $_GET[self::PARAM_FAKE];
         $exploded = explode('@', $fakePath);
         if (isset($exploded[1])) {
             // Grab just fixture filename
