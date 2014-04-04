@@ -141,8 +141,6 @@ class Client
             return false;
         }
 
-        $feed = $this->_parseFeed($feed);
-
         $fakedFeed = $_GET[self::PARAM_FAIL];
 
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {
@@ -150,7 +148,6 @@ class Client
         }
         return false;
     }
-
 
     /*
      * Check if this request needs to use a fixture.
@@ -162,31 +159,18 @@ class Client
             return false;
         }
 
-        $feed = $this->_parseFeed($feed);
-
+        $fakedFeed = "";
         $fakePath = $_GET[self::PARAM_DEGRADE];
         $exploded = explode('@', $fakePath);
         if (isset($exploded[1])) {
             // Grab just fixture filename
             $fakedFeed = $exploded[0];
-        } else {
-            // No @ so use whole fixture
-            $fakedFeed = $fakePath;
         }
 
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {
             return true;
         }
         return false;
-    }
-
-    private function _parseFeed($feed) {
-        // Strip unnecessary values from feed
-        $feed = str_replace("ibl/v1/", "", $feed);
-        $feed = str_replace(".json", "", $feed);
-        $feed = str_replace("/", "_", $feed);
-
-        return $feed;
     }
 
     private function _doesHaveMatches($feed, $fakedFeed) {
