@@ -2,7 +2,7 @@
     "name": "bbc/bamboo2",
     "type": "library",
     "description": "PHP client library for iBL",
-    "license": "BSD",
+    "license": "proprietary",
     "require": {
         "guzzle/guzzle": "v3.8.1"
     },
