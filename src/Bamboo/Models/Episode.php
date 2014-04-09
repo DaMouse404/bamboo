@@ -121,31 +121,9 @@ class Episode extends Elements
         $version = $this->getPriorityVersion($preference);
 
         if ($version) {
-          //var_dump($version);die
-            return $this->getVersionSlug($version);
-            //return $version->getSlug();
+            return $version->getSlug();
         }
         return "";
-    }
-
-    /**
-     * Get the slug of the version.
-     * This can be used in URLs for episode playback
-     *
-     * @return string
-     */
-    public function getVersionSlug($version) {
-        switch ($version->getKind()) {
-            case 'signed':
-                $slug = 'sign';
-                break;
-            case 'audio-described':
-                $slug = 'ad';
-                break;
-            default:
-                $slug = '';
-        }
-        return $slug;
     }
 
       /**
@@ -160,10 +138,12 @@ class Episode extends Elements
     public function getPriorityVersion($preference = null) {
         if (isset($this->_versions[0])) {
             $result = new Version($this->_versions[0]);
+
             if ($preference) {
                 foreach ($this->_versions as $version) {
-                    if ($version->kind === $preference) {
-                        $result = new Version($version);
+                    $version = new Version($version);
+                    if ($version->getKind() === $preference) {
+                        $result = $version;
                     }
                 }
             }
@@ -241,7 +221,7 @@ class Episode extends Elements
     public function getDuration() {
         $version = $this->getPriorityVersion();
         if ($version) {
-            return $this->getPriorityDuration($version);
+            return $version->getDuration($version);
         }
         return '';
     }
@@ -327,7 +307,11 @@ class Episode extends Elements
      */
     public function getRelatedLinks() {
         // @codingStandardsIgnoreStart
-        return $this->_related_links;
+        $related_links_array = array();
+        foreach($this->_related_links as $related_links) {
+            $related_links_array[] = new Related($related_links);
+        }
+        return $related_links_array;
         // @codingStandardsIgnoreEnd
     }
 
@@ -340,7 +324,7 @@ class Episode extends Elements
         $link = "";
         // @codingStandardsIgnoreStart
         if (isset($this->_related_links[0])) {
-            $link = $this->_related_links[0];
+            $link = new Related($this->_related_links[0]);
         }
         // @codingStandardsIgnoreEnd
         return $link;
