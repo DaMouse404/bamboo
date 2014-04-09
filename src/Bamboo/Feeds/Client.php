@@ -18,8 +18,8 @@ class Client
     const PARAM_DEGRADE = '_fake';
     const PARAM_FAIL = '_fail';
 
-    private $_baseUrl = "http://d.bbc.co.uk/";
-    private $_version = "ibl/v1/";
+    private $_host = "";
+    private $_baseUrl = "";
     private $_proxy = "";
     private $_config = array();
     private $_fakeHttpClient;
@@ -38,6 +38,14 @@ class Client
         }
 
         return self::$instance;
+    }
+
+    public function setHost($host) {
+        $this->_host = $host;
+    }
+
+    public function setBaseUrl($baseUrl) {
+        $this->_baseUrl = $baseUrl;
     }
 
     public function setFakeHttpClient($fakeHttpClient) {
@@ -62,7 +70,7 @@ class Client
 
         try {
             $request = $client->get(
-                $this->_version . $feed . ".json", 
+                $this->_baseUrl . $feed . ".json", 
                 array(), 
                 array(
                     'query' => $params,
@@ -120,16 +128,15 @@ class Client
      * Return Client to use for this request.
      */
     private function _getClient($feed) {
-
         if ($this->_useFixture($feed)) {
             return $this->_fakeHttpClient;
         }
 
         if ($this->_useFailure($feed)) {
-            return new HttpFail();
+            return new \Bamboo\Feeds\Http\Fail();
         }
 
-        return new Http\Client($this->_baseUrl);
+        return new Http\Client($this->_host);
 
     }
     
