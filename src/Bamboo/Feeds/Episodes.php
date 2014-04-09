@@ -16,7 +16,9 @@ class Episodes extends Base
     }
 
     private function _setPids($pids) {
-        $pids = join($pids, ",");
+        if (is_array($pids)) {
+            $pids = join($pids, ",");
+        }
         $this->_feed = str_replace("{pids}", $pids, $this->_feed); 
     }
 

@@ -59,11 +59,13 @@ class Version extends Base
      * @return string
      */
     public function getOnwardJourneyTime() {
-        foreach ($this->_events as $event) {
-            if ($event->kind == 'onward_journey') {
-                // @codingStandardsIgnoreStart
-                return $event->time_offset_seconds;
-                // @codingStandardsIgnoreEnd
+        if ($this->_events) {
+            foreach ($this->_events as $event) {
+                if ($event->kind == 'onward_journey') {
+                    // @codingStandardsIgnoreStart
+                    return $event->time_offset_seconds;
+                    // @codingStandardsIgnoreEnd
+                }
             }
         }
         return "";
