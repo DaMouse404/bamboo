@@ -12,13 +12,13 @@ class Episode extends Elements
     protected $_release_date;
     protected $_tleo_id;
     protected $_tleo_type;
+    protected $_related_links;
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_film = false;
     protected $_href;
     protected $_stacked;
     protected $_guidance;
-    protected $_related_links;
 
     /**
      * Is the episode stacked

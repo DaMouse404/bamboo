@@ -32,5 +32,8 @@ class Episodes extends Base
         return $elements;
     }
 
+    public function getResponse() {
+        return $this->_response->programme_episodes->elements;
+    }
 
 }
