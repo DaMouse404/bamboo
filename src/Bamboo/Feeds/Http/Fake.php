@@ -1,8 +1,8 @@
 <?php
 
-namespace Bamboo\Feeds;
+namespace Bamboo\Feeds\Http;
 
-class HttpFake
+class Fake
 {
 
     private $_path;

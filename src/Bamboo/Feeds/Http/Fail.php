@@ -1,10 +1,10 @@
 <?php
 
-namespace Bamboo\Feeds;
+namespace Bamboo\Feeds\Http;
 
 use Guzzle\Http\Exception\ServerErrorResponseException;
 
-class HttpFail
+class Fail
 {
 
     public function get($feed, $params = array(), $queryParams = array()) {
