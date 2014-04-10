@@ -11,10 +11,10 @@ use \Bamboo\Feeds\Http\Fake;
 abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function setupRequest($feed) {
-    	$_GET['_fake'] = $feed;
-    	$httpFake = new Fake();
-    	$path =  dirname(__FILE__) . '/../../../tests/fixtures/';
-    	$httpFake->setFixturesPath($path);
+        $_GET['_fake'] = $feed;
+        $httpFake = new Fake();
+        $path =  dirname(__FILE__) . '/../../../tests/fixtures/';
+        $httpFake->setFixturesPath($path);
         Client::getInstance()->setFakeHttpClient(
             $httpFake
         );
