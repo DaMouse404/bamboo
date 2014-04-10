@@ -13,7 +13,7 @@ class Fail
     }
 
     public function send() {
-        throw new ServerErrorResponseException();
+        throw new ServerErrorResponseException("500 Error on IBL", 500);
     }
 
     public function json() {

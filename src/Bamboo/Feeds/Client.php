@@ -61,7 +61,6 @@ class Client
     }
 
     /*
-     *
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params = array()) {
@@ -85,15 +84,10 @@ class Client
                 $e, $feed
             );
         } catch (ClientErrorResponseException $e) {
+            $errorArray = $this->_translateClientError($e);
             $this->_logAndThrowError(
-                "Bamboo\Feeds\Exception\ClientError", 
-                "BAMBOO_NOTFOUND", 
-                $e, $feed
-            );
-        } catch (BadResponseException $e) {
-            $this->_logAndThrowError(
-                "Bamboo\Feeds\Exception\BadResponse", 
-                "BAMBOO_BADREQUEST", 
+                "Bamboo\Feeds\Exception" . $$errorArray['class'], 
+                $$errorArray['counter'], 
                 $e, $feed
             );
         } catch(\Exception $e){
@@ -108,6 +102,40 @@ class Client
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
+    }
+
+    /*
+     * Translate the 4** errors into counter and error class.
+     * @return array
+     */
+    private function _translateClientError($e) {
+        switch ($e->getCode()) {
+            case 400:
+                $errorClass = "\BadRequest";
+                $counterName = "BAMBOO_BADREQUEST";
+                break;
+            case 403:
+                $errorClass = "\Unauthorized";
+                $counterName = "BAMBOO_UNAUTHORISED";
+                break;
+            case 404:
+                $errorClass = "\NotFound";
+                $counterName = "BAMBOO_NOTFOUND";
+                break;
+            case 405:
+                $errorClass = "\MethodNotAllowed";
+                $counterName = "BAMBOO_METHODNOTALLOWED";
+                break;
+            default:
+                $errorClass = "\ClientError";
+                $counterName = "BAMBOO_OTHER";
+                break;
+        }
+
+        return array(
+            'class' => $errorClass, 
+            'counter' => $counterName
+        );
     }
 
     private function _parseResponse($response, $feedName, $params) {
