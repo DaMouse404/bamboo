@@ -4,6 +4,7 @@ namespace Bamboo\Feeds\Exception;
 
 use Bamboo\Feeds\Exception;
 
-class BadResponse extends Exception
+class BadRequest extends Exception
 {
+    protected $_defaultCode = 400;
 }
