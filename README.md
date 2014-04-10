@@ -11,6 +11,7 @@ Run Unit tests.
     ./vendor/bin/phpunit
 
 Usage
+
     use Bamboo\Feeds;
     try {
         $highlightsObject = new Feeds\Highlights\Home();
