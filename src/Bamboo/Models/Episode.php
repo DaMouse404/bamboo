@@ -287,7 +287,7 @@ class Episode extends Elements
 
     /**
      * Get the versions attached to this episode. 
-     * Returns an array of {@link BBC_Service_Bamboo_Models_Version} objects
+     * Returns an array of {@link Bamboo\Models\Version} objects
      *
      * @return array
      */
@@ -301,7 +301,7 @@ class Episode extends Elements
 
    /**
      * Get the related links attached to this episode.
-     * Returns an array of {@link BBC_Service_Bamboo_Models_Related} objects
+     * Returns an array of {@link Bamboo\Models\Related} objects
      *
      * @return array
      */
@@ -318,7 +318,7 @@ class Episode extends Elements
     /**
      * Get the first related link attached to this episode.
      *
-     * @return string|BBC_Service_Bamboo_Models_Related
+     * @return string|Bamboo\Models\Related
      */
     public function getFirstRelatedLink() {
         $link = "";

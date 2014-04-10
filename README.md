@@ -11,10 +11,10 @@ Run Unit tests.
 	./vendor/bin/phpunit
 
 Usage
-
+	use Bamboo\Feeds;
     try {
-        $highlightsObject = new Bamboo_Feeds_Highlights_Home();
-    } catch (IblClient_Exception $e) {
+        $highlightsObject = new Feeds\Highlights\Home();
+    } catch (Feeds\Exception $e) {
       //exception
     }
     echo $highlightsObject->getEpisode('b03x19tb')->getSubtitle();

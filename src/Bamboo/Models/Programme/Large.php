@@ -57,7 +57,7 @@ class Large extends Elements
     /**
      * Get the latest episode
      *
-     * @return BBC_Service_Bamboo_Models_Episode
+     * @return Bamboo\Models\Episode
      */
     public function getLatestAvailableEpisode() {
         // @codingStandardsIgnoreStart

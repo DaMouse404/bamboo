@@ -36,7 +36,7 @@ class Broadcast extends Elements
     /**
      * Get episode inside Broadcast
      * 
-     * @return BBC_Service_Bamboo_Models_Episode
+     * @return Bamboo\Models\Episode
      */
     public function getEpisode() {
         $episodeModel = new Episode($this->_episode);

@@ -8,14 +8,35 @@ use Bamboo\Models\Episode;
 
 class Large extends Elements
 {
+    protected $_subtitle = "";
     // @codingStandardsIgnoreStart
-    protected $_initial_children;
-    // @codingStandardsIgnoreEnd
-    protected $_episodes;
-    protected $_stacked;
+    protected $_initial_children = array();
     protected $_count = 0;
-
+    protected $_labels = "";
+    protected $_related_links = "";
+    protected $_stacked = "";
+    // @codingStandardsIgnoreEnd
     private $_broadcastType = 'broadcast';
+
+   /**
+     * Returns the related links
+     *
+     * @return object
+     */
+    public function getRelatedLinks() {
+        // @codingStandardsIgnoreStart
+        return $this->_related_links;
+        // @codingStandardsIgnoreEnd
+    }
+
+    /**
+     * Returns the subtitle of the episode
+     *
+     * @return string
+     */
+    public function getSubtitle() {
+        return $this->_subtitle;
+    }
 
     /**
      * @todo Not sure this is relevant any longer
@@ -58,5 +79,26 @@ class Large extends Elements
      */
     public function isStacked() {
         return !!$this->_stacked;
+    }
+
+    /**
+     * @todo Not sure this is relevant any longer
+     */
+    public function getLabels() {
+        return $this->_labels;
+    }
+
+    /**
+     * Get the iStats type of the group
+     */
+    public function getIstatsType() {
+        if ($this->getId() === 'popular') {
+            $type = 'most-popular';
+        } elseif ($this->isStacked()) {
+            $type = 'series-catchup';
+        } else {
+            $type = 'editorial';
+        }
+        return $type;
     }
 }
