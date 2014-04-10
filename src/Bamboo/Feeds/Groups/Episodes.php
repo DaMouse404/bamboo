@@ -32,6 +32,10 @@ class Episodes extends Base
         return $elements;
     }
 
+    public function getCount() {
+        return $this->_response->group_episodes->count;
+    }
+
     public function getGroup() {
         $groupObject = $this->_response->group_episodes->group;
         
