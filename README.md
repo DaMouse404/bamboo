@@ -8,10 +8,10 @@ Setup dependencies.
 
 Run Unit tests.
 
-	./vendor/bin/phpunit
+    ./vendor/bin/phpunit
 
 Usage
-	use Bamboo\Feeds;
+    use Bamboo\Feeds;
     try {
         $highlightsObject = new Feeds\Highlights\Home();
     } catch (Feeds\Exception $e) {
