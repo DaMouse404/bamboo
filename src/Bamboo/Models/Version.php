@@ -175,10 +175,6 @@ class Version extends Base
         // @codingStandardsIgnoreEnd
     }
 
-    public function hasFutureFirstBroadcast() {
-        return $this->isFutureDate($this->getFirstBroadcast());
-    }
-
     /**
      * Get the small guidance message (if available)
      *

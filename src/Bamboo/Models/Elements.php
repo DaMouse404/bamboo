@@ -235,40 +235,6 @@ class Elements extends Base
         return $this->_status === 'unavailable';
     }
 
-    public function isFutureDate($date) {
-        //If there's only years, make it New Year
-        if (is_numeric($date)) {
-            $date = "1 Jan ".$date;
-        }
-
-        //If date has time we have to take the current time when comparing.
-        if ($this->_hasTimeInDate($date)) {
-            $now = mktime();
-        } else {
-            //If not, compare with right before midnight
-            $now = mktime(23, 59, 59, date('m'), date('d'), date('y'));
-        }
-
-        $releaseTime = strtotime($date);
-        if ($releaseTime === false) {
-            return false;
-        }
-        return $now < $releaseTime;
-    }
-
-    /**
-     * Returns true if a date follows a specific format including the time in a 12-hour format
-     * Will return true for 8pm 23 Feb 2010
-     * And false for 23 Feb 2010
-     *
-     * @param string $date
-     * @return bool
-     */
-    private function _hasTimeInDate($date) {
-        preg_match("/^[0-9]{1,2}(pm|am) [0-9]{1,2} [A-Z]{1}[a-z]{2} [0-9]{4}$/", $date, $matches);
-        return count($matches)>0;
-    }
-
     /**
      * Returns the recipe for a specific width x height or a recipe name
      *
