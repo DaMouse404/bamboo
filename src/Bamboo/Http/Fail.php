@@ -2,7 +2,7 @@
 
 namespace Bamboo\Http;
 
-class Fail
+class Fail implements GuzzleInterface
 {
     private $_errorClass;
     private $_errorMessage;

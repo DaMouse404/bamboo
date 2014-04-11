@@ -2,7 +2,7 @@
 
 namespace Bamboo\Http;
 
-class Fake
+class Fake implements GuzzleInterface
 {
 
     private $_path;
