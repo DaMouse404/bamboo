@@ -86,8 +86,8 @@ class Client
         } catch (ClientErrorResponseException $e) {
             $errorArray = $this->_translateClientError($e);
             $this->_logAndThrowError(
-                "Bamboo\Feeds\Exception" . $$errorArray['class'], 
-                $$errorArray['counter'], 
+                "Bamboo\Feeds\Exception" . $errorArray['class'], 
+                $errorArray['counter'], 
                 $e, $feed
             );
         } catch(\Exception $e){
@@ -219,8 +219,10 @@ class Client
      * Logs the error, throws 
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
+        $statusCode = $e->getCode();
+        
         // Log Error
-        Log::err("Bamboo error on feed $feed.");
+        Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode.");
 
         // Increment Counter
         Counter::increment($counterName);
@@ -228,7 +230,7 @@ class Client
         // Throw Exception
         $exception = new $errorClass(
             $e->getMessage(),
-            $e->getCode(),
+            $statusCode,
             $e
         );
         throw $exception;
