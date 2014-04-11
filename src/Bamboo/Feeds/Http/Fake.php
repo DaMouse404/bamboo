@@ -71,7 +71,8 @@ class Fake
             $fakedFeed = $fakePath;
             $fixtureFile = $fakePath;
         }
-
+        
+        $fixtureFile = str_replace("-", "_", $fixtureFile);
         return $fixtureFile;
     }
 }
