@@ -4,7 +4,7 @@ namespace Bamboo\Feeds\Programmes;
 
 use Bamboo\Feeds\Base;
 use Bamboo\Models\Episode;
-use Bamboo\Models\Group\Large;
+use Bamboo\Models\Group;
 
 class Episodes extends Base
 {

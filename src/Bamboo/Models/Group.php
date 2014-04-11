@@ -1,12 +1,8 @@
 <?php
 
-namespace Bamboo\Models\Group;
+namespace Bamboo\Models;
 
-use Bamboo\Models\Elements;
-use Bamboo\Models\Broadcast;
-use Bamboo\Models\Episode;
-
-class Large extends Elements
+class Group extends Elements
 {
     protected $_subtitle = "";
     // @codingStandardsIgnoreStart
