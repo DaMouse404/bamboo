@@ -17,7 +17,7 @@ class AtozTest extends BambooTestCase
   public function testProgrammeItemType() {
     $this->assertEquals(
         get_class($this->_programmes[0]), 
-        "Bamboo\Models\Programme\Large"
+        "Bamboo\Models\Programme"
     );
   }
 

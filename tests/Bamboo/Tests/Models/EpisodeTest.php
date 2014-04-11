@@ -274,6 +274,173 @@ class EpisodeTest extends BambooTestCase
         $this->assertFalse($notDownloadable->hasDownloads());
     }
 
+    public function testDownloadsFirstSDVersion() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'original',
+                    'kind' => 'iplayer',
+                    'hd' => true,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'signedSD',
+                    'kind' => 'signed',
+                    'hd' => false,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'prewatershed',
+                    'kind' => 'orignal',
+                    'hd' => false,
+                    'download' => true
+                )
+            ),
+            array (
+                'SD' => 'bbc-ipd:download//original/sd/standard/',
+                'SL' => 'bbc-ipd:download//signedSD/sd/signed/',
+                'HD' => 'bbc-ipd:download//original/hd/standard/'
+            )
+        );
+    }
+
+    public function testDownloadsMultipleAccessibleVersions() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'audioSD',
+                    'kind' => 'audio-described',
+                    'hd' => false,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'signedSD',
+                    'kind' => 'signed',
+                    'hd' => false,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'originalSD',
+                    'kind' => 'orignal',
+                    'hd' => false,
+                    'download' => true
+                )
+            ),
+            array (
+                'SD' => 'bbc-ipd:download//originalSD/sd/standard/',
+                'SL' => 'bbc-ipd:download//signedSD/sd/signed/',
+                'AD' => 'bbc-ipd:download//audioSD/sd/dubbedaudiodescribed/'
+            )
+        );
+    }
+
+    public function testDownloadsFirstSDOverHDVersions() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'premierSD',
+                    'kind' => 'iplayer',
+                    'hd' => false,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'originalHD',
+                    'kind' => 'orignal',
+                    'hd' => true,
+                    'download' => true
+                )
+            ),
+            array (
+                'SD' => 'bbc-ipd:download//premierSD/sd/standard/',
+                'HD' => 'bbc-ipd:download//originalHD/hd/standard/'
+            )
+        );
+    }
+
+    public function testDownloadsHDIgnoredOnAccessibleVersions() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'signedHD',
+                    'kind' => 'signed',
+                    'hd' => true,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'audioHD',
+                    'kind' => 'audio-described',
+                    'hd' => true,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'originalSD',
+                    'kind' => 'original',
+                    'hd' => false,
+                    'download' => true
+                )
+            ),
+            array (
+                'SD' => 'bbc-ipd:download//originalSD/sd/standard/',
+                'SL' => 'bbc-ipd:download//signedHD/sd/signed/',
+                'AD' => 'bbc-ipd:download//audioHD/sd/dubbedaudiodescribed/'
+            )
+        );
+    }
+
+    public function testDownloadsHDUsedForSDIfPriority() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'originalHD',
+                    'kind' => 'original',
+                    'hd' => true,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'originalSD',
+                    'kind' => 'original',
+                    'hd' => false,
+                    'download' => true
+                )
+            ),
+            array (
+                'SD' => 'bbc-ipd:download//originalHD/sd/standard/',
+                'HD' => 'bbc-ipd:download//originalHD/hd/standard/',
+            )
+        );
+    }
+
+    public function testDownloadsSDIgnoredOnAccessibleVersions() {
+        $this->_assertDownloadVersionsMatch(
+            array(
+                (object) array(
+                    'id' => 'audioSD',
+                    'kind' => 'audio-described',
+                    'hd' => false,
+                    'download' => true
+                ),
+                (object) array(
+                    'id' => 'signedSD',
+                    'kind' => 'signed',
+                    'hd' => false,
+                    'download' => true
+                )
+            ),
+            array (
+                'AD' => 'bbc-ipd:download//audioSD/sd/dubbedaudiodescribed/',
+                'SL' => 'bbc-ipd:download//signedSD/sd/signed/',
+            )
+        );
+    }
+
+    private function _assertDownloadVersionsMatch ($versions, $expectation) {
+        $episode = $this->_createEpisode(array('versions' => $versions));
+
+        $downloads = $episode->getDownloadURIs();
+
+        $this->assertEquals($expectation, $downloads);
+    }
+    
     private function _createEpisode($params) {
         return new Episode((object) $params);
     }
