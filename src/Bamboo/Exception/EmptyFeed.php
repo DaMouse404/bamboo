@@ -1,8 +1,8 @@
 <?php
 
-namespace Bamboo\Feeds\Exception;
+namespace Bamboo\Exception;
 
-use Bamboo\Feeds\Exception;
+use Bamboo\Exception;
 
 class EmptyFeed extends Exception
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bamboo\Feeds\Http;
+namespace Bamboo\Http;
 
 class Fake
 {

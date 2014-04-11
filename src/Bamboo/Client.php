@@ -1,16 +1,15 @@
 <?php
 
-namespace Bamboo\Feeds;
+namespace Bamboo;
 
 use Guzzle\Http;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Http\Exception\BadResponseException;
-use Bamboo\Feeds\HttpFail;
-use Bamboo\Feeds\Log;
-use Bamboo\Feeds\Counter;
-use Bamboo\Feeds\Exception;
-use Bamboo\Feeds\Exception\EmptyFeed;
+use Bamboo\Log;
+use Bamboo\Counter;
+use Bamboo\Exception;
+use Bamboo\Exception\EmptyFeed;
 
 class Client
 {
@@ -23,6 +22,7 @@ class Client
     private $_proxy = "";
     private $_config = array();
     private $_fakeHttpClient;
+    private $_failHttpClient;
     private $_defaultParams = array(
                                 "api_key" => "",
                                 "availability" => "all",
@@ -52,6 +52,10 @@ class Client
         $this->_fakeHttpClient = $fakeHttpClient;
     }
 
+    public function setFailHttpClient($failHttpClient) {
+        $this->_failHttpClient = $failHttpClient;
+    }
+
     public function setConfig($config) {
         $this->_config = $config;
     }
@@ -79,14 +83,14 @@ class Client
             $response = $request->send();
         } catch (ServerErrorResponseException $e) {
             $this->_logAndThrowError(
-                "Bamboo\Feeds\Exception\ServerError", 
+                "Bamboo\Exception\ServerError", 
                 "BAMBOO_SERVERERROR", 
                 $e, $feed
             );
         } catch (ClientErrorResponseException $e) {
             $errorArray = $this->_translateClientError($e);
             $this->_logAndThrowError(
-                "Bamboo\Feeds\Exception" . $errorArray['class'], 
+                "Bamboo\Exception" . $errorArray['class'], 
                 $errorArray['counter'], 
                 $e, $feed
             );
@@ -156,12 +160,13 @@ class Client
      * Return Client to use for this request.
      */
     private function _getClient($feed) {
+
         if ($this->_useFixture($feed)) {
             return $this->_fakeHttpClient;
         }
 
         if ($this->_useFailure($feed)) {
-            return new \Bamboo\Feeds\Http\Fail();
+            return $this->_failHttpClient;
         }
 
         return new Http\Client($this->_host);
