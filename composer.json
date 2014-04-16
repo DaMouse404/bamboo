@@ -12,7 +12,7 @@
     },
     "config": {
         "vendor-dir": "vendor",
-        "autoloader-suffix": "Bamboo",
+        "autoloader-suffix": "Bamboo"
     },
     "autoload": {
         "psr-0": {
