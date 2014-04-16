@@ -2,6 +2,8 @@
 
 namespace Bamboo\Feeds;
 
+use Bamboo\Client;
+
 class Base
 {
 
@@ -11,22 +13,25 @@ class Base
         );
     }
 
+    /*
+     * Translate Class name into Model name.
+     *  $words[0] as most only have first index.
+     *  Exept Programme and Group which have 'Large' at index 2
+     *
+     * @return string $return
+     */
     protected function _className($string) {
         $words = explode('_', mb_strtoupper($string, "UTF-8"));
-
         $return = "Bamboo\Models\\";
-        $count = 0;
-        foreach ($words as $word) {
-            if ($count > 0) {
-              $return .=  "\\" . $this->_ucFirstChar($word);
-            } else {
-              $return .=  $this->_ucFirstChar($word);
-            }
-            $count++;
-        }
+        $return .=  $this->_ucFirstChar($words[0]);
         return $return;
     }
 
+    /* 
+     * Upper case first character, lower case all following.
+     *
+     * @return string
+     */ 
     private function _ucFirstChar($string) {
         $encoding = "UTF-8";
 

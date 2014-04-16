@@ -313,12 +313,18 @@ class Episode extends Elements
         foreach ($this->_versions as $version) {
             $version = new Version($version);
             if ($version->isDownload()) {
-                // If the version is HD then also add the SD version
-                if ($version->getAbbreviation() === 'HD') {
-                    $downloadableVersions['SD'] = $this->_createDownloadURI($version);
-                    $downloadableVersions['HD'] = $this->_createDownloadURI($version, 'hd');
-                } else {
-                    $downloadableVersions[$version->getAbbreviation()] = $this->_createDownloadURI($version);
+                $abbr = $version->getAbbreviation();
+                $quality = 'sd';
+
+                if ($abbr === 'HD') {
+                    if (!isset($downloadableVersions['SD'])) {
+                        $downloadableVersions['SD'] = $this->_createDownloadURI($version);
+                    }
+                    $quality = 'hd';
+                }
+
+                if (!isset($downloadableVersions[$abbr])) {
+                    $downloadableVersions[$abbr] = $this->_createDownloadURI($version, $quality);
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bamboo\Feeds;
+namespace Bamboo;
 
 class Exception extends \Exception
 {

@@ -4,7 +4,7 @@ namespace Bamboo\Feeds\Groups;
 
 use Bamboo\Feeds\Base;
 use Bamboo\Models\Episode;
-use Bamboo\Models\Group\Large;
+use Bamboo\Models\Group;
 
 class Episodes extends Base
 {
@@ -32,14 +32,14 @@ class Episodes extends Base
         return $elements;
     }
 
-    public function getCount() {
+    public function getTotalCount() {
         return $this->_response->group_episodes->count;
     }
 
     public function getGroup() {
         $groupObject = $this->_response->group_episodes->group;
         
-        return new Large($groupObject);
+        return new Group($groupObject);
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace Bamboo\Feeds;
 
-use Bamboo\Models\Programme\Large;
+use Bamboo\Models\Programme;
 
 class Atoz extends Base
 {
@@ -25,7 +25,7 @@ class Atoz extends Base
     public function getElements() {
         $programmes = array();
         foreach ($this->_response->atoz_programmes->elements as $programme) {
-            $programmes[] = new Large($programme);
+            $programmes[] = new Programme($programme);
         }
 
         return $programmes;

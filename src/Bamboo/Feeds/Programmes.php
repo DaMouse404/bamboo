@@ -2,7 +2,7 @@
 
 namespace Bamboo\Feeds;
 
-use Bamboo\Models\Programme\Large;
+use Bamboo\Models\Programme;
 
 class Programmes extends Base
 {
@@ -28,7 +28,7 @@ class Programmes extends Base
     public function getElements() {
         $programmes = array();
         foreach ($this->_response->programmes as $programme) {
-            $programmes[] = new Large($programme);
+            $programmes[] = new Programme($programme);
         }
 
         return $programmes;

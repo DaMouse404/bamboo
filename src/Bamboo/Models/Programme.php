@@ -1,11 +1,8 @@
 <?php
 
-namespace Bamboo\Models\Programme;
+namespace Bamboo\Models;
 
-use Bamboo\Models\Elements;
-use Bamboo\Models\Episode;
-
-class Large extends Elements
+class Programme extends Elements
 {
   
      // @codingStandardsIgnoreStart

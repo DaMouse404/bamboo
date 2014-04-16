@@ -4,7 +4,7 @@ namespace Bamboo\Feeds\Programmes;
 
 use Bamboo\Feeds\Base;
 use Bamboo\Models\Episode;
-use Bamboo\Models\Group\Large;
+use Bamboo\Models\Group;
 
 class Episodes extends Base
 {
@@ -36,7 +36,7 @@ class Episodes extends Base
         return $this->_response->programme_episodes->elements;
     }
 
-    public function getCount() {
+    public function getTotalCount() {
         return $this->_response->programme_episodes->count;
     }
 }

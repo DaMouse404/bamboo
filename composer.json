@@ -11,7 +11,8 @@
         "phpunit/phpunit": "4.*"
     },
     "config": {
-       "vendor-dir": "vendor"
+        "vendor-dir": "vendor",
+        "autoloader-suffix": "Bamboo",
     },
     "autoload": {
         "psr-0": {

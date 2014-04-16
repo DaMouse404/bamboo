@@ -1,8 +1,8 @@
 <?php
 
-namespace Bamboo\Feeds\Http;
+namespace Bamboo\Http;
 
-class Fake
+class Fake implements GuzzleInterface
 {
 
     private $_path;

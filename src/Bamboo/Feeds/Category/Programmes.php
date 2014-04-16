@@ -37,5 +37,8 @@ class Programmes extends Base
         return new Models\Category($category);
     }
 
+    public function getTotalCount() {
+        return $this->_response->category_programmes->count;
+    }
 
 }
