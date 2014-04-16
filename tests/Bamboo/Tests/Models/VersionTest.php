@@ -34,7 +34,7 @@ class VersionTest extends BambooTestCase
                 'events' => array(
                     (object) array(
                         'kind' => 'onward_journey', 
-                        'time_offset_seconds' => $timeOffset;
+                        'time_offset_seconds' => $timeOffset
                     )
                 )
             )
