@@ -28,18 +28,18 @@ class VersionTest extends BambooTestCase
     }
 
     public function testRetrievingOnwardJourneyTime() {
-        $offsetTime = '30';
+        $timeOffset = '30';
         $version = $this->_createVersion(
             array(
                 'events' => array(
                     (object) array(
                         'kind' => 'onward_journey', 
-                        'time_offset_seconds' => $offsetTime;
+                        'time_offset_seconds' => $timeOffset;
                     )
                 )
             )
         );
-        $this->assertEquals($offsetTime, $version->getOnwardJourneyTime());
+        $this->assertEquals($timeOffset, $version->getOnwardJourneyTime());
     }
 
     public function testGuidanceData() {
