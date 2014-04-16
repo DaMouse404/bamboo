@@ -78,6 +78,8 @@ class Client
                 array(
                     'query' => $params,
                     'proxy' =>  $this->_proxy,
+                    'timeout'         => 60, // 60 seconds
+                    'connect_timeout' => 5 // 5 seconds
                 )
             );
             $response = $request->send();
