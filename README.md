@@ -1,6 +1,6 @@
 #PHP client library for iBL
 
-[![Build Status](https://travis-ci.org/iplayer/bamboo2.svg?branch=develop)](https://travis-ci.org/iplayer/bamboo2)
+[![](http://hubson.cloud.bbc.co.uk/badges/bamboo)](https://ci-pal.int.bbc.co.uk/hudson/view/iPlayer/job/bamboo/)
 
 Setup dependencies.
 
