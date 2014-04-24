@@ -6,6 +6,7 @@ use Guzzle\Http;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Http\Exception\BadResponseException;
+use Guzzle\Http\Exception\CurlException;
 use Bamboo\Log;
 use Bamboo\Counter;
 use Bamboo\Exception;
@@ -78,7 +79,7 @@ class Client
                 array(
                     'query' => $params,
                     'proxy' =>  $this->_proxy,
-                    'timeout'         => 60, // 60 seconds
+                    'timeout'         => 6, // 6 seconds
                     'connect_timeout' => 5 // 5 seconds
                 )
             );
@@ -96,7 +97,14 @@ class Client
                 $errorArray['counter'], 
                 $e, $feed
             );
-        } catch(\Exception $e){
+        } catch (CurlException $e) {
+            // Response/Connection Timeout
+            $this->_logAndThrowError(
+                "Bamboo\Exception\CurlError", 
+                "BAMBOO_CURLERROR", 
+                $e, $feed
+            );
+        } catch(\Exception $e) {
             // General Exception
             $this->_logAndThrowError(
                 "Exception", 
@@ -222,21 +230,23 @@ class Client
             return true;          
         }
     }
+
     /*
      * Logs the error, throws 
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
         $statusCode = $e->getCode();
+        $message = $e->getMessage();
         
         // Log Error
-        Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode.");
+        Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode. Message: $message.");
 
         // Increment Counter
         Counter::increment($counterName);
 
         // Throw Exception
         $exception = new $errorClass(
-            $e->getMessage(),
+            $message,
             $statusCode,
             $e
         );
