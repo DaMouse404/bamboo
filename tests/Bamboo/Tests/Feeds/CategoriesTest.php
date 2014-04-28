@@ -11,7 +11,7 @@ class CategoriesTest extends BambooTestCase
   private $_categories;
 
   public function setup() {
-    parent::setupRequest("categories");
+    parent::setupRequest("categories@categories");
     $feedObject = new Categories();
     $this->_categories = $feedObject->getCategories();
   }
