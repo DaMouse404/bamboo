@@ -224,11 +224,14 @@ class Client
     }
 
     private function _doesHaveMatches($feed, $fakedFeed) {
-        preg_match('/' . $fakedFeed . '/', $feed, $matches);
-        if (count($matches) > 0) {
-            // matches, so use the fixtureFile
-            return true;          
+        if ($fakedFeed) {
+            preg_match('/' . $fakedFeed . '/', $feed, $matches);
+            if (count($matches) > 0) {
+                // matches, so use the fixtureFile
+                return true;          
+            }
         }
+        return false;
     }
 
     /*
