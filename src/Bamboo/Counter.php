@@ -22,6 +22,8 @@ class Counter
      */
     public static function increment($counterName) {
         $counter = self::$_counter;
-        $counter::increment($counterName); 
+        $counter::increment(
+            constant("$counter::$counterName")
+        ); 
     }
 }
