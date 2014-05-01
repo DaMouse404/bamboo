@@ -28,12 +28,12 @@ class CounterFake
     }
 
     public static function getCount($counterName) {
-        $counter = constant("\Bamboo\CounterFake::$counterName");
-        return self::$_countArray[$counter];
+        $realName = constant("\Bamboo\CounterFake::$counterName");
+        return self::$_countArray[$realName];
     }
 
     public static function resetCount($counterName) {
-        $counter = constant("\Bamboo\CounterFake::$counterName");
-        self::$_countArray[$counter] = 0;
+        $realName = constant("\Bamboo\CounterFake::$counterName");
+        self::$_countArray[$realName] = 0;
     }
 }

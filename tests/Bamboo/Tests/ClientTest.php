@@ -26,6 +26,7 @@ class ClientTest extends BambooTestCase
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\ServerError $e) {
             $endCount = CounterFake::getCount('BAMBOO_SERVERERROR');
+            
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);
         }   
