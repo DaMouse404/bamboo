@@ -21,8 +21,8 @@ class ClientTest extends BambooTestCase
     public function testServerErrorCounter() {    
         try {
             CounterFake::resetCount('BAMBOO_SERVERERROR');
-            parent::setupFailRequest('atoz');
             $startCount = CounterFake::getCount('BAMBOO_SERVERERROR');
+            parent::setupFailRequest('atoz');
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\ServerError $e) {
             $endCount = CounterFake::getCount('BAMBOO_SERVERERROR');
@@ -45,12 +45,12 @@ class ClientTest extends BambooTestCase
     public function testBadRequestCounter() {    
         try {
             CounterFake::resetCount('BAMBOO_BADREQUEST');
+            $startCount = CounterFake::getCount('BAMBOO_BADREQUEST');
             parent::setupFailRequest(
                 'atoz', 
                 'Guzzle\Http\Exception\ClientErrorResponseException', 
                 400
             );
-            $startCount = CounterFake::getCount('BAMBOO_BADREQUEST');
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\BadRequest $e) {
             $endCount = CounterFake::getCount('BAMBOO_BADREQUEST');
