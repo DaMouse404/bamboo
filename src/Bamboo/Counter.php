@@ -18,10 +18,12 @@ class Counter
     }
 
     /* 
-     * A proxy method for the counter
+     * A proxy method for the counter. Dynamically looks up real counter name.
      */
     public static function increment($counterName) {
         $counter = self::$_counter;
-        $counter::increment($counterName); 
+        $counter::increment(
+            constant("$counter::$counterName")
+        ); 
     }
 }
