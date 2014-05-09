@@ -18,6 +18,7 @@ class Client
     const PARAM_DEGRADE = '_fake';
     const PARAM_FAIL = '_fail';
     const LOCALE_SUFFIX = '-gb';
+    const LOCALE_LENGTH = 2;
 
     private $_host = "";
     private $_baseUrl = "";
@@ -68,11 +69,15 @@ class Client
 
     /* 
      * Set locale for remainder of requests.
+     * Needs to be lowercased, without a suffix and 2 chars long.
+     * Default is English.
      */
     public function setLang($locale) {
         $locale = mb_strtolower($locale);
-        $locale = str_replace(self::LOCALE_SUFFIX, "", $locale);  
-        $this->_defaultParams['lang'] = $locale;
+        $locale = str_replace(self::LOCALE_SUFFIX, "", $locale);
+        if (strlen($locale) === self::LOCALE_LENGTH) {
+            $this->_defaultParams['lang'] = $locale;
+        }
     }
 
     /*
