@@ -17,6 +17,7 @@ class Client
 
     const PARAM_DEGRADE = '_fake';
     const PARAM_FAIL = '_fail';
+    const LOCALE_LENGTH = 2;
 
     private $_host = "";
     private $_baseUrl = "";
@@ -64,6 +65,22 @@ class Client
     public function setProxy($proxy) {
         $this->_proxy = $proxy;
     }
+
+    /* 
+     * Set locale for remainder of requests.
+     * Needs to be lowercased, without a suffix and 2 chars long.
+     * Default is English.
+     */
+    public function setLang($locale) {
+        $locale = mb_strtolower($locale);
+        if (mb_strlen($locale) === self::LOCALE_LENGTH) {
+            $this->_defaultParams['lang'] = $locale;
+        }
+    }
+
+    public function getParam($key) {
+        return $this->_defaultParams[$key];
+    }    
 
     /*
      * Log Error...Translate Exception and throw

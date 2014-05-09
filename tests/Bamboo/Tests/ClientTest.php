@@ -9,6 +9,17 @@ use Bamboo\Feeds\Atoz;
 class ClientTest extends BambooTestCase
 {
 
+    public function testSetLang() {
+        parent::setupRequest('atoz_a_programmes');
+
+        $defaultLang = Client::getInstance()->getParam('lang');
+        Client::getInstance()->setLang('cy');
+        $newLang = Client::getInstance()->getParam('lang');
+        
+        $this->assertEquals('en', $defaultLang);
+        $this->assertEquals('cy', $newLang);
+    }
+
     public function testServerError() {
         parent::setupFailRequest('atoz');
         $this->setExpectedException('Bamboo\Exception\ServerError');
