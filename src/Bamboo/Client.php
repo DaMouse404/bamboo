@@ -17,7 +17,6 @@ class Client
 
     const PARAM_DEGRADE = '_fake';
     const PARAM_FAIL = '_fail';
-    const LOCALE_SUFFIX = '-gb';
     const LOCALE_LENGTH = 2;
 
     private $_host = "";
@@ -74,7 +73,6 @@ class Client
      */
     public function setLang($locale) {
         $locale = mb_strtolower($locale);
-        $locale = str_replace(self::LOCALE_SUFFIX, "", $locale);
         if (mb_strlen($locale) === self::LOCALE_LENGTH) {
             $this->_defaultParams['lang'] = $locale;
         }
