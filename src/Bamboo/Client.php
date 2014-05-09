@@ -75,7 +75,7 @@ class Client
     public function setLang($locale) {
         $locale = mb_strtolower($locale);
         $locale = str_replace(self::LOCALE_SUFFIX, "", $locale);
-        if (strlen($locale) === self::LOCALE_LENGTH) {
+        if (mb_strlen($locale) === self::LOCALE_LENGTH) {
             $this->_defaultParams['lang'] = $locale;
         }
     }
