@@ -78,6 +78,10 @@ class Client
         }
     }
 
+    public function getParam($key) {
+        return $this->_defaultParams[$key];
+    }    
+
     /*
      * Log Error...Translate Exception and throw
      */
