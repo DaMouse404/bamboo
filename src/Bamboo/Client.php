@@ -65,6 +65,15 @@ class Client
         $this->_proxy = $proxy;
     }
 
+    /* 
+     * Set locale for remainder of requests.
+     */
+    public function setLang($locale) {
+        $locale = mb_strtolower($locale);
+        $locale = str_replace("-gb", "", $locale);  
+        $this->_defaultParams['lang'] = $locale;
+    }
+
     /*
      * Log Error...Translate Exception and throw
      */
