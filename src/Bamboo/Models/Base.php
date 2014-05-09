@@ -9,9 +9,11 @@ class Base
   protected $_title;
     
   public function __construct($object) {
-    foreach (get_object_vars($object) as $key => $value) {
-      $key = "_$key";
-      $this->$key = $value;
+    if ($object) {
+      foreach (get_object_vars($object) as $key => $value) {
+        $key = "_$key";
+        $this->$key = $value;
+      }
     }
   }
   
