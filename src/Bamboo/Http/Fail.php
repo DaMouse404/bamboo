@@ -2,7 +2,7 @@
 
 namespace Bamboo\Http;
 
-class Fail implements GuzzleInterface
+class Fail extends Base implements GuzzleInterface 
 {
     private $_errorClass;
     private $_errorMessage;
@@ -28,15 +28,30 @@ class Fail implements GuzzleInterface
 
     public function get($feed, $params = array(), $queryParams = array()) {
         //setup request object
+
+        $this->_buildPath($feed);
+
         return $this;
     }
 
     public function send() {
 
-        throw new $this->_errorClass(
+        // attach to error as response->body
+        $response = file_get_contents($this->_path);
+        $e = new $this->_errorClass(
             $this->_errorMessage, 
             $this->_statusCode
         );
+//var_dump($e);
+//die('2');
+        $response = new \Guzzle\Http\Message\Response($this->_statusCode, $this->_errorMessage, $response);
+        var_dump($response);
+die('4');
+        $e->setResponse($response);
+die('3');
+var_dump($e);
+die;
+        throw $e;
     }
 
     public function json() {
@@ -44,7 +59,6 @@ class Fail implements GuzzleInterface
 
         return;
     }
-
 
 
 }

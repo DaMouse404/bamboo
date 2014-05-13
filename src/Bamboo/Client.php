@@ -31,6 +31,10 @@ class Client
                                 "lang" => "en",
                                 "rights" => "web"
             );
+    private $_errorSource = array (
+                                "apigee" => array("fault" => "faultstring"),
+                                "ibl"    => array("error" => "details")
+            );
 
     public static $instance;
 
@@ -86,12 +90,16 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params = array()) {
+
+
         $client = $this->_getClient($feed);
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
             $request = $client->get(
                 $this->_baseUrl . $feed . ".json", 
+                //"http://pal.sandbox.dev.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json",
+                //"http://www.developerknowhow.com/tttt",
                 array(), 
                 array(
                     'query' => $params,
@@ -102,9 +110,10 @@ class Client
             );
             $response = $request->send();
         } catch (ServerErrorResponseException $e) {
+            die('1');
             $this->_logAndThrowError(
                 "Bamboo\Exception\ServerError", 
-                "BAMBOO_SERVERERROR", 
+                "BAMBOO_{service}_SERVERERROR", 
                 $e, $feed
             );
         } catch (ClientErrorResponseException $e) {
@@ -118,14 +127,14 @@ class Client
             // Response/Connection Timeout
             $this->_logAndThrowError(
                 "Bamboo\Exception\CurlError", 
-                "BAMBOO_CURLERROR", 
+                "BAMBOO_{service}_CURLERROR", 
                 $e, $feed
             );
         } catch(\Exception $e) {
             // General Exception
             $this->_logAndThrowError(
                 "Exception", 
-                "BAMBOO_OTHER", 
+                "BAMBOO_{service}_OTHER", 
                 $e, $feed
             );
         }
@@ -143,23 +152,23 @@ class Client
         switch ($e->getCode()) {
             case 400:
                 $errorClass = "\BadRequest";
-                $counterName = "BAMBOO_BADREQUEST";
+                $counterName = "BAMBOO_{service}_BADREQUEST";
                 break;
             case 403:
                 $errorClass = "\Unauthorized";
-                $counterName = "BAMBOO_UNAUTHORISED";
+                $counterName = "BAMBOO_{service}_UNAUTHORISED";
                 break;
             case 404:
                 $errorClass = "\NotFound";
-                $counterName = "BAMBOO_NOTFOUND";
+                $counterName = "BAMBOO_{service}_NOTFOUND";
                 break;
             case 405:
                 $errorClass = "\MethodNotAllowed";
-                $counterName = "BAMBOO_METHODNOTALLOWED";
+                $counterName = "BAMBOO_{service}_METHODNOTALLOWED";
                 break;
             default:
                 $errorClass = "\ClientError";
-                $counterName = "BAMBOO_OTHER";
+                $counterName = "BAMBOO_{service}_OTHER";
                 break;
         }
 
@@ -205,14 +214,15 @@ class Client
      */
     private function _useFailure($feed) {
         if (!isset($_GET[self::PARAM_FAIL])) {
+
             return false;
         }
-
         $fakedFeed = $_GET[self::PARAM_FAIL];
 
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {
             return true;
         }
+
         return false;
     }
 
@@ -257,12 +267,15 @@ class Client
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
         $statusCode = $e->getCode();
         $message = $e->getMessage();
-        
+
+        $source = $this->_getErrorSource($e);
+        $fullCounterName = str_replace("{service}", $source, $counterName); 
+
         // Log Error
         Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode. Message: $message.");
 
         // Increment Counter
-        Counter::increment($counterName);
+        Counter::increment($fullCounterName);
 
         // Throw Exception
         $exception = new $errorClass(
@@ -271,6 +284,35 @@ class Client
             $e
         );
         throw $exception;
+    }
+
+
+    /*
+     * Used to detect who the error comes from.
+     * @return string $source
+     */
+    private function _getErrorSource($e) {
+        $source = '';
+        //var_dump($e->getResponse());die;
+        $response = $e->getResponse();
+        if ($response) {
+            $response = $response->getBody(true);
+        }
+        $object = json_decode($response);
+
+        if (!$object) {
+            $source = 'APIGEE';
+        } else {
+            if (isset($object->error, $object->error->details)) {
+                $source = 'IBL';
+            } else if (isset($object->fault, $object->fault->faultString)) {
+                $source = 'APIGEE';
+            } else {
+                $source = 'APIGEE';
+            }
+        }
+
+        return $source;
     }
 
 }

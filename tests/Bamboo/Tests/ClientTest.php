@@ -9,6 +9,20 @@ use Bamboo\Feeds\Atoz;
 class ClientTest extends BambooTestCase
 {
 
+    public function testIblServerErrorCounter() {
+        try {
+            CounterFake::resetCount('BAMBOO_IBL_SERVERERROR');
+            $startCount = CounterFake::getCount('BAMBOO_IBL_SERVERERROR');
+            parent::setupFailRequest('atoz');
+            $feedObject = new Atoz(array(), 'a');
+        } catch (\Bamboo\Exception\ServerError $e) {
+            $endCount = CounterFake::getCount('BAMBOO_IBL_SERVERERROR');
+            
+            $this->assertEquals(0, $startCount);
+            $this->assertEquals(1, $endCount);
+        }     
+    }
+
     public function testSetLang() {
         parent::setupRequest('atoz_a_programmes');
 
@@ -20,7 +34,7 @@ class ClientTest extends BambooTestCase
         $this->assertEquals('cy', $newLang);
     }
 
-    public function testServerError() {
+    public function testerverError() {
         parent::setupFailRequest('atoz');
         $this->setExpectedException('Bamboo\Exception\ServerError');
         $feedObject = new Atoz(array(), 'a');
@@ -29,14 +43,14 @@ class ClientTest extends BambooTestCase
     /* 
      * Test to ensure name maps to correct constant on error.
      */
-    public function testServerErrorCounter() {    
+    public function testApigeeServerErrorCounter() {    
         try {
-            CounterFake::resetCount('BAMBOO_SERVERERROR');
-            $startCount = CounterFake::getCount('BAMBOO_SERVERERROR');
+            CounterFake::resetCount('BAMBOO_APIGEE_SERVERERROR');
+            $startCount = CounterFake::getCount('BAMBOO_APIGEE_SERVERERROR');
             parent::setupFailRequest('atoz');
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\ServerError $e) {
-            $endCount = CounterFake::getCount('BAMBOO_SERVERERROR');
+            $endCount = CounterFake::getCount('BAMBOO_APIGEE_SERVERERROR');
             
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);
@@ -53,10 +67,10 @@ class ClientTest extends BambooTestCase
         $feedObject = new Atoz(array(), 'a');
     }
 
-    public function testBadRequestCounter() {    
+    public function testApigeeBadRequestCounter() {    
         try {
-            CounterFake::resetCount('BAMBOO_BADREQUEST');
-            $startCount = CounterFake::getCount('BAMBOO_BADREQUEST');
+            CounterFake::resetCount('BAMBOO_APIGEE_BADREQUEST');
+            $startCount = CounterFake::getCount('BAMBOO_APIGEE_BADREQUEST');
             parent::setupFailRequest(
                 'atoz', 
                 'Guzzle\Http\Exception\ClientErrorResponseException', 
@@ -64,7 +78,7 @@ class ClientTest extends BambooTestCase
             );
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\BadRequest $e) {
-            $endCount = CounterFake::getCount('BAMBOO_BADREQUEST');
+            $endCount = CounterFake::getCount('BAMBOO_APIGEE_BADREQUEST');
 
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);

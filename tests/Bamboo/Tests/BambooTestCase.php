@@ -24,7 +24,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function setupFailRequest($feed, $errorClass = "", $statusCode = "") {
+    protected function setupFailRequest($feed, $errorClass = null, $statusCode = null) {
 
         // As deals with errors, set fake Counter
         \Bamboo\Counter::setCounter("Bamboo\CounterFake");
@@ -39,9 +39,11 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
             $httpFail->setStatusCode($statusCode);
         }
 
+        $path =  dirname(__FILE__) . '/../../../tests/fixtures/';
+        $httpFail->setFixturesPath($path);
         Client::getInstance()->setFailHttpClient(
             $httpFail
-        );
-            
+        );  
     }
+
 }

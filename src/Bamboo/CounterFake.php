@@ -8,17 +8,16 @@ namespace Bamboo;
 class CounterFake
 {
     private static $_countArray = array(
-        'bambooError500' => 0,
-        'bambooError404' => 0
+        'bambooErrorApigee500' => 0,
+        'bambooErrorApigee404' => 0,
+        'bambooErrorApigee500' => 0,
+        'bambooErrorIbl500' => 0
     );
 
-    const BAMBOO_BADREQUEST = 'bambooError400';
-    const BAMBOO_UNAUTHORISED = 'bamboError403';
-    const BAMBOO_NOTFOUND = 'bambooError404';
-    const BAMBOO_METHODNOTALLOWED = 'bamboError405';
-    const BAMBOO_SERVERERROR = 'bambooError500';
-    const BAMBOO_CURLERROR = 'bambooErrorCurl';
-    const BAMBOO_OTHER = 'bambooErrorOther';
+    const BAMBOO_APIGEE_BADREQUEST = 'bambooErrorApigee400';
+    const BAMBOO_APIGEE_NOTFOUND = 'bambooErrorApigee404';
+    const BAMBOO_APIGEE_SERVERERROR = 'bambooErrorApigee500';
+    const BAMBOO_IBL_SERVERERROR = 'bambooErrorIbl500';
 
     /* 
      * A proxy method for the counter
