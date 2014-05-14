@@ -2,6 +2,8 @@
 
 namespace Bamboo\Http;
 
+use \Guzzle\Http\Message\Response;
+
 class Fail extends Base implements GuzzleInterface 
 {
     private $_errorClass;
@@ -28,30 +30,33 @@ class Fail extends Base implements GuzzleInterface
 
     public function get($feed, $params = array(), $queryParams = array()) {
         //setup request object
-
         $this->_buildPath($feed);
 
         return $this;
     }
 
+    /*
+     * Grab file contents from fixture.
+     * Create exception object as handed down from above.
+     * Add fixture contents to exception object (in form of Response)
+     *
+     * @return exception 
+     */ 
     public function send() {
 
         // attach to error as response->body
         $response = file_get_contents($this->_path);
-        $e = new $this->_errorClass(
+
+        $exception = new $this->_errorClass(
             $this->_errorMessage, 
             $this->_statusCode
         );
-//var_dump($e);
-//die('2');
-        $response = new \Guzzle\Http\Message\Response($this->_statusCode, $this->_errorMessage, $response);
-        var_dump($response);
-die('4');
-        $e->setResponse($response);
-die('3');
-var_dump($e);
-die;
-        throw $e;
+
+        $response = new Response($this->_statusCode, array(), $response);
+
+        $exception->setResponse($response);
+
+        throw $exception;
     }
 
     public function json() {

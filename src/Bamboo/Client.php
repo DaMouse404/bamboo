@@ -31,10 +31,6 @@ class Client
                                 "lang" => "en",
                                 "rights" => "web"
             );
-    private $_errorSource = array (
-                                "apigee" => array("fault" => "faultstring"),
-                                "ibl"    => array("error" => "details")
-            );
 
     public static $instance;
 
@@ -98,8 +94,6 @@ class Client
         try {
             $request = $client->get(
                 $this->_baseUrl . $feed . ".json", 
-                //"http://pal.sandbox.dev.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json",
-                //"http://www.developerknowhow.com/tttt",
                 array(), 
                 array(
                     'query' => $params,
@@ -110,7 +104,6 @@ class Client
             );
             $response = $request->send();
         } catch (ServerErrorResponseException $e) {
-            die('1');
             $this->_logAndThrowError(
                 "Bamboo\Exception\ServerError", 
                 "BAMBOO_{service}_SERVERERROR", 
@@ -213,17 +206,7 @@ class Client
      * Check if the current feed matches ?_fail one
      */
     private function _useFailure($feed) {
-        if (!isset($_GET[self::PARAM_FAIL])) {
-
-            return false;
-        }
-        $fakedFeed = $_GET[self::PARAM_FAIL];
-
-        if ($this->_doesHaveMatches($feed, $fakedFeed)) {
-            return true;
-        }
-
-        return false;
+        return $this->_setupAndCheckMatches($feed, self::PARAM_FAIL);
     }
 
     /*
@@ -231,13 +214,16 @@ class Client
      * Does part before @ pattern match current Feed?
      */
     private function _useFixture($feed) {
+        return $this->_setupAndCheckMatches($feed, self::PARAM_DEGRADE);
+    }
 
-        if (!isset($_GET[self::PARAM_DEGRADE])) {
+    private function _setupAndCheckMatches($feed, $type) {
+        if (!isset($_GET[$type])) {
             return false;
         }
 
         $fakedFeed = "";
-        $fakePath = $_GET[self::PARAM_DEGRADE];
+        $fakePath = $_GET[$type];
         $exploded = explode('@', $fakePath);
         if (isset($exploded[1])) {
             // Grab just fixture filename
@@ -247,11 +233,17 @@ class Client
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {
             return true;
         }
-        return false;
     }
 
+    /*
+     * Check if current feed matches fixture given
+     * Feed contains / which is convert to _ for fixture.
+     *
+     * @return bool
+     */ 
     private function _doesHaveMatches($feed, $fakedFeed) {
         if ($fakedFeed) {
+            $feed = str_replace("/", "_", $feed);
             preg_match('/' . $fakedFeed . '/', $feed, $matches);
             if (count($matches) > 0) {
                 // matches, so use the fixtureFile
@@ -269,6 +261,7 @@ class Client
         $message = $e->getMessage();
 
         $source = $this->_getErrorSource($e);
+
         $fullCounterName = str_replace("{service}", $source, $counterName); 
 
         // Log Error
@@ -293,7 +286,6 @@ class Client
      */
     private function _getErrorSource($e) {
         $source = '';
-        //var_dump($e->getResponse());die;
         $response = $e->getResponse();
         if ($response) {
             $response = $response->getBody(true);
