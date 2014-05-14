@@ -86,8 +86,6 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params = array()) {
-
-
         $client = $this->_getClient($feed);
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
