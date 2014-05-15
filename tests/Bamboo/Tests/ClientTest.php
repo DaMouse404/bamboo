@@ -32,7 +32,9 @@ class ClientTest extends BambooTestCase
             'Guzzle\Http\Exception\ClientErrorResponseException', 
             400
         );
+
         $this->setExpectedException('Bamboo\Exception\BadRequest');
+
         $feedObject = new Atoz(array(), 'a');
     }
 
@@ -42,25 +44,45 @@ class ClientTest extends BambooTestCase
             'Guzzle\Http\Exception\ClientErrorResponseException', 
             404
         );
+
         $this->setExpectedException('Bamboo\Exception\NotFound');
+
         $feedObject = new Atoz(array(), 'a');
     }
 
-    public function testIblServerErrorCounter() {
+    public function testServerErrorApigeeCounter() { 
         $this->_counterTest(
-            'ibl_failure', 
+            'apigee_failure', 
+            'BAMBOO_APIGEE_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
-    
-    public function testApigeeServerErrorCounter() { 
+
+    public function testServerErrorIblCounter() {
         $this->_counterTest(
-            'apigee_failure', 
+            'ibl_failure', 
+            'BAMBOO_IBL_SERVERERROR',
             'BAMBOO_APIGEE_SERVERERROR'
         );
     }
 
-    public function testApigeeBadRequestCounter() {   
+    public function testEmptyResponseApigeeCounter() { 
+        $this->_counterTest(
+            'empty_response', 
+            'BAMBOO_APIGEE_SERVERERROR',
+            'BAMBOO_IBL_SERVERERROR'
+        );
+    }
+
+    public function testUnknownResponseApigeeCounter() { 
+        $this->_counterTest(
+            'unknown_json_response', 
+            'BAMBOO_APIGEE_SERVERERROR',
+            'BAMBOO_IBL_SERVERERROR'
+        );
+    }
+
+    public function testBadRequestApigeeCounter() {   
         try {
             CounterFake::resetCount('BAMBOO_APIGEE_BADREQUEST');
             $startCount = CounterFake::getCount('BAMBOO_APIGEE_BADREQUEST');
@@ -79,17 +101,20 @@ class ClientTest extends BambooTestCase
         }   
     }
 
-    private function _counterTest($fixture, $counter) {
+    private function _counterTest($fixture, $counter, $wrongCounter) {
         try {
             CounterFake::resetCount($counter);
+            CounterFake::resetCount($wrongCounter);
             $startCount = CounterFake::getCount($counter);
             parent::setupFailRequest('atoz@' . $fixture);
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\ServerError $e) {
             $endCount = CounterFake::getCount($counter);
-            
+            $wrongCounter = CounterFake::getCount($wrongCounter);
+
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);
+            $this->assertEquals(0, $wrongCounter);
         }   
     }
 }
