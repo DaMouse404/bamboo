@@ -258,9 +258,8 @@ class Client
         $statusCode = $e->getCode();
         $message = $e->getMessage();
 
-        $source = $this->_getErrorSource($e);
-
-        $fullCounterName = str_replace("{service}", $source, $counterName); 
+        $errorSource = $this->_getErrorSource($e);
+        $fullCounterName = str_replace("{service}", $errorSource, $counterName); 
 
         // Log Error
         Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode. Message: $message.");
@@ -277,29 +276,25 @@ class Client
         throw $exception;
     }
 
-
     /*
      * Used to detect who the error comes from.
+     * Is Apigee if:
+     *  - No json response is available 
+     *  - Is a response but it does NOT contain 'error->details'
+     *  - Response has 'fault->faultString'
+     *
      * @return string $source
      */
     private function _getErrorSource($e) {
-        $source = '';
         $response = $e->getResponse();
         if ($response) {
             $response = $response->getBody(true);
         }
         $object = json_decode($response);
 
-        if (!$object) {
-            $source = 'APIGEE';
-        } else {
-            if (isset($object->error, $object->error->details)) {
-                $source = 'IBL';
-            } else if (isset($object->fault, $object->fault->faultString)) {
-                $source = 'APIGEE';
-            } else {
-                $source = 'APIGEE';
-            }
+        $source = 'APIGEE';
+        if (isset($object->error, $object->error->details)) {
+            $source = 'IBL';
         }
 
         return $source;

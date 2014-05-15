@@ -5,7 +5,7 @@ namespace Bamboo;
 /**
  * A class representing a Fake Counter
  */
-class CounterFake
+class CounterFake extends Counter
 {
     private static $_countArray = array(
         'bambooErrorApigee500' => 0,

@@ -29,7 +29,7 @@ class Fail extends Base implements GuzzleInterface
     }
 
     public function get($feed, $params = array(), $queryParams = array()) {
-        //setup request object
+        // Setup request object
         $this->_buildPath($feed);
 
         return $this;
@@ -37,22 +37,23 @@ class Fail extends Base implements GuzzleInterface
 
     /*
      * Grab file contents from fixture.
-     * Create exception object as handed down from above.
+     * Create exception class/object as handed down from above.
      * Add fixture contents to exception object (in form of Response)
      *
      * @return exception 
      */ 
     public function send() {
 
-        // attach to error as response->body
-        $response = file_get_contents($this->_path);
-
         $exception = new $this->_errorClass(
             $this->_errorMessage, 
             $this->_statusCode
         );
 
-        $response = new Response($this->_statusCode, array(), $response);
+        $response = new Response(
+            $this->_statusCode, 
+            array(), // Headers
+            file_get_contents($this->_path)  // Response contents
+        );
 
         $exception->setResponse($response);
 
@@ -60,7 +61,7 @@ class Fail extends Base implements GuzzleInterface
     }
 
     public function json() {
-        //return body of fixture, return array of data
+        // Return body of fixture, return array of data
 
         return;
     }
