@@ -10,7 +10,6 @@ class Exception extends \Exception
         if ($code == 0) {
             $code = $this->_defaultCode;
         }
-
         parent::__construct($message, (int) $code, $previous);
     }
 
