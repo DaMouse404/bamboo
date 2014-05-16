@@ -271,11 +271,18 @@ class Client
         $statusCode = $e->getCode();
         $message = $e->getMessage();
 
-        $errorSource = $this->_getErrorSource($e);
+        list($errorSource, $sourceMessage) = $this->_getErrorSource($e);
         $fullCounterName = str_replace("{service}", $errorSource, $counterName); 
 
         // Log Error
-        Log::err("Bamboo Error: $errorClass. Feed: $feed. Status code: $statusCode. Message: $message.");
+        Log::err(
+            "Bamboo Error: $errorClass, " .
+            "Feed: $feed, " .
+            "Status code: $statusCode, " .
+            "Message: $message, " . 
+            "Source: $errorSource, " .
+            "Source Message: $sourceMessage"
+        );
 
         // Increment Counter
         Counter::increment($fullCounterName);
@@ -296,7 +303,7 @@ class Client
      *  - Is a response but it does NOT contain 'error->details'
      *  - Response has 'fault->faultString'
      *
-     * @return string $source
+     * @return array(string $source, string $message)
      */
     private function _getErrorSource($e) {
         $response = $e->getResponse();
@@ -306,11 +313,17 @@ class Client
         $object = json_decode($response);
 
         $source = 'APIGEE';
+        $message = 'Something has gone wrong.';
+        if (isset($object->fault, $object->fault->faultString)) {
+            $message = $object->fault->faultString;
+        }  
+
         if (isset($object->error, $object->error->details)) {
             $source = 'IBL';
+            $message = $object->error->details;
         }
 
-        return $source;
+        return array($source, $message);
     }
 
 }
