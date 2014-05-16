@@ -12,6 +12,14 @@ use Bamboo\Counter;
 use Bamboo\Exception;
 use Bamboo\Exception\EmptyFeed;
 
+/*
+ * Client Responsibility:
+ * - pre fetch -> grab correct client
+ * - fetch -> make response
+ * - post fetch -> 
+ * -- parse correct response OR
+ * -- error translating/handling
+ */
 class Client
 {
 
@@ -226,6 +234,11 @@ class Client
         if (isset($exploded[1])) {
             // Grab just fixture filename
             $fakedFeed = $exploded[0];
+        } else if ($type === self::PARAM_FAIL) {
+            // Nothing @ given and ?_fail
+            // Largely for backwards compatibility with RW cukes
+            $fakePath = str_replace("/", "_", $fakePath);
+            $fakedFeed = $fakePath;
         }
 
         if ($this->_doesHaveMatches($feed, $fakedFeed)) {

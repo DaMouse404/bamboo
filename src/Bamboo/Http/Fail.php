@@ -4,6 +4,12 @@ namespace Bamboo\Http;
 
 use \Guzzle\Http\Message\Response;
 
+/*
+ * Has some key differences to fake client.
+ * If ?_fail and no @fixture will:
+ *  - use feed as fixture name (for unit tests)
+ *  - use empty_feed.json in RW (for website cukes)
+ */
 class Fail extends Base implements GuzzleInterface 
 {
     private $_errorClass;

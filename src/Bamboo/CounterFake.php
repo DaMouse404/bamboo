@@ -3,7 +3,7 @@
 namespace Bamboo;
 
 /**
- * A class representing a Fake Counter
+ * A class representing a Fake Counter. 
  */
 class CounterFake extends Counter
 {

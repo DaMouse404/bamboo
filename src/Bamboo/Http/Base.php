@@ -30,9 +30,9 @@ class Base
      */
     protected function _getFixtureFile() {
 
-        if ($_GET[Client::PARAM_DEGRADE]) {
+        if (isset($_GET[Client::PARAM_DEGRADE])) {
             $fixtureFile = $this->_setupFixturePath(Client::PARAM_DEGRADE);
-        } else if ($_GET[Client::PARAM_FAIL]) {
+        } else if (isset($_GET[Client::PARAM_FAIL])) {
             $fixtureFile = $this->_setupFixturePath(Client::PARAM_FAIL);
         }
 
@@ -45,14 +45,18 @@ class Base
 
         // Split query string by the @
         if (isset($exploded[1])) {
-            $fakedFeed = $exploded[0];
+            //$fakedFeed = $exploded[0];
             $fixtureFile = $exploded[1];
+        } else if ($type === Client::PARAM_FAIL) {
+            // ?_fail and no @ given 
+            // For backwards compatibility with RW cukes
+            $fixtureFile = 'empty_feed';
         } else {
             // No @ so just use feed as fixture name
             $fakedFeed = $fakePath;
             $fixtureFile = $fakePath;
         }
-        
+
         return str_replace("-", "_", $fixtureFile);
     }
 }
