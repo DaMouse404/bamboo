@@ -9,6 +9,29 @@ use Bamboo\Feeds\Atoz;
 class ClientTest extends BambooTestCase
 {
 
+    /*
+     * Test HTTP Clients 
+     */
+    public function testGetHttpClientGuzzle() {
+        $client = Client::getInstance()->getClient("atoz");
+
+        $this->assertInstanceOf('Guzzle\Http\Client', $client);
+    }
+
+    public function testGetHttpClientFake() {
+        parent::setupRequest('atoz@atoz_a_programmes');
+        $client = Client::getInstance()->getClient("atoz");
+        
+        $this->assertInstanceOf('Bamboo\Http\Fake', $client);
+    }
+
+    public function testGetHttpClientFail() {
+        parent::setupFailRequest('atoz@atoz_a_programmes');
+        $client = Client::getInstance()->getClient("atoz");
+
+        $this->assertInstanceOf('Bamboo\Http\Fail', $client);
+    }
+
     public function testSetLang() {
         parent::setupRequest('atoz_a_programmes');
 
@@ -20,6 +43,9 @@ class ClientTest extends BambooTestCase
         $this->assertEquals('cy', $newLang);
     }
 
+    /* 
+     * Test Translate response Exception
+     */
     public function testServerError() {
         parent::setupFailRequest('atoz@atoz_a_programmes');
         $this->setExpectedException('Bamboo\Exception\ServerError');
@@ -50,6 +76,9 @@ class ClientTest extends BambooTestCase
         $feedObject = new Atoz(array(), 'a');
     }
 
+    /* 
+     * Test Translate reponse exception+response into Counters 
+     */
     public function testServerErrorApigeeCounter() { 
         $this->_counterTest(
             'apigee_failure', 

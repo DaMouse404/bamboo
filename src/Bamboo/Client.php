@@ -94,7 +94,7 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params = array()) {
-        $client = $this->_getClient($feed);
+        $client = $this->getClient($feed);
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
@@ -194,7 +194,7 @@ class Client
     /* 
      * Return Client to use for this request.
      */
-    private function _getClient($feed) {
+    public function getClient($feed) {
 
         if ($this->_useFixture($feed)) {
             return $this->_fakeHttpClient;
