@@ -4,7 +4,7 @@ namespace Bamboo\Http;
 
 use Bamboo\Client;
 
-class Base 
+class Base
 {
 
     protected $_path;
