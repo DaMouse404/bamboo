@@ -10,7 +10,7 @@ use \Guzzle\Http\Message\Response;
  *  - use feed as fixture name (for unit tests)
  *  - use empty_feed.json in RW (for website cukes)
  */
-class Fail extends Base implements GuzzleInterface 
+class Fail extends Base implements GuzzleInterface
 {
     private $_errorClass;
     private $_errorMessage;
