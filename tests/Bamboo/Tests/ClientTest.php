@@ -6,11 +6,15 @@ use \Bamboo\Client;
 use \Bamboo\CounterFake;
 use Bamboo\Feeds\Atoz;
 
+/* 
+ * Using ATOZ as the example feed testing Clients responsibilities.
+ */
 class ClientTest extends BambooTestCase
 {
 
     /*
-     * Test HTTP Clients 
+     * Test pre fetch 
+     * - HTTP Clients
      */
     public function testGetHttpClientGuzzle() {
         $client = Client::getInstance()->getClient("atoz");
@@ -44,7 +48,21 @@ class ClientTest extends BambooTestCase
     }
 
     /* 
-     * Test Translate response Exception
+     * Test Post Fetch 
+     * - Correct response parsing
+     *
+     * Very few testing this as more in FEED tests
+     */
+    public function testParsesResponse() {
+        parent::setupRequest("atoz@atoz_a_programmes");
+        $feedObject = new Atoz(array(), 'a');
+        
+        $this->assertInstanceOf('Bamboo\Feeds\Atoz', $feedObject);
+    }
+
+    /* 
+     * Test Post Fetch 
+     * - Test Translate response Exception
      */
     public function testServerError() {
         parent::setupFailRequest('atoz@atoz_a_programmes');
@@ -77,7 +95,8 @@ class ClientTest extends BambooTestCase
     }
 
     /* 
-     * Test Translate reponse exception+response into Counters 
+     * Test Post Fetch more 
+     * - Translate reponse exception+response into Counters
      */
     public function testServerErrorApigeeCounter() { 
         $this->_counterTest(
