@@ -8,7 +8,7 @@ namespace Bamboo;
 class CounterFake extends Counter
 {
     private static $_countArray = array(
-        'bambooErrorApigee500' => 0,
+        'bambooErrorApigee400' => 0,
         'bambooErrorApigee404' => 0,
         'bambooErrorApigee500' => 0,
         'bambooErrorIbl500' => 0
