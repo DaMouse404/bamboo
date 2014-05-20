@@ -44,8 +44,17 @@ git fetch origin
 git branch -D pr/$PR || true
 git checkout pr/$PR
 
+# Install composer dependencies
+#./scripts/composer_setup.sh
+
+if [ ! $? -eq 0 ]; then
+    echo "failure"
+    update_github 2 "Check build failed (composer)"
+    finish 1
+fi
+
 # Run makefile
-make test
+#make test
 
 if [ ! $? -eq 0 ]; then
     echo "failure"
