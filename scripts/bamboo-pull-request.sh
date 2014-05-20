@@ -30,7 +30,7 @@ finish() {
 update_github 1 "Build in progress..."
 
 # Checkout repo
-curl -u $1:$2 https://api.github.com/repos/iplayer/bamboo/contents/scripts/configure-repo.sh | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
+curl -u $1:$2 https://api.github.com/repos/craigtaub/bamboo/contents/scripts/configure-repo.sh?ref=19050 | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
 chmod +x configure-repo.sh
 ./configure-repo.sh $3 $4
 
