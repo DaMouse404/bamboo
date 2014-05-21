@@ -89,7 +89,7 @@ class EpisodeDownloadsTest extends BambooTestCase
         );
 
         $expectedURIs = array(
-            'bbc-ipd:download/episode-id/original-id/sd/standard/QmF0bWFuIFJldHVybnM_'
+            'bbc-ipd:download/episode-id/original-id/sd/standard/QmF0bWFuIFJldHVybnM-'
         );
 
         $this->assertEquals($expectedURIs, array_values($episode->getDownloadURIs()));
