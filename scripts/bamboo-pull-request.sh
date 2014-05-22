@@ -51,7 +51,7 @@ git checkout pr/$PR
 
 if [ ! $? -eq 0 ]; then
     echo "failure"
-    update_github 2 "Check build failed (composer)" $CLONE_PASSWORD
+    update_github 2 "Check build failed (composer)" $ACCESS_TOKEN
     finish 1
 fi
 
@@ -60,9 +60,9 @@ make test
 
 if [ ! $? -eq 0 ]; then
     echo "failure"
-    update_github 2 "Check build failed (makefile)" $CLONE_PASSWORD
+    update_github 2 "Check build failed (makefile)" $ACCESS_TOKEN
     finish 1
 fi
 
-update_github 0 "Everything looks good" $CLONE_PASSWORD
+update_github 0 "Everything looks good" $ACCESS_TOKEN
 finish 0
