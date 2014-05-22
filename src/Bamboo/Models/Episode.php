@@ -352,8 +352,8 @@ class Episode extends Elements
                 $link .= '/standard';
                 break;
         }
-        // iPlayer Downloader cannot understand '/' in the base64 title so we must replace them with '_'
-        $link .= '/' . str_replace('/', '_', base64_encode($this->getCompleteTitle()));
+        // iPlayer Downloader cannot understand '/' in the base64 title so we must replace them with '-'
+        $link .= '/' . str_replace('/', '-', base64_encode($this->getCompleteTitle()));
 
         return $link;
     }
