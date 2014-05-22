@@ -37,6 +37,7 @@ echo "Using PASSWORD '$PASSWORD'"
 echo "Using OWNER '$OWNER'"
 
 mkdir -p $REPOSITORY
+
 cd $REPOSITORY
 
 if [ ! -d ".git" ]; then
@@ -46,6 +47,9 @@ if [ ! -d ".git" ]; then
 fi
 
 git checkout $BRANCH
+
 git pull
+
+cd ../
 exit 0
 
