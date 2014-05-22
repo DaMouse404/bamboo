@@ -98,10 +98,10 @@ class ClientTest extends BambooTestCase
      * Test Post Fetch more 
      * - Translate reponse exception+response into Counters
      */
-    public function testServerErrorApigeeCounter() { 
+    public function testServerErrorProxyCounter() { 
         $this->_counterTest(
-            'apigee_failure', 
-            'BAMBOO_APIGEE_SERVERERROR',
+            'proxy_failure', 
+            'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
@@ -110,30 +110,30 @@ class ClientTest extends BambooTestCase
         $this->_counterTest(
             'ibl_failure', 
             'BAMBOO_IBL_SERVERERROR',
-            'BAMBOO_APIGEE_SERVERERROR'
+            'BAMBOO_PROXY_SERVERERROR'
         );
     }
 
-    public function testEmptyResponseApigeeCounter() { 
+    public function testEmptyResponseProxyCounter() { 
         $this->_counterTest(
             'empty_response', 
-            'BAMBOO_APIGEE_SERVERERROR',
+            'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
 
-    public function testUnknownResponseApigeeCounter() { 
+    public function testUnknownResponseProxyCounter() { 
         $this->_counterTest(
             'unknown_json_response', 
-            'BAMBOO_APIGEE_SERVERERROR',
+            'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
 
-    public function testBadRequestApigeeCounter() {   
+    public function testBadRequestProxyCounter() {   
         try {
-            CounterFake::resetCount('BAMBOO_APIGEE_BADREQUEST');
-            $startCount = CounterFake::getCount('BAMBOO_APIGEE_BADREQUEST');
+            CounterFake::resetCount('BAMBOO_PROXY_BADREQUEST');
+            $startCount = CounterFake::getCount('BAMBOO_PROXY_BADREQUEST');
             parent::setupFailRequest(
                 'atoz@atoz_a_programmes', 
                 'Guzzle\Http\Exception\ClientErrorResponseException', 
@@ -141,7 +141,7 @@ class ClientTest extends BambooTestCase
             );
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception $e) {
-            $endCount = CounterFake::getCount('BAMBOO_APIGEE_BADREQUEST');
+            $endCount = CounterFake::getCount('BAMBOO_PROXY_BADREQUEST');
 
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);

@@ -298,7 +298,7 @@ class Client
 
     /*
      * Used to detect who the error comes from.
-     * Is Apigee if:
+     * Is Proxy if:
      *  - No json response is available 
      *  - Is a response but it does NOT contain 'error->details'
      *  - Response has 'fault->faultString'
@@ -306,13 +306,14 @@ class Client
      * @return array(string $source, string $message)
      */
     private function _getErrorSource($e) {
+        $object = null;
         $response = $e->getResponse();
         if ($response) {
             $response = $response->getBody(true);
+            $object = json_decode($response);
         }
-        $object = json_decode($response);
 
-        $source = 'APIGEE';
+        $source = 'PROXY';
         $message = 'Something has gone wrong.';
         if (isset($object->fault, $object->fault->faultString)) {
             $message = $object->fault->faultString;
