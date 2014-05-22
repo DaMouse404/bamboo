@@ -1,0 +1,8 @@
+{
+    "server": "ci-pal.int",
+    "branch": "develop",
+    "jobs": {
+        "build": "bamboo",
+        "pull_request": "bamboo-pull-requests"
+    }
+}
