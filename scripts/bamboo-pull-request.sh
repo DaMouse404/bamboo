@@ -2,10 +2,10 @@
 #SHA=
 #PR=
 
-#$1 - username
-#$2 - password
-#$3 - access_token & clone username
-#$4 - clone password
+USERNAME=$1
+PASSWORD=$2
+ACCESS_TOKEN=$3
+CLONE_PASSWORD=$4
 
 update_github() {
     echo 'update github'
@@ -28,13 +28,13 @@ finish() {
     exit $1
 }
 
-update_github 1 "Build in progress..." $3
+update_github 1 "Build in progress..." $ACCESS_TOKEN
 
 # Checkout repo
-curl -u $1:$2 https://api.github.com/repos/craigtaub/bamboo/contents/scripts/configure-repo.sh?ref=19050 | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
+curl -u $USERNAME:$PASSWORD https://api.github.com/repos/craigtaub/bamboo/contents/scripts/configure-repo.sh?ref=19050 | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
 chmod +x configure-repo.sh
 
-./configure-repo.sh $3 $4
+./configure-repo.sh $ACCESS_TOKEN $CLONE_PASSWORD
 
 cd bamboo
 
@@ -51,7 +51,7 @@ git checkout pr/$PR
 
 if [ ! $? -eq 0 ]; then
     echo "failure"
-    update_github 2 "Check build failed (composer)" $3
+    update_github 2 "Check build failed (composer)" $CLONE_PASSWORD
     finish 1
 fi
 
@@ -60,9 +60,9 @@ make test
 
 if [ ! $? -eq 0 ]; then
     echo "failure"
-    update_github 2 "Check build failed (makefile)" $3
+    update_github 2 "Check build failed (makefile)" $CLONE_PASSWORD
     finish 1
 fi
 
-update_github 0 "Everything looks good" $3
+update_github 0 "Everything looks good" $CLONE_PASSWORD
 finish 0
