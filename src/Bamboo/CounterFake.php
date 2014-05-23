@@ -3,22 +3,21 @@
 namespace Bamboo;
 
 /**
- * A class representing a Fake Counter
+ * A class representing a Fake Counter. 
  */
-class CounterFake
+class CounterFake extends Counter
 {
     private static $_countArray = array(
-        'bambooError500' => 0,
-        'bambooError404' => 0
+        'bambooErrorProxy400' => 0,
+        'bambooErrorProxy404' => 0,
+        'bambooErrorProxy500' => 0,
+        'bambooErrorIbl500' => 0
     );
 
-    const BAMBOO_BADREQUEST = 'bambooError400';
-    const BAMBOO_UNAUTHORISED = 'bamboError403';
-    const BAMBOO_NOTFOUND = 'bambooError404';
-    const BAMBOO_METHODNOTALLOWED = 'bamboError405';
-    const BAMBOO_SERVERERROR = 'bambooError500';
-    const BAMBOO_CURLERROR = 'bambooErrorCurl';
-    const BAMBOO_OTHER = 'bambooErrorOther';
+    const BAMBOO_PROXY_BADREQUEST = 'bambooErrorProxy400';
+    const BAMBOO_PROXY_NOTFOUND = 'bambooErrorProxy404';
+    const BAMBOO_PROXY_SERVERERROR = 'bambooErrorProxy500';
+    const BAMBOO_IBL_SERVERERROR = 'bambooErrorIbl500';
 
     /* 
      * A proxy method for the counter

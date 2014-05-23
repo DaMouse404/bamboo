@@ -11,37 +11,42 @@ use \Bamboo\Http\Fail;
  */
 abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 {
+    const FIXTURE_PATH =  '/../../../tests/fixtures/';
+
     /*
      * By default we will use fixtures..use fake client.
      */
     protected function setupRequest($feed) {
         $_GET['_fake'] = $feed;
+
         $httpFake = new Fake();
-        $path =  dirname(__FILE__) . '/../../../tests/fixtures/';
+        $path =  dirname(__FILE__) . self::FIXTURE_PATH;
         $httpFake->setFixturesPath($path);
+
         Client::getInstance()->setFakeHttpClient(
             $httpFake
         );
     }
 
-    protected function setupFailRequest($feed, $errorClass = "", $statusCode = "") {
+    protected function setupFailRequest($feed, $errorClass = null, $statusCode = "") {
 
         // As deals with errors, set fake Counter
         \Bamboo\Counter::setCounter("Bamboo\CounterFake");
-
         $_GET['_fail'] = $feed;
-        $httpFail = new Fail();
 
+        $httpFail = new Fail();
         if ($errorClass) {
             $httpFail->setErrorClass($errorClass);
         }
         if ($statusCode) {
             $httpFail->setStatusCode($statusCode);
         }
+        $path =  dirname(__FILE__) . self::FIXTURE_PATH;
+        $httpFail->setFixturesPath($path);
 
         Client::getInstance()->setFailHttpClient(
             $httpFail
-        );
-            
+        );  
     }
+
 }
