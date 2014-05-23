@@ -1,3 +1,5 @@
+# Configure repo
+
 REPOSITORY=bamboo
 BRANCH=develop
 USERNAME=$1
