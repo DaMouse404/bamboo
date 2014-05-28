@@ -307,11 +307,17 @@ class Client
      */
     private function _getErrorSource($e) {
         $object = null;
-        $response = $e->getResponse();
-        if ($response) {
-            $response = $response->getBody(true);
-            $object = json_decode($response);
-        }
+        $response = null;
+
+        // Certain exceptions dont have the method.
+        // These will have no response (timeouts) so set to default source.
+        if (method_exists($e, 'getResponse')) {
+            $response = $e->getResponse();
+            if ($response) {
+                $response = $response->getBody(true);
+                $object = json_decode($response);
+            }
+        } 
 
         $source = 'PROXY';
         $message = 'Something has gone wrong.';
