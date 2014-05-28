@@ -310,7 +310,7 @@ class Client
         $response = null;
 
         // Certain exceptions dont have the method.
-        // These will have no response (timeouts) so set to defaul source.
+        // These will have no response (timeouts) so set to default source.
         if (method_exists($e, 'getResponse')) {
             $response = $e->getResponse();
             if ($response) {
