@@ -13,14 +13,6 @@ class Base
         );
     }
 
-    /**
-     * Fetch a feed by reading a JSON file from /Assets
-     */
-    public function fetchAssetFeed($feed) {
-        $json = file_get_contents(dirname(__FILE__) . '/../Assets/' . $feed . '.json');
-        return json_decode($json);
-    }
-
     /*
      * Translate Class name into Model name.
      *  $words[0] as most only have first index.

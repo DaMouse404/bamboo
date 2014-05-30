@@ -11,7 +11,6 @@ class CategoriesTest extends BambooTestCase
   private $_categories;
 
   public function setup() {
-    parent::setupRequest("categories@categories");
     $feedObject = new Categories();
     $this->_categories = $feedObject->getCategories();
   }
@@ -22,14 +21,14 @@ class CategoriesTest extends BambooTestCase
 
   public function testFeedSize() {
     $this->assertEquals(
-        sizeof($this->_categories), 
+        sizeof($this->_categories),
         19
     );
   }
 
   public function testFeedItemType() {
     $this->assertEquals(
-        get_class($this->_categories[0]), 
+        get_class($this->_categories[0]),
         "Bamboo\Models\Category"
     );
   }
