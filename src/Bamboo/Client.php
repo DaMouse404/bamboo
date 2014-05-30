@@ -16,7 +16,7 @@ use Bamboo\Exception\EmptyFeed;
  * Client Responsibility:
  * - pre fetch -> grab correct client
  * - fetch -> make response
- * - post fetch -> 
+ * - post fetch ->
  * -- parse correct response OR
  * -- error translating/handling
  */
@@ -74,7 +74,7 @@ class Client
         $this->_proxy = $proxy;
     }
 
-    /* 
+    /*
      * Set locale for remainder of requests.
      * Needs to be lowercased, without a suffix and 2 chars long.
      * Default is English.
@@ -88,7 +88,7 @@ class Client
 
     public function getParam($key) {
         return $this->_defaultParams[$key];
-    }    
+    }
 
     /*
      * Log Error...Translate Exception and throw
@@ -99,8 +99,8 @@ class Client
 
         try {
             $request = $client->get(
-                $this->_baseUrl . $feed . ".json", 
-                array(), 
+                $this->_baseUrl . $feed . ".json",
+                array(),
                 array(
                     'query' => $params,
                     'proxy' =>  $this->_proxy,
@@ -111,33 +111,33 @@ class Client
             $response = $request->send();
         } catch (ServerErrorResponseException $e) {
             $this->_logAndThrowError(
-                "Bamboo\Exception\ServerError", 
-                "BAMBOO_{service}_SERVERERROR", 
+                "Bamboo\Exception\ServerError",
+                "BAMBOO_{service}_SERVERERROR",
                 $e, $feed
             );
         } catch (ClientErrorResponseException $e) {
             $errorArray = $this->_translateClientError($e);
             $this->_logAndThrowError(
-                "Bamboo\Exception" . $errorArray['class'], 
-                $errorArray['counter'], 
+                "Bamboo\Exception" . $errorArray['class'],
+                $errorArray['counter'],
                 $e, $feed
             );
         } catch (CurlException $e) {
             // Response/Connection Timeout
             $this->_logAndThrowError(
-                "Bamboo\Exception\CurlError", 
-                "BAMBOO_{service}_CURLERROR", 
+                "Bamboo\Exception\CurlError",
+                "BAMBOO_{service}_CURLERROR",
                 $e, $feed
             );
         } catch(\Exception $e) {
             // General Exception
             $this->_logAndThrowError(
-                "Exception", 
-                "BAMBOO_{service}_OTHER", 
+                "Exception",
+                "BAMBOO_{service}_OTHER",
                 $e, $feed
             );
         }
- 
+
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
@@ -172,7 +172,7 @@ class Client
         }
 
         return array(
-            'class' => $errorClass, 
+            'class' => $errorClass,
             'counter' => $counterName
         );
     }
@@ -191,7 +191,7 @@ class Client
         return $object;
     }
 
-    /* 
+    /*
      * Return Client to use for this request.
      */
     public function getClient($feed) {
@@ -207,7 +207,7 @@ class Client
         return new Http\Client($this->_host);
 
     }
-    
+
     /*
      * Check if the current feed matches ?_fail one
      */
@@ -251,35 +251,35 @@ class Client
      * Feed contains / which is convert to _ for fixture.
      *
      * @return bool
-     */ 
+     */
     private function _doesHaveMatches($feed, $fakedFeed) {
         if ($fakedFeed) {
             $feed = str_replace("/", "_", $feed);
             preg_match('/' . $fakedFeed . '/', $feed, $matches);
             if (count($matches) > 0) {
                 // matches, so use the fixtureFile
-                return true;          
+                return true;
             }
         }
         return false;
     }
 
     /*
-     * Logs the error, throws 
+     * Logs the error, throws
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
         $statusCode = $e->getCode();
         $message = $e->getMessage();
 
         list($errorSource, $sourceMessage) = $this->_getErrorSource($e);
-        $fullCounterName = str_replace("{service}", $errorSource, $counterName); 
+        $fullCounterName = str_replace("{service}", $errorSource, $counterName);
 
         // Log Error
         Log::err(
             "Bamboo Error: $errorClass, " .
             "Feed: $feed, " .
             "Status code: $statusCode, " .
-            "Message: $message, " . 
+            "Message: $message, " .
             "Source: $errorSource, " .
             "Source Message: $sourceMessage"
         );
@@ -299,7 +299,7 @@ class Client
     /*
      * Used to detect who the error comes from.
      * Is Proxy if:
-     *  - No json response is available 
+     *  - No json response is available
      *  - Is a response but it does NOT contain 'error->details'
      *  - Response has 'fault->faultString'
      *
@@ -317,13 +317,13 @@ class Client
                 $response = $response->getBody(true);
                 $object = json_decode($response);
             }
-        } 
+        }
 
         $source = 'PROXY';
         $message = 'Something has gone wrong.';
         if (isset($object->fault, $object->fault->faultString)) {
             $message = $object->fault->faultString;
-        }  
+        }
 
         if (isset($object->error, $object->error->details)) {
             $source = 'IBL';
