@@ -41,7 +41,7 @@ class Client
      */
     private $_networkProxy = "";
     /*
-     * The service used by iBL to respond to clients. Might be off. Errors are handled differently.
+     * The service used by iBL to respond to clients. Default state is off. Errors are handled differently.
      * @var boolean
      */
     private $_serviceProxy = false;
