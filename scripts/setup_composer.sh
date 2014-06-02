@@ -6,7 +6,7 @@ cd $BASEDIR
 
 if [ ! -e "composer.phar" ]; then
     # Download composer.phar
-    curl -sS http://getcomposer.org/installer | php -d detect_unicode=Off
+    curl -sS https://getcomposer.org/installer | php -d detect_unicode=Off
 fi
 
 
