@@ -31,7 +31,7 @@ finish() {
 update_github 1 "Build in progress..." $ACCESS_TOKEN
 
 # Checkout repo
-curl -u $USERNAME:$PASSWORD https://api.github.com/repos/craigtaub/bamboo/contents/scripts/configure-repo.sh?ref=19050 | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
+curl -u $USERNAME:$PASSWORD https://api.github.com/repos/iplayer/bamboo/contents/scripts/configure-repo.sh | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
 chmod +x configure-repo.sh
 
 ./configure-repo.sh $ACCESS_TOKEN $CLONE_PASSWORD
