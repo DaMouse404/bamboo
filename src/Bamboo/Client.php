@@ -16,9 +16,7 @@ use Bamboo\Exception\EmptyFeed;
  * Client Responsibility:
  * - pre fetch -> grab correct client
  * - fetch -> make response
- * - post fetch ->
- * -- parse correct response OR
- * -- error translating/handling
+ * - post fetch -> parse correct response OR error translating/handling
  */
 class Client
 {
@@ -27,12 +25,45 @@ class Client
     const PARAM_FAIL = '_fail';
     const LOCALE_LENGTH = 2;
 
+    /*
+     * Hostname used for the request.
+     * @var string
+     */
     private $_host = "";
+    /*
+     * URL prepended to all feeds for the service. Contains provider name and version.
+     * @var string
+     */
     private $_baseUrl = "";
-    private $_proxy = "";
+    /*
+     * Tells the HTTP Client what proxy it must route traffic through if necessary.
+     * @var string
+     */
+    private $_networkProxy = "";
+    /*
+     * The service used by iBL to respond to clients. Might be off. Errors are handled differently.
+     * @var boolean
+     */
+    private $_serviceProxy = false;
+    /*
+     * Used to set api_key and any other important feed info which is later merged over $_defaultParams.
+     * @var array
+     */
     private $_config = array();
+    /* 
+     * The HTTP Client to use for normal unit tests, cukes and reading fixtures.
+     * @var object
+     */
     private $_fakeHttpClient;
+    /*
+     * The HTTP Client to use to to do all the above except for error and fail states/responses.
+     * @var object
+     */
     private $_failHttpClient;
+    /* 
+     * An array of params appended onto every request as a query string.
+     * @var array
+     */
     private $_defaultParams = array(
                                 "api_key" => "",
                                 "availability" => "all",
@@ -40,6 +71,9 @@ class Client
                                 "rights" => "web"
             );
 
+    /*
+     * Singleton interface for the client.
+     */
     public static $instance;
 
     public static function getInstance() {
@@ -70,8 +104,12 @@ class Client
         $this->_config = $config;
     }
 
-    public function setProxy($proxy) {
-        $this->_proxy = $proxy;
+    public function setNetworkProxy($proxy) {
+        $this->_networkProxy = $proxy;
+    }
+
+    public function setServiceProxy($bool) {
+        $this->_serviceProxy = $bool;
     }
 
     /*
@@ -103,7 +141,7 @@ class Client
                 array(),
                 array(
                     'query' => $params,
-                    'proxy' =>  $this->_proxy,
+                    'proxy' =>  $this->_networkProxy,
                     'timeout'         => 6, // 6 seconds
                     'connect_timeout' => 5 // 5 seconds
                 )
@@ -319,12 +357,19 @@ class Client
             }
         }
 
-        $source = 'PROXY';
+        $source = 'IBL';
+        if ($this->_serviceProxy) {
+            $source = 'PROXY';
+        }
         $message = 'Something has gone wrong.';
         if (isset($object->fault, $object->fault->faultString)) {
             $message = $object->fault->faultString;
+<<<<<<< HEAD
         }
 
+=======
+        }  
+>>>>>>> Add Service Proxy to Client
         if (isset($object->error, $object->error->details)) {
             $source = 'IBL';
             $message = $object->error->details;
