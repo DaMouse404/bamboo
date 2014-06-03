@@ -4,7 +4,7 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Category;
 
-class Categories extends Base
+class Categories extends StaticBase
 {
 
     protected $_feed = 'categories';

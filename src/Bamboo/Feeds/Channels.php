@@ -4,7 +4,7 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Channel;
 
-class Channels extends Base
+class Channels extends StaticBase
 {
 
     protected $_feed = 'channels';
