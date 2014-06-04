@@ -26,6 +26,8 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         Client::getInstance()->setFakeHttpClient(
             $httpFake
         );
+
+        Client::getInstance()->setServiceProxy(true);
     }
 
     protected function setupFailRequest($feed, $errorClass = null, $statusCode = "") {
@@ -47,6 +49,8 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         Client::getInstance()->setFailHttpClient(
             $httpFail
         );  
+
+        Client::getInstance()->setServiceProxy(true);
     }
 
 }
