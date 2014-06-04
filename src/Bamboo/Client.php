@@ -364,12 +364,7 @@ class Client
         $message = 'Something has gone wrong.';
         if (isset($object->fault, $object->fault->faultString)) {
             $message = $object->fault->faultString;
-<<<<<<< HEAD
         }
-
-=======
-        }  
->>>>>>> Add Service Proxy to Client
         if (isset($object->error, $object->error->details)) {
             $source = 'IBL';
             $message = $object->error->details;
