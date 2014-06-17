@@ -1,18 +1,21 @@
 <?php
 
 namespace Bamboo\Http;
-
+use Bamboo\Log;
 class Fake extends Base implements GuzzleInterface
 {
 
     public function get($feed, $params = array(), $queryParams = array()) {
         //setup request object
         $this->_buildPath($feed);
+        Log::debug('BAMBOO: Faking feed: '. $feed );
 
         return $this;
     }
 
     public function send() {
+        Log::debug('BAMBOO: Using Fixture: '. $this->_path );
+
         //grab json from fixture
         $this->_response = file_get_contents($this->_path);
 

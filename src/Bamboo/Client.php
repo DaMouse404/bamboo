@@ -50,7 +50,7 @@ class Client
      * @var array
      */
     private $_config = array();
-    /* 
+    /*
      * The HTTP Client to use for normal unit tests, cukes and reading fixtures.
      * @var object
      */
@@ -60,7 +60,7 @@ class Client
      * @var object
      */
     private $_failHttpClient;
-    /* 
+    /*
      * An array of params appended onto every request as a query string.
      * @var array
      */
@@ -136,6 +136,7 @@ class Client
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
+            Log::debug('Fetching iBL feed: ' . $this->_host . $this->_baseUrl . $feed . '.json with params: "' . urlencode($params) . '"');
             $request = $client->get(
                 $this->_baseUrl . $feed . ".json",
                 array(),
