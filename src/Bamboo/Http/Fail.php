@@ -38,7 +38,7 @@ class Fail extends Base implements GuzzleInterface
     public function get($feed, $params = array(), $queryParams = array()) {
         // Setup request object
         $this->_buildPath($feed);
-        Log::debug('BAMBOO: Failing feed: '. $feed );
+        Log::debug('BAMBOO: Failing feed: ' . $feed);
         return $this;
     }
 
@@ -61,7 +61,7 @@ class Fail extends Base implements GuzzleInterface
             array(), // Headers
             file_get_contents($this->_path)  // Response contents
         );
-        Log::debug('BAMBOO: Failing with contents from:'.$this->path );
+        Log::debug('BAMBOO: Failing with contents from:' . $this->path);
 
         $exception->setResponse($response);
 

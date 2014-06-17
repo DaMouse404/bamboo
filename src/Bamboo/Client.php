@@ -136,7 +136,8 @@ class Client
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         try {
-            Log::debug('Fetching iBL feed: ' . $this->_host . $this->_baseUrl . $feed . '.json with params: "' . urlencode($params) . '"');
+            $fullUrl = $this->_host . $this->_baseUrl . $feed;
+            Log::debug('Fetching iBL feed: ' . $fullUrl . '.json with params: "' . urlencode($params) . '"');
             $request = $client->get(
                 $this->_baseUrl . $feed . ".json",
                 array(),
