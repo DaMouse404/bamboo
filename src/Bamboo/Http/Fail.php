@@ -2,6 +2,7 @@
 
 namespace Bamboo\Http;
 
+use Bamboo\Log;
 use \Guzzle\Http\Message\Response;
 
 /*
@@ -19,7 +20,7 @@ class Fail extends Base implements GuzzleInterface
     public function __construct() {
         $this->_errorClass = 'Guzzle\Http\Exception\ServerErrorResponseException';
         $this->_errorMessage = '500 Error on IBL';
-        $this->_statusCode = 500;       
+        $this->_statusCode = 500;
     }
 
     public function setErrorClass($errorClass) {
@@ -37,7 +38,7 @@ class Fail extends Base implements GuzzleInterface
     public function get($feed, $params = array(), $queryParams = array()) {
         // Setup request object
         $this->_buildPath($feed);
-
+        Log::debug('BAMBOO: Failing feed: ' . $feed);
         return $this;
     }
 
@@ -46,20 +47,21 @@ class Fail extends Base implements GuzzleInterface
      * Create exception class/object as handed down from above.
      * Add fixture contents to exception object (in form of Response)
      *
-     * @return exception 
-     */ 
+     * @return exception
+     */
     public function send() {
 
         $exception = new $this->_errorClass(
-            $this->_errorMessage, 
+            $this->_errorMessage,
             $this->_statusCode
         );
 
         $response = new Response(
-            $this->_statusCode, 
+            $this->_statusCode,
             array(), // Headers
             file_get_contents($this->_path)  // Response contents
         );
+        Log::debug('BAMBOO: Failing with contents from:' . $this->_path);
 
         $exception->setResponse($response);
 
