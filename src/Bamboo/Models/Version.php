@@ -98,6 +98,23 @@ class Version extends Base
     }
 
     /**
+     * Get the version duration in minutes
+     * by parsing the duration code
+     *
+     * @return int
+     */
+    public function getDurationInMins()
+    {
+        $mins = 0;
+        if (isset($this->_duration->value)) {
+            $date = new \DateInterval($this->_duration->value);
+            $dt = (new \DateTime());
+            $mins = $dt->setTimeStamp(0)->add($date)->getTimestamp()  / 60;
+        }
+        return $mins;
+    }
+
+    /**
      * Get the version kind
      *
      * @return string
