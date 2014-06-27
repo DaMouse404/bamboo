@@ -33,7 +33,7 @@ class VersionTest extends BambooTestCase
             array(
                 'events' => array(
                     (object) array(
-                        'kind' => 'onward_journey', 
+                        'kind' => 'onward_journey',
                         'time_offset_seconds' => $timeOffset
                     )
                 )
@@ -88,6 +88,26 @@ class VersionTest extends BambooTestCase
         $this->assertEquals('SL', $sl->getAbbreviation());
         $this->assertEquals('SL', $slhd->getAbbreviation());
         $this->assertEquals('HD', $hd->getAbbreviation());
+    }
+
+    public function testDurationInMins() {
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '80 mins',
+                'value' => 'PT1H20M'
+            )
+        ));
+
+        $this->assertEquals(80, $ver->getDurationInMins());
+
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '10 mins',
+                'value' => 'PT10M'
+            )
+        ));
+
+        $this->assertEquals(10, $ver->getDurationInMins());
     }
 
     private function _createVersion($params) {
