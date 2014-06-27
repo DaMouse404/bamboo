@@ -235,6 +235,34 @@ class EpisodeTest extends BambooTestCase
         $this->assertEquals('', $stub->getDuration());
     }
 
+    public function testGetDurationInMinsReturnsPriorityVersionDuration() {
+        $version = new Version((object) array('duration' => (object) array('text' => '140 mins', 'value' => 'PT2H20M')));
+
+        $stub = $this->getMockBuilder('Bamboo\Models\Episode')
+            ->setMethods(array('getPriorityVersion'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stub->expects($this->once())
+            ->method('getPriorityVersion')
+            ->will($this->returnValue($version));
+
+        $this->assertEquals(140, $stub->getDurationInMins());
+    }
+
+    public function testGetDurationInMinsReturnsZeroWhenNoVersionPresent() {
+        $stub = $this->getMockBuilder('Bamboo\Models\Episode')
+            ->setMethods(array('getPriorityVersion'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stub->expects($this->once())
+            ->method('getPriorityVersion')
+            ->will($this->returnValue(''));
+
+        $this->assertEquals(0, $stub->getDurationInMins());
+    }
+
     public function testGetMasterBrandAttribution() {
         $episode = $this->_createEpisode(
             (object) array(
@@ -440,7 +468,7 @@ class EpisodeTest extends BambooTestCase
 
         $this->assertEquals($expectation, $downloads);
     }
-    
+
     private function _createEpisode($params) {
         return new Episode((object) $params);
     }
