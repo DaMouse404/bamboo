@@ -184,6 +184,20 @@ class Episode extends Elements
     }
 
     /**
+     * Get the duration in minutes of the highest priority version.
+     * If the episode has no version return 0.
+     *
+     * @return int
+     */
+    public function getDurationInMins() {
+        $version = $this->getPriorityVersion();
+        if ($version) {
+            return $version->getDurationInMins();
+        }
+        return 0;
+    }
+
+    /**
      * Get the release date
      *
      * @return string
