@@ -13,13 +13,29 @@ class Fake extends Base implements GuzzleInterface
         return $this;
     }
 
-    public function send() {
+    public function send($requests=null) {
+        if (is_array($requests)) {
+            return $this->sendAll($requests);
+        }
+
         Log::debug('BAMBOO: Using Fixture: ' . $this->_path);
 
         //grab json from fixture
         $this->_response = file_get_contents($this->_path);
 
         return $this;
+    }
+
+    public function sendAll($requests) {
+
+        Log::debug('BAMBOO: Using Fixture for all ' . count($requests) . ' parallel requests: ' . $this->_path);
+        $responses = array();
+        $feedContents = file_get_contents($this->_path);
+        foreach ($requests as $request) {
+            $responses[] = clone $feedContents;
+        }
+
+        return $responses;
     }
 
     public function json() {

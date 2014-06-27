@@ -159,41 +159,7 @@ class Client
         } catch (MultiTransferException $e) {
 
             foreach ($e as $exception) {
-                switch (get_class($exception)) {
-                    case 'Guzzle\Http\Exception\ServerErrorResponseException':
-                        $this->_logAndThrowError(
-                            "Bamboo\Exception\ServerError",
-                            "BAMBOO_{service}_SERVERERROR",
-                            $e, $feed
-                        );
-                        break;
-
-                    case 'Guzzle\Http\Exception\ClientErrorResponseException':
-                        $errorArray = $this->_translateClientError($e);
-                        $this->_logAndThrowError(
-                            "Bamboo\Exception" . $errorArray['class'],
-                            $errorArray['counter'],
-                            $e, $feed
-                        );
-                        break;
-
-                    case 'CurlException':
-                        // Response/Connection Timeout
-                        $this->_logAndThrowError(
-                            "Bamboo\Exception\CurlError",
-                            "BAMBOO_{service}_CURLERROR",
-                            $e, $feed
-                        );
-                        break;
-
-                    default:
-                        // Anything else
-                        $this->_logAndThrowError(
-                            "Exception",
-                            "BAMBOO_{service}_OTHER",
-                            $e, $feed
-                        );
-                }
+                $this->_parseRequestException($e, $feed);
             }
         }
         $objects = array();
@@ -226,33 +192,8 @@ class Client
                 )
             );
             $response = $request->send();
-        } catch (ServerErrorResponseException $e) {
-            $this->_logAndThrowError(
-                "Bamboo\Exception\ServerError",
-                "BAMBOO_{service}_SERVERERROR",
-                $e, $feed
-            );
-        } catch (ClientErrorResponseException $e) {
-            $errorArray = $this->_translateClientError($e);
-            $this->_logAndThrowError(
-                "Bamboo\Exception" . $errorArray['class'],
-                $errorArray['counter'],
-                $e, $feed
-            );
-        } catch (CurlException $e) {
-            // Response/Connection Timeout
-            $this->_logAndThrowError(
-                "Bamboo\Exception\CurlError",
-                "BAMBOO_{service}_CURLERROR",
-                $e, $feed
-            );
-        } catch(\Exception $e) {
-            // General Exception
-            $this->_logAndThrowError(
-                "Exception",
-                "BAMBOO_{service}_OTHER",
-                $e, $feed
-            );
+        } catch (\Exception $e) {
+            $this->_parseRequestException($e, $feed);
         }
 
         $object = $this->_parseResponse($response, $feed, $params);
@@ -260,6 +201,43 @@ class Client
         return $object;
     }
 
+    private function _parseRequestException ($e, $feed) {
+        switch (get_class($e)) {
+            case 'Guzzle\Http\Exception\ServerErrorResponseException':
+                $this->_logAndThrowError(
+                    "Bamboo\Exception\ServerError",
+                    "BAMBOO_{service}_SERVERERROR",
+                    $e, $feed
+                );
+                break;
+
+            case 'Guzzle\Http\Exception\ClientErrorResponseException':
+                $errorArray = $this->_translateClientError($e);
+                $this->_logAndThrowError(
+                    "Bamboo\Exception" . $errorArray['class'],
+                    $errorArray['counter'],
+                    $e, $feed
+                );
+                break;
+
+            case 'CurlException':
+                // Response/Connection Timeout
+                $this->_logAndThrowError(
+                    "Bamboo\Exception\CurlError",
+                    "BAMBOO_{service}_CURLERROR",
+                    $e, $feed
+                );
+                break;
+
+            default:
+                // Anything else
+                $this->_logAndThrowError(
+                    "Exception",
+                    "BAMBOO_{service}_OTHER",
+                    $e, $feed
+                );
+        }
+    }
 
     /*
      * Translate the 4** errors into counter and error class.
@@ -296,6 +274,9 @@ class Client
     }
 
     private function _parseResponse($response, $feedName, $params) {
+        // The response comes back in array format.
+        // We go to json then back again to make sure it's an object
+        // We don't cast to ArrayObject because it only casts one level down the nested items
         $array = $response->json();
         $json = json_encode($array);
         $object = json_decode($json);

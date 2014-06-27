@@ -68,6 +68,11 @@ class Fail extends Base implements GuzzleInterface
         throw $exception;
     }
 
+    public function sendAll() {
+        var_export('sdfdsfasfdasfdas'); die();
+        throw new MultiTransferException();
+    }
+
     public function json() {
         // Return body of fixture, return array of data
 
