@@ -135,7 +135,6 @@ class Client
     public function requestAll($feeds) {
         $client = $this->getClient($feeds[0][0]);
 
-
         try {
             $requests = array();
             foreach ($feeds as $feed) {
@@ -157,10 +156,8 @@ class Client
 
             $responses = $client->send($requests);
         } catch (MultiTransferException $e) {
-
-            foreach ($e as $exception) {
-                $this->_parseRequestException($e, $feed);
-            }
+            // Only deal with first exception as we'll throw it and quit anyway
+            $this->_parseRequestException($e->getFirst(), $feed);
         }
         $objects = array();
         foreach ($responses as $response) {
@@ -209,7 +206,6 @@ class Client
                     "BAMBOO_{service}_SERVERERROR",
                     $e, $feed
                 );
-                break;
 
             case 'Guzzle\Http\Exception\ClientErrorResponseException':
                 $errorArray = $this->_translateClientError($e);
@@ -218,16 +214,14 @@ class Client
                     $errorArray['counter'],
                     $e, $feed
                 );
-                break;
 
-            case 'CurlException':
+            case 'Guzzle\Http\Exception\CurlException':
                 // Response/Connection Timeout
                 $this->_logAndThrowError(
                     "Bamboo\Exception\CurlError",
                     "BAMBOO_{service}_CURLERROR",
                     $e, $feed
                 );
-                break;
 
             default:
                 // Anything else

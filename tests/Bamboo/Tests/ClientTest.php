@@ -6,14 +6,14 @@ use \Bamboo\Client;
 use \Bamboo\CounterFake;
 use Bamboo\Feeds\Atoz;
 
-/* 
+/*
  * Using ATOZ as the example feed testing Clients responsibilities.
  */
 class ClientTest extends BambooTestCase
 {
 
     /*
-     * Test pre fetch 
+     * Test pre fetch
      * - HTTP Clients
      */
     public function testGetHttpClientGuzzle() {
@@ -25,7 +25,7 @@ class ClientTest extends BambooTestCase
     public function testGetHttpClientFake() {
         parent::setupRequest('atoz@atoz_a_programmes');
         $client = Client::getInstance()->getClient("atoz");
-        
+
         $this->assertInstanceOf('Bamboo\Http\Fake', $client);
     }
 
@@ -42,13 +42,13 @@ class ClientTest extends BambooTestCase
         $defaultLang = Client::getInstance()->getParam('lang');
         Client::getInstance()->setLang('cy');
         $newLang = Client::getInstance()->getParam('lang');
-        
+
         $this->assertEquals('en', $defaultLang);
         $this->assertEquals('cy', $newLang);
     }
 
-    /* 
-     * Test Post Fetch 
+    /*
+     * Test Post Fetch
      * - Correct response parsing
      *
      * Very few testing this as more in FEED tests
@@ -56,12 +56,12 @@ class ClientTest extends BambooTestCase
     public function testParsesResponse() {
         parent::setupRequest("atoz@atoz_a_programmes");
         $feedObject = new Atoz(array(), 'a');
-        
+
         $this->assertInstanceOf('Bamboo\Feeds\Atoz', $feedObject);
     }
 
-    /* 
-     * Test Post Fetch 
+    /*
+     * Test Post Fetch
      * - Test Translate response Exception
      */
     public function testServerError() {
@@ -72,8 +72,8 @@ class ClientTest extends BambooTestCase
 
     public function testBadRequest() {
         parent::setupFailRequest(
-            'atoz@atoz_a_programmes', 
-            'Guzzle\Http\Exception\ClientErrorResponseException', 
+            'atoz@atoz_a_programmes',
+            'Guzzle\Http\Exception\ClientErrorResponseException',
             400
         );
 
@@ -84,8 +84,8 @@ class ClientTest extends BambooTestCase
 
     public function testNotFound() {
         parent::setupFailRequest(
-            'atoz@atoz_a_programmes', 
-            'Guzzle\Http\Exception\ClientErrorResponseException', 
+            'atoz@atoz_a_programmes',
+            'Guzzle\Http\Exception\ClientErrorResponseException',
             404
         );
 
@@ -94,13 +94,81 @@ class ClientTest extends BambooTestCase
         $feedObject = new Atoz(array(), 'a');
     }
 
-    /* 
-     * Test Post Fetch more 
+    public function testRequestAll() {
+        $requests = array(
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array())
+        );
+        $client = Client::getInstance();
+        $this->setupParallelRequest($requests);
+        $responses = $client->requestAll($requests);
+
+        $this->assertEquals(3,count($responses));
+    }
+
+    public function testCurlExceptionsInRequestAll() {
+        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
+        $stub->method('send')->will($this->returnCallback(function ($requests) {
+            $err = new \Guzzle\Http\Exception\CurlException('Timed Out');
+            $multi = new \Guzzle\Http\Exception\MultiTransferException();
+            $multi->setExceptions(array($err));
+            throw $multi;
+        }));
+
+        $requests = array(
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array())
+        );
+        $client = Client::getInstance();
+        $this->setupParallelRequest($requests, $stub);
+
+        $this->setExpectedException('Bamboo\Exception\CurlError');
+        try {
+            $responses = $client->requestAll($requests);
+        } catch (\Exception $e) {
+            $this->assertEquals(1, CounterFake::getCount('BAMBOO_PROXY_CURLERROR'));
+            CounterFake::resetCount('BAMBOO_PROXY_CURLERROR');
+            throw $e;
+        }
+    }
+
+    public function testNormalExceptionsInRequestAll() {
+        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
+        $stub->method('send')->will($this->returnCallback(function ($requests) {
+            $err = new \Exception('Parse Error');
+            $multi = new \Guzzle\Http\Exception\MultiTransferException();
+            $multi->setExceptions(array($err));
+            throw $multi;
+        }));
+
+        $requests = array(
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array()),
+            array('atoz@atoz_a_programmes', array())
+        );
+        $client = Client::getInstance();
+        $this->setupParallelRequest($requests, $stub);
+
+        $this->setExpectedException('Exception');
+        try {
+            $responses = $client->requestAll($requests);
+        } catch (\Exception $e) {
+            $this->assertEquals(1, CounterFake::getCount('BAMBOO_PROXY_OTHER'));
+            CounterFake::resetCount('BAMBOO_PROXY_OTHER');
+            throw $e;
+        }
+    }
+
+
+    /*
+     * Test Post Fetch more
      * - Translate reponse exception+response into Counters
      */
-    public function testServerErrorProxyCounter() { 
+    public function testServerErrorProxyCounter() {
         $this->_counterTest(
-            'proxy_failure', 
+            'proxy_failure',
             'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
@@ -108,35 +176,35 @@ class ClientTest extends BambooTestCase
 
     public function testServerErrorIblCounter() {
         $this->_counterTest(
-            'ibl_failure', 
+            'ibl_failure',
             'BAMBOO_IBL_SERVERERROR',
             'BAMBOO_PROXY_SERVERERROR'
         );
     }
 
-    public function testEmptyResponseProxyCounter() { 
+    public function testEmptyResponseProxyCounter() {
         $this->_counterTest(
-            'empty_response', 
+            'empty_response',
             'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
 
-    public function testUnknownResponseProxyCounter() { 
+    public function testUnknownResponseProxyCounter() {
         $this->_counterTest(
-            'unknown_json_response', 
+            'unknown_json_response',
             'BAMBOO_PROXY_SERVERERROR',
             'BAMBOO_IBL_SERVERERROR'
         );
     }
 
-    public function testBadRequestProxyCounter() {   
+    public function testBadRequestProxyCounter() {
         try {
             CounterFake::resetCount('BAMBOO_PROXY_BADREQUEST');
             $startCount = CounterFake::getCount('BAMBOO_PROXY_BADREQUEST');
             parent::setupFailRequest(
-                'atoz@atoz_a_programmes', 
-                'Guzzle\Http\Exception\ClientErrorResponseException', 
+                'atoz@atoz_a_programmes',
+                'Guzzle\Http\Exception\ClientErrorResponseException',
                 400
             );
             $feedObject = new Atoz(array(), 'a');
@@ -146,7 +214,7 @@ class ClientTest extends BambooTestCase
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);
             $this->assertInstanceOf('\Bamboo\Exception\BadRequest', $e);
-        }   
+        }
     }
 
     private function _counterTest($fixture, $counter, $wrongCounter) {
@@ -163,6 +231,6 @@ class ClientTest extends BambooTestCase
             $this->assertEquals(0, $startCount);
             $this->assertEquals(1, $endCount);
             $this->assertEquals(0, $wrongCounter);
-        }   
+        }
     }
 }

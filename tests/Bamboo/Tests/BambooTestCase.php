@@ -16,10 +16,11 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
     /*
      * By default we will use fixtures..use fake client.
      */
-    protected function setupRequest($feed) {
+    protected function setupRequest($feed, $httpFake=false) {
         $_GET['_fake'] = $feed;
-
-        $httpFake = new Fake();
+        if (!$httpFake) {
+            $httpFake = new Fake();
+        }
         $path =  dirname(__FILE__) . self::FIXTURE_PATH;
         $httpFake->setFixturesPath($path);
 
@@ -28,6 +29,10 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         );
 
         Client::getInstance()->setServiceProxy(true);
+    }
+
+    protected function setupParallelRequest($feed, $fakeClient=false) {
+        return $this->setupRequest($feed[0][0], $fakeClient);
     }
 
     protected function setupFailRequest($feed, $errorClass = null, $statusCode = "") {
@@ -48,7 +53,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 
         Client::getInstance()->setFailHttpClient(
             $httpFail
-        );  
+        );
 
         Client::getInstance()->setServiceProxy(true);
     }
