@@ -23,7 +23,7 @@ class BaseParallel extends Base
             $this->_response = Client::getInstance()->request($requests[0][0], $requests[0][1]);
         } else {
             $responses = Client::getInstance()->requestAll($requests);
-            $baseResponse = $responses[0];
+            $baseResponse = array_shift($responses);
             foreach ($responses as $response) {
                 $baseResponse->programmes = array_merge($baseResponse->programmes, $response->programmes);
             }
@@ -31,5 +31,4 @@ class BaseParallel extends Base
             $this->_response = $baseResponse;
         }
     }
-
 }

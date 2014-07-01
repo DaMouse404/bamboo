@@ -20,7 +20,10 @@ class Programmes extends BaseParallel
         $feedName = $this->_feedName;
         $this->_feeds = array_map(
             function ($pids) use ($feedName) {
-                return str_replace("{pids}", join($pids, ","), $feedName);
+                if (is_array($pids)) {
+                    $pids = join($pids, ",");
+                }
+                return str_replace("{pids}", $pids, $feedName);
             },
             $pidSets
         );
