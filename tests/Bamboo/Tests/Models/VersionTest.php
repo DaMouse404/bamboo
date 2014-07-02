@@ -108,6 +108,15 @@ class VersionTest extends BambooTestCase
         ));
 
         $this->assertEquals(10, $ver->getDurationInMins());
+
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '11 mins',
+                'value' => 'PT10M30S'
+            )
+        ));
+
+        $this->assertEquals(11, $ver->getDurationInMins());
     }
 
     private function _createVersion($params) {
