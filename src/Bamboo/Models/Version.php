@@ -111,7 +111,7 @@ class Version extends Base
             $dt = (new \DateTime());
             $mins = $dt->setTimeStamp(0)->add($date)->getTimestamp()  / 60;
         }
-        return ceil ($mins);
+        return ceil($mins);
     }
 
     /**
