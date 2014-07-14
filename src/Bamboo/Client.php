@@ -141,7 +141,7 @@ class Client
                 $params = array_merge($this->_defaultParams, $this->_config, $feed[1]);
 
                 $fullUrl = $this->_host . $this->_baseUrl . $feed[0];
-                Log::debug('BAMBOO: Parallel iBL feed: ' . $fullUrl . '.json?' . http_build_query($params));
+                Log::info('BAMBOO: Parallel iBL feed: ' . $fullUrl . '.json?' . http_build_query($params));
                 $requests[] = $client->get(
                     $this->_baseUrl . $feed[0] . '.json',
                     array(),
@@ -175,7 +175,7 @@ class Client
 
         $fullUrl = $this->_host . $this->_baseUrl . $feed;
 
-        Log::debug('Fetching iBL feed: ' . $fullUrl . '.json with params: "' . http_build_query($params) . '"');
+        Log::info('Fetching iBL feed: ' . $fullUrl . '.json with params: "' . http_build_query($params) . '"');
 
         try {
             $request = $client->get(

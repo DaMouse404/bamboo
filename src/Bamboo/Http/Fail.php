@@ -61,7 +61,7 @@ class Fail extends Base implements GuzzleInterface
             array(), // Headers
             file_get_contents($this->_path)  // Response contents
         );
-        Log::debug('BAMBOO: Failing with contents from:' . $this->_path);
+        Log::info('BAMBOO: Failing with contents from:' . $this->_path);
 
         $exception->setResponse($response);
 
