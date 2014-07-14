@@ -68,6 +68,12 @@ class Fail extends Base implements GuzzleInterface
         throw $exception;
     }
 
+    public function sendAll() {
+        $excep = new MultiTransferException();
+        $excep->addException(new Exception('Failing request on purpose'));
+        throw $excep;
+    }
+
     public function json() {
         // Return body of fixture, return array of data
 

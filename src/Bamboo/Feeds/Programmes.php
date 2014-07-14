@@ -4,10 +4,11 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Programme;
 
-class Programmes extends Base
+class Programmes extends BaseParallel
 {
 
-    protected $_feed = 'programmes/{pids}';
+    protected $_feedName = 'programmes/{pids}';
+    protected $_feeds = array();
     protected $_response;
 
     public function __construct($params, $pids) {
@@ -15,11 +16,17 @@ class Programmes extends Base
         parent::__construct($params);
     }
 
-    private function _setPids($pids) {
-        if (is_array($pids)) {
-            $pids = join($pids, ",");
-        }
-        $this->_feed = str_replace("{pids}", $pids, $this->_feed); 
+    private function _setPids($pidSets) {
+        $feedName = $this->_feedName;
+        $this->_feeds = array_map(
+            function ($pids) use ($feedName) {
+                if (is_array($pids)) {
+                    $pids = join($pids, ",");
+                }
+                return str_replace("{pids}", $pids, $feedName);
+            },
+            $pidSets
+        );
     }
 
     /*
@@ -35,7 +42,7 @@ class Programmes extends Base
     }
 
     public function getResponse() {
-        return json_encode($this->_response);
+        return $this->_response;
     }
 
 }

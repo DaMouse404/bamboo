@@ -6,6 +6,7 @@ use Guzzle\Http;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Http\Exception\BadResponseException;
+use Guzzle\Http\Exception\MultiTransferException;
 use Guzzle\Http\Exception\CurlException;
 use Bamboo\Log;
 use Bamboo\Counter;
@@ -131,11 +132,49 @@ class Client
     /*
      * Log Error...Translate Exception and throw
      */
-    public function request($feed, $params = array()) {
+    public function requestAll($feeds) {
+        $client = $this->getClient($feeds[0][0]);
+
+        try {
+            $requests = array();
+            foreach ($feeds as $feed) {
+                $params = array_merge($this->_defaultParams, $this->_config, $feed[1]);
+
+                $fullUrl = $this->_host . $this->_baseUrl . $feed[0];
+                Log::debug('BAMBOO: Parallel iBL feed: ' . $fullUrl . '.json?' . http_build_query($params));
+                $requests[] = $client->get(
+                    $this->_baseUrl . $feed[0] . '.json',
+                    array(),
+                    array(
+                        'query' => $params,
+                        'proxy' =>  $this->_networkProxy,
+                        'timeout'         => 6, // 6 seconds
+                        'connect_timeout' => 5 // 5 seconds
+                    )
+                );
+            }
+
+            $responses = $client->send($requests);
+        } catch (MultiTransferException $e) {
+            // Only deal with first exception as we'll throw it and quit anyway
+            $this->_parseRequestException($e->getFirst(), $feed);
+        }
+        $objects = array();
+        foreach ($responses as $response) {
+            $objects[] = $this->_parseResponse($response, $feed, $params);
+        }
+        return $objects;
+    }
+
+    /*
+     * Log Error...Translate Exception and throw
+     */
+    public function request($feed, $params) {
         $client = $this->getClient($feed);
         $params = array_merge($this->_defaultParams, $this->_config, $params);
 
         $fullUrl = $this->_host . $this->_baseUrl . $feed;
+
         Log::debug('Fetching iBL feed: ' . $fullUrl . '.json with params: "' . http_build_query($params) . '"');
 
         try {
@@ -150,38 +189,48 @@ class Client
                 )
             );
             $response = $request->send();
-        } catch (ServerErrorResponseException $e) {
-            $this->_logAndThrowError(
-                "Bamboo\Exception\ServerError",
-                "BAMBOO_{service}_SERVERERROR",
-                $e, $feed
-            );
-        } catch (ClientErrorResponseException $e) {
-            $errorArray = $this->_translateClientError($e);
-            $this->_logAndThrowError(
-                "Bamboo\Exception" . $errorArray['class'],
-                $errorArray['counter'],
-                $e, $feed
-            );
-        } catch (CurlException $e) {
-            // Response/Connection Timeout
-            $this->_logAndThrowError(
-                "Bamboo\Exception\CurlError",
-                "BAMBOO_{service}_CURLERROR",
-                $e, $feed
-            );
-        } catch(\Exception $e) {
-            // General Exception
-            $this->_logAndThrowError(
-                "Exception",
-                "BAMBOO_{service}_OTHER",
-                $e, $feed
-            );
+        } catch (\Exception $e) {
+            $this->_parseRequestException($e, $feed);
         }
 
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
+    }
+
+    private function _parseRequestException ($e, $feed) {
+        switch (get_class($e)) {
+            case 'Guzzle\Http\Exception\ServerErrorResponseException':
+                $this->_logAndThrowError(
+                    "Bamboo\Exception\ServerError",
+                    "BAMBOO_{service}_SERVERERROR",
+                    $e, $feed
+                );
+
+            case 'Guzzle\Http\Exception\ClientErrorResponseException':
+                $errorArray = $this->_translateClientError($e);
+                $this->_logAndThrowError(
+                    "Bamboo\Exception" . $errorArray['class'],
+                    $errorArray['counter'],
+                    $e, $feed
+                );
+
+            case 'Guzzle\Http\Exception\CurlException':
+                // Response/Connection Timeout
+                $this->_logAndThrowError(
+                    "Bamboo\Exception\CurlError",
+                    "BAMBOO_{service}_CURLERROR",
+                    $e, $feed
+                );
+
+            default:
+                // Anything else
+                $this->_logAndThrowError(
+                    "Exception",
+                    "BAMBOO_{service}_OTHER",
+                    $e, $feed
+                );
+        }
     }
 
     /*
@@ -219,6 +268,9 @@ class Client
     }
 
     private function _parseResponse($response, $feedName, $params) {
+        // The response comes back in array format.
+        // We go to json then back again to make sure it's an object
+        // We don't cast to ArrayObject because it only casts one level down the nested items
         $array = $response->json();
         $json = json_encode($array);
         $object = json_decode($json);
