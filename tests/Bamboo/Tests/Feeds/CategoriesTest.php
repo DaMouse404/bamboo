@@ -22,7 +22,7 @@ class CategoriesTest extends BambooTestCase
   public function testFeedSize() {
     $this->assertEquals(
         sizeof($this->_categories),
-        19
+        31
     );
   }
 
