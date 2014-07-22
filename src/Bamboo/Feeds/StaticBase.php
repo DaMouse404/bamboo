@@ -1,8 +1,8 @@
 <?php
 
 namespace Bamboo\Feeds;
-use Bamboo\Exceptions\NotFound;
-use Bamboo\Exceptions\EmptyFeed;
+use Bamboo\Exception\NotFound;
+use Bamboo\Exception\EmptyFeed;
 use Bamboo\Log;
 
 class StaticBase extends Base
@@ -15,14 +15,23 @@ class StaticBase extends Base
      * Fetch a feed by reading a JSON file from /Assets
      */
     public function fetchAssetFeed($feed) {
-        $json = $this->fetchFile($feed);
         Log::info('Fetching Static feed from /Assets: ' . $feed);
+        try {
+            $json = $this->fetchFile($feed);
+        } catch (\Exception $e) {
+            $this->throwEmpty($feed);
+        }
         // can return false or file contents, so falsyness is a failure
         if (!$json) {
-            throw new EmptyFeed('Could not find file in /Assets/ for feed: '. $feed);
+            $this->throwEmpty($feed);
         } else {
             return json_decode($json);
         }
+    }
+
+    private function throwEmpty($feed)
+    {
+        throw new EmptyFeed('Could not find file in /Assets/ for feed: '. $feed);
     }
 
     private function fetchFile($feed) {
