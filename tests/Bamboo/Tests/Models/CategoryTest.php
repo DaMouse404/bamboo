@@ -31,6 +31,12 @@ class CategoryTest extends BambooTestCase
         $this->assertEquals($category->getChildEpisodeCount(), 0);
     }
 
+    public function testCategoryKind() {
+        $category = $this->_createCategory(array('kind' => 'sub-genre'));
+        $this->assertEquals('sub-genre', $category->getKind());
+
+     }
+
     private function _createCategory($params) {
         return new Category((object) $params);
     }
