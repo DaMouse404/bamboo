@@ -123,6 +123,11 @@
       "kind": "genre"
     },
     {
+      "id": "lifestyle",
+      "title": "Lifestyle",
+      "kind": "genre"
+    },
+    {
       "id": "music",
       "title": "Music",
       "kind": "genre"
