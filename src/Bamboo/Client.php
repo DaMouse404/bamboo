@@ -3,6 +3,8 @@
 namespace Bamboo;
 
 use Guzzle\Http;
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Plugin\Cache\DefaultCacheStorage;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Http\Exception\BadResponseException;
@@ -46,6 +48,11 @@ class Client
      * @var boolean
      */
     private $_serviceProxy = false;
+    /*
+     *
+     * @var CacheInterface
+     */
+    private $_cache = false;
     /*
      * Used to set api_key and any other important feed info which is later merged over $_defaultParams.
      * @var array
@@ -111,6 +118,15 @@ class Client
 
     public function setServiceProxy($bool) {
         $this->_serviceProxy = $bool;
+    }
+
+    /**
+     *  Binds the cacheadapter to the cache as a plugin to Guzzle
+     */
+    public function setCache($cache) {
+        $cachePlugin = new CachePlugin($cache);
+
+        $this->_cache = $cachePlugin;
     }
 
     /*
@@ -297,8 +313,13 @@ class Client
             return $this->_failHttpClient;
         }
 
-        return new Http\Client($this->_host);
+        $client = new Http\Client($this->_host);
 
+        if ( $this->_cache ) {
+            $client->addSubscriber($this->_cache);
+        }
+
+        return $client;
     }
 
     /*

@@ -217,6 +217,20 @@ class ClientTest extends BambooTestCase
         }
     }
 
+    public function testSetCache() {
+        $cache = $this->getMockBuilder('Guzzle\Cache\CacheAdapterInterface')
+                    ->getMockForAbstractClass();
+
+        Client::getInstance()->setCache($cache);
+
+        $client = Client::getInstance()->getClient('atoz');
+
+        $l = $client->getEventDispatcher()->getListeners();
+
+        // Check that the cache plugin was properly attached
+        $this->assertInstanceOf('Guzzle\Plugin\Cache\CachePlugin', $l['request.sent'][0][0]);
+    }
+
     private function _counterTest($fixture, $counter, $wrongCounter) {
         try {
             CounterFake::resetCount($counter);
