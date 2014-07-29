@@ -1,7 +1,4 @@
 {
-  "version": "1.0",
-  "schema": "/ibl/v1/schema/ibl.json",
-  "timestamp": "2014-05-30T13:31:05Z",
   "categories": [
     {
       "id": "arts",
@@ -24,14 +21,86 @@
       "kind": "genre"
     },
     {
+      "id": "comedy-panel-shows",
+      "title": "Panel Show Comedy",
+      "contextual_title": "Panel Shows",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "comedy-sitcoms",
+      "title": "Situation Comedy",
+      "contextual_title": "Sitcoms",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "comedy-stand-up",
+      "title": "Stand-Up Comedy",
+      "contextual_title": "Stand-Up",
+      "kind": "sub-genre"
+    },
+    {
       "id": "documentaries",
       "title": "Documentaries",
       "kind": "genre"
     },
     {
+      "id": "documentaries-arts",
+      "title": "Arts Documentaries",
+      "contextual_title": "Arts",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "documentaries-crime-and-justice",
+      "title": "Crime & Justice Documentaries",
+      "contextual_title": "Crime & Justice",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "documentaries-history",
+      "title": "History Documentaries",
+      "contextual_title": "History",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "documentaries-life-stories",
+      "title": "Life Stories Documentaries",
+      "contextual_title": "Life Stories",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "documentaries-music",
+      "title": "Music Documentaries",
+      "contextual_title": "Music",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "documentaries-science-and-nature",
+      "title": "Science & Nature Documentaries",
+      "contextual_title": "Science & Nature",
+      "kind": "sub-genre"
+    },
+    {
       "id": "drama-and-soaps",
       "title": "Drama & Soaps",
       "kind": "genre"
+    },
+    {
+      "id": "drama-classic-and-period",
+      "title": "Classic & Period Drama",
+      "contextual_title": "Classic & Period",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "drama-crime",
+      "title": "Crime Drama",
+      "contextual_title": "Crime",
+      "kind": "sub-genre"
+    },
+    {
+      "id": "drama-sci-fi-and-fantasy",
+      "title": "Sci-Fi & Fantasy Drama",
+      "contextual_title": "Sci-Fi & Fantasy",
+      "kind": "sub-genre"
     },
     {
       "id": "entertainment",
