@@ -27,9 +27,43 @@ class CategoriesTest extends BambooTestCase
   }
 
   public function testFeedItemType() {
+    $this->assertInstanceOf(
+        "Bamboo\Models\Category",
+        array_pop($this->_categories)
+    );
+  }
+
+  public function testChildrenIsSet () {
+    $comedy = false;
+    foreach($this->_categories as $cat) {
+      if ($cat->getId() == 'comedy') {
+        $comedy = $cat;
+        break;
+      }
+    }
+
     $this->assertEquals(
-        get_class($this->_categories[0]),
-        "Bamboo\Models\Category"
+      3,
+      count($comedy->children)
+    );
+
+    $this->assertEquals(
+      'comedy-sitcoms',
+      $comedy->children[0]->getId()
+    );
+  }
+
+  public function testParentIsSet () {
+    $crime = false;
+    foreach($this->_categories as $cat) {
+      if ($cat->getId() == 'drama-crime') {
+        $crime = $cat;
+        break;
+      }
+    }
+    $this->assertEquals(
+      'drama-and-soaps',
+      $crime->parent->getId()
     );
   }
 

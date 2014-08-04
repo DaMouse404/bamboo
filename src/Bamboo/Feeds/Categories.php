@@ -15,10 +15,19 @@ class Categories extends StaticBase
      */
     public function getCategories() {
         $categories = array();
+        $index = array();
+        $relationships = $this->_response->relationships;
         foreach ($this->_response->categories as $category) {
-            $categories[] = new Category($category);
+            $category = new Category($category);
+            $categories[$category->getId()] = $category;
         }
 
+        foreach ($relationships as $parent => $children) {
+            foreach ($children as $child) {
+                $categories[$parent]->children[] = $categories[$child];
+                $categories[$child]->parent = $categories[$parent];
+            }
+        }
         return $categories;
     }
 

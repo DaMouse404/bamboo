@@ -172,5 +172,25 @@
       "title": "Wales",
       "kind": "regional"
     }
-  ]
+  ],
+  "relationships": {
+    "documentaries": [
+      "documentaries-science-and-nature",
+      "documentaries-history",
+      "documentaries-arts",
+      "documentaries-life-stories",
+      "documentaries-music",
+      "documentaries-crime-and-justice"
+    ],
+    "drama-and-soaps": [
+      "drama-crime",
+      "drama-sci-fi-and-fantasy",
+      "drama-classic-and-period"
+    ],
+    "comedy": [
+      "comedy-sitcoms",
+      "comedy-panel-shows",
+      "comedy-stand-up"
+    ]
+  }
 }
