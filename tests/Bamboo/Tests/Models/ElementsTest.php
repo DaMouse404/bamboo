@@ -69,6 +69,20 @@ class ElementsTest extends BambooTestCase
         $this->assertEquals($mockedEpisode->getMasterBrandAttribution(), 'bbc_two');
     }
 
+    public function testGetEpisodeMasterBrandIdentId() {
+        $params =  array('master_brand' => (object) array('ident_id'=>'1234'));
+        $mockedEpisode = $this->_mockEpisode($params);
+
+        $this->assertEquals($mockedEpisode->getMasterBrandIdentId(), '1234');
+    }
+
+    public function testGetEpisodeMasterBrandIdentIdMissing() {
+        $params =  array('master_brand' => (object) array());
+        $mockedEpisode = $this->_mockEpisode($params);
+
+        $this->assertEmpty($mockedEpisode->getMasterBrandIdentId());
+    }
+
     public function testGetEpisodeImageRecipe() {
         $params = array();
         $mockedEpisode = $this->_mockEpisode($params);

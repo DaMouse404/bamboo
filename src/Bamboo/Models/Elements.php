@@ -4,7 +4,7 @@ namespace Bamboo\Models;
 
 class Elements extends Base
 {
-  
+
     protected $_type = '';
     protected $_synopses;
     protected $_images;
@@ -61,7 +61,7 @@ class Elements extends Base
     public function getStandardImage($width = 336, $height = 189) {
         if (isset($this->_images->standard)) {
             return str_replace(
-                '{recipe}', $this->_getRecipe($width, $height), 
+                '{recipe}', $this->_getRecipe($width, $height),
                 $this->_images->standard
             );
         }
@@ -92,8 +92,8 @@ class Elements extends Base
     public function getPortraitImage($width = 336, $height = 581) {
         if (isset($this->_images->portrait)) {
             return str_replace(
-                '{recipe}', 
-                $this->_getRecipe($width, $height), 
+                '{recipe}',
+                $this->_getRecipe($width, $height),
                 $this->_images->portrait
             );
         }
@@ -125,8 +125,8 @@ class Elements extends Base
     public function getImage($type = 'standard', $width = 336, $height = 581) {
         if (isset($this->_images->$type)) {
             return str_replace(
-                '{recipe}', 
-                $this->_getRecipe($width, $height), 
+                '{recipe}',
+                $this->_getRecipe($width, $height),
                 $this->_images->$type
             );
         }
@@ -203,6 +203,20 @@ class Elements extends Base
         // @codingStandardsIgnoreStart
         if (isset($this->_master_brand->attribution)) {
             return $this->_master_brand->attribution;
+        }
+        // @codingStandardsIgnoreEnd
+        return "";
+    }
+
+    /**
+     * Get the master brand ident's id
+     *
+     * @return string
+     */
+    public function getMasterBrandIdentId() {
+        // @codingStandardsIgnoreStart
+        if (isset($this->_master_brand->ident_id)) {
+            return $this->_master_brand->ident_id;
         }
         // @codingStandardsIgnoreEnd
         return "";
