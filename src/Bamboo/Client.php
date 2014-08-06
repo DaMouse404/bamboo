@@ -254,7 +254,7 @@ class Client
      * @return array
      */
     private function _translateClientError($e) {
-        if (method_exists($e, 'getResponse')) {
+        if ($e instanceof BadResponseException) {
             $response = $e->getResponse();
             $statusCode = $response->getStatusCode();
         } else {
@@ -389,7 +389,7 @@ class Client
      * Logs the error, throws
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
-        if (method_exists($e, 'getResponse')) {
+        if ($e instanceof BadResponseException) {
             $response = $e->getResponse();
             $statusCode = $response->getStatusCode();
         } else {
