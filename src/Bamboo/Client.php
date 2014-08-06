@@ -259,7 +259,7 @@ class Client
             $statusCode = $response->getStatusCode();
         } else {
             // Assume timeout
-            $statusCode = 504;
+            $statusCode = 418;
         }
         switch ($statusCode) {
             case 400:
@@ -394,7 +394,7 @@ class Client
             $statusCode = $response->getStatusCode();
         } else {
             // Assume timeout
-            $statusCode = 504;
+            $statusCode = 418;
         }
         $message = $e->getMessage();
 
