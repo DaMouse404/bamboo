@@ -254,8 +254,13 @@ class Client
      * @return array
      */
     private function _translateClientError($e) {
-        $response = $e->getResponse();
-        $statusCode = $response->getStatusCode();
+        if ($e instanceof BadResponseException) {
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+        } else {
+            // Assume timeout
+            $statusCode = 418;
+        }
         switch ($statusCode) {
             case 400:
                 $errorClass = "\BadRequest";
@@ -384,8 +389,13 @@ class Client
      * Logs the error, throws
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
-        $response = $e->getResponse();
-        $statusCode = $response->getStatusCode();
+        if ($e instanceof BadResponseException) {
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+        } else {
+            // Assume timeout
+            $statusCode = 418;
+        }
         $message = $e->getMessage();
 
         list($errorSource, $sourceMessage) = $this->_getErrorSource($e);
