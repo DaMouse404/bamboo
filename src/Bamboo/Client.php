@@ -254,7 +254,9 @@ class Client
      * @return array
      */
     private function _translateClientError($e) {
-        switch ($e->getCode()) {
+        $response = $e->getResponse();
+        $statusCode = $response->getStatusCode();
+        switch ($statusCode) {
             case 400:
                 $errorClass = "\BadRequest";
                 $counterName = "BAMBOO_{service}_BADREQUEST";
@@ -382,7 +384,8 @@ class Client
      * Logs the error, throws
      */
     private function _logAndThrowError($errorClass, $counterName, $e, $feed) {
-        $statusCode = $e->getCode();
+        $response = $e->getResponse();
+        $statusCode = $response->getStatusCode();
         $message = $e->getMessage();
 
         list($errorSource, $sourceMessage) = $this->_getErrorSource($e);
