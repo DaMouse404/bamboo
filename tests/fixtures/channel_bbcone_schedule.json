@@ -1,0 +1,94 @@
+{
+  "version": "1.0",
+  "schema": "\/ibl\/v1\/schema\/ibl.json",
+  "timestamp": "2014-08-13T15:59:17Z",
+  "schedule": {
+    "channel": {
+      "id": "bbc_one_london",
+      "type": "channel",
+      "title": "BBC One"
+    },
+    "elements": [
+      {
+        "id": "p0223rh9",
+        "type": "broadcast",
+        "start_time": "2014-07-14T05:00:00.000Z",
+        "end_time": "2014-07-14T08:15:00.000Z",
+        "blanked": false,
+        "duration": {
+          "value": "PT3H15M",
+          "text": "195 mins"
+        },
+        "episode": {
+          "id": "b048nzrq",
+          "type": "episode",
+          "lexical_sort_letter": "B",
+          "title": "Breakfast",
+          "subtitle": "14\/07\/2014",
+          "synopses": {
+            "small": "The latest news, sport, business and weather from the BBC's Breakfast team.",
+            "medium": "The latest news, sport, business and weather from the BBC's Breakfast team."
+          },
+          "images": {
+            "standard": "http:\/\/ichef.bbci.co.uk\/images\/ic\/{recipe}\/p01vlgx0.jpg",
+            "type": "image"
+          },
+          "tleo_id": "b006v5tb",
+          "tleo_type": "brand",
+          "parent_id": "b006v5tb",
+          "release_date": "14 Jul 2014",
+          "master_brand": {
+            "id": "bbc_one",
+            "titles": {
+              "small": "BBC One",
+              "medium": "BBC One",
+              "large": "BBC One"
+            },
+            "attribution": "bbc_one",
+            "ident_id": "p00pvbj7"
+          }
+        }
+      },
+      {
+        "id": "p02265ll",
+        "type": "broadcast",
+        "start_time": "2014-07-14T08:15:00.000Z",
+        "end_time": "2014-07-14T09:00:00.000Z",
+        "blanked": false,
+        "duration": {
+          "value": "PT45M",
+          "text": "45 mins"
+        },
+        "episode": {
+          "id": "b01rbncx",
+          "type": "episode",
+          "lexical_sort_letter": "H",
+          "title": "Heir Hunters",
+          "subtitle": "Series 7: 6. Paine\/Birchall",
+          "synopses": {
+            "small": "A new heir comes to light on a case the heir hunters thought was complete.",
+            "medium": "Series following the work of probate researchers. A new heir comes to light on a case the heir hunters thought was complete. Plus, a remarkable story of wartime aviation."
+          },
+          "images": {
+            "standard": "http:\/\/ichef.bbci.co.uk\/images\/ic\/{recipe}\/p01lc41f.jpg",
+            "type": "image"
+          },
+          "tleo_id": "b007nms5",
+          "tleo_type": "brand",
+          "parent_id": "b01r6blz",
+          "release_date": "11 Mar 2013",
+          "master_brand": {
+            "id": "bbc_one",
+            "titles": {
+              "small": "BBC One",
+              "medium": "BBC One",
+              "large": "BBC One"
+            },
+            "attribution": "bbc_one",
+            "ident_id": "p00pvbj7"
+          }
+        }
+      }
+    ]
+  }
+}

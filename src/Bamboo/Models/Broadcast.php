@@ -10,6 +10,7 @@ class Broadcast extends Elements
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_episode;
+    protected $_blanked;
 
     /**
      * Get start time from episode
@@ -41,5 +42,14 @@ class Broadcast extends Elements
     public function getEpisode() {
         $episodeModel = new Episode($this->_episode);
         return $episodeModel;
+    }
+
+    /**
+     * Is broadcast banned from simulcast
+     * 
+     * @return boolean
+     */
+    public function isBlanked() {
+        return !!$this->_blanked;
     }
 }

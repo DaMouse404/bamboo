@@ -10,6 +10,12 @@ class Channels extends StaticBase
     protected $_feed = 'channels';
     protected $_response;
 
+    public function __construct($params = array(), $partner = false) {
+        if ($partner) {
+            $this->_feed .= '/partner';
+        }
+        parent::__construct($params);
+    }
     /*
      * Return array of Channel models
      */
