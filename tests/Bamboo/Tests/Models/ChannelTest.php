@@ -36,6 +36,13 @@ class ChannelTest extends BambooTestCase
     );
   }
 
+  public function testGetRegion() {
+    $this->assertEquals(
+        $this->_channel->getRegion(),
+        'LONDON'
+    );
+  }
+
   public function testIsChildrens() {
     $this->assertFalse(
         $this->_channel->isChildrens()
@@ -46,7 +53,8 @@ class ChannelTest extends BambooTestCase
     $object = (object) array(
         "id" => "bbc_one_london",
         "title" => "BBC One",
-        "type" => "channel"
+        "type" => "channel",
+        "region" => "LONDON"
     );
 
     return $object;
