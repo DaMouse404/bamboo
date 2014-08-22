@@ -27,6 +27,19 @@ class BroadcastTest extends BambooTestCase
         $this->assertEquals('2013-04-09T17:00:00Z', $broadcast->getEndTime());
     }
 
+    public function testRepeat() {
+        $params = array(
+            'type' => 'broadcast',
+            'repeat' => false
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $this->assertFalse($broadcast->isRepeat());
+
+        $params['repeat'] = true;
+        $broadcast = $this->_createBroadcast($params);
+        $this->assertTrue($broadcast->isRepeat());
+    }
+
     public function testEpisodeType() {
         $params = array(
             'type' => 'broadcast',
