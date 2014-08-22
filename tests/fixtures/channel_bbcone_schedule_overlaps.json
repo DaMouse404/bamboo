@@ -1,0 +1,44 @@
+{
+  "version": "1.0",
+  "schema": "\/ibl\/v1\/schema\/ibl.json",
+  "timestamp": "2014-08-13T15:59:17Z",
+  "schedule": {
+    "channel": {
+      "id": "bbc_one_london",
+      "type": "channel",
+      "title": "BBC One"
+    },
+    "elements": [
+      {
+        "id": "p0223rh9",
+        "type": "broadcast",
+        "start_time": "2014-07-14T05:00:00.000Z",
+        "end_time": "2014-07-14T08:15:00.000Z"
+      },
+      {
+        "id": "p0223rh9",
+        "type": "broadcast",
+        "start_time": "2014-07-14T05:00:00.000Z",
+        "end_time": "2014-07-14T08:15:00.000Z"
+      },
+      {
+        "id": "p0223rh9",
+        "type": "broadcast",
+        "start_time": "2014-07-14T08:10:00.000Z",
+        "end_time": "2014-07-14T08:35:00.000Z"
+      },
+      {
+        "id": "p02265ll",
+        "type": "broadcast",
+        "start_time": "2014-07-14T08:30:00.000Z",
+        "end_time": "2014-07-14T09:00:00.000Z"
+      },
+      {
+        "id": "p02265ll",
+        "type": "broadcast",
+        "start_time": "2014-07-14T08:30:00.000Z",
+        "end_time": "2014-07-14T09:00:00.000Z"
+      }
+    ]
+  }
+}

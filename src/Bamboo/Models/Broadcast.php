@@ -30,7 +30,7 @@ class Broadcast extends Elements
     }
 
     /**
-     * Get end time from episode
+     * Get end time from broadcast
      * 
      * @return string
      */
@@ -40,6 +40,15 @@ class Broadcast extends Elements
             return $this->_transmission_end;
         }
         return $this->_scheduled_end;
+        // @codingStandardsIgnoreEnd
+    }
+
+    /**
+     * Sets the end time of the broadcast
+     */
+    public function setEndTime($endTime) {
+        // @codingStandardsIgnoreStart
+        $this->_end_time = $endTime;
         // @codingStandardsIgnoreEnd
     }
 
