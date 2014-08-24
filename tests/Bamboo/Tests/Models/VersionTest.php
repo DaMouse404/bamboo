@@ -90,6 +90,40 @@ class VersionTest extends BambooTestCase
         $this->assertEquals('HD', $hd->getAbbreviation());
     }
 
+    public function testDurationInSecs() {
+
+        $ver = $this->_createVersion(array());
+
+        $this->assertEquals(0, $ver->getDurationInSecs());
+
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '80 mins',
+                'value' => 'PT1H20M'
+            )
+        ));
+
+        $this->assertEquals(4800, $ver->getDurationInSecs());
+
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '10 mins',
+                'value' => 'PT10M'
+            )
+        ));
+
+        $this->assertEquals(600, $ver->getDurationInSecs());
+
+        $ver = $this->_createVersion(array(
+            'duration' => (object) array(
+                'text' => '11 mins',
+                'value' => 'PT10M30S'
+            )
+	));
+
+        $this->assertEquals(630, $ver->getDurationInSecs());
+    }
+
     public function testDurationInMins() {
         $ver = $this->_createVersion(array(
             'duration' => (object) array(
