@@ -11,6 +11,7 @@ class Broadcast extends Elements
     protected $_duration;
     protected $_episode;
     protected $_blanked;
+    protected $_repeat;
 
     /**
      * Get start time from episode
@@ -51,5 +52,14 @@ class Broadcast extends Elements
      */
     public function isBlanked() {
         return !!$this->_blanked;
+    }
+
+    /**
+     * Is broadcast a repetition
+     *
+     * @return boolean
+     */
+    public function isRepeat() {
+        return !!$this->_repeat;
     }
 }
