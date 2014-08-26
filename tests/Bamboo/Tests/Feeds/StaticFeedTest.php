@@ -3,32 +3,41 @@
 namespace Bamboo\Tests\Feeds;
 
 use Bamboo\Tests\BambooTestCase;
-use Bamboo\Feeds\Categories;
+use Bamboo\Feeds\StaticBase;
 
 class StaticFeedTest extends BambooTestCase
 {
+    public function testFeed () {
+
+        $feedObject = new MockStaticFeed();
+        $this->assertAttributeEquals('Cake', '_response', $feedObject);
+    }
+
     public function testNoFeed () {
-        $this->setExpectedException('Bamboo\Exception\EmptyFeed');
+        $this->setExpectedException('Bamboo\Exception\NotFound');
         $fake = new FakeStaticFeed();
     }
 
     public function testEmptyFeed () {
-        $stub = $this->getMock('EmptyStaticFeed', array('fetchFile'));
-        $stub->method('fetchFile')->will($this->returnValue(false));
-
         $this->setExpectedException('Bamboo\Exception\EmptyFeed');
         $fake = new EmptyStaticFeed();
     }
 }
 
-class FakeStaticFeed extends \Bamboo\Feeds\StaticBase {
+class MockStaticFeed extends StaticBase {
+
+    protected $_feed = '../../../tests/fixtures/mock_static_feed';
+    protected $_response;
+}
+
+class FakeStaticFeed extends StaticBase {
 
     protected $_feed = 'non-existant-feed';
     protected $_response;
 }
 
-class EmptyStaticFeed extends \Bamboo\Feeds\StaticBase {
+class EmptyStaticFeed extends StaticBase {
 
-    protected $_feed = 'empty-feed';
+    protected $_feed = '../../../tests/fixtures/empty_response';
     protected $_response;
 }

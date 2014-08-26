@@ -15,26 +15,46 @@ class StaticBase extends Base
      * Fetch a feed by reading a JSON file from /Assets
      */
     public function fetchAssetFeed($feed) {
-        Log::info('Fetching Static feed from /Assets: %s', $feed);
+        Log::info('Fetching Static feed from /Assets: ' . $feed);
+
         try {
-            $json = $this->fetchFile($feed);
-        } catch (\Exception $e) {
+            $contents = $this->fetchFile($feed);
+        } catch (Exception $e) {
             $this->throwEmpty($feed);
         }
+
         // can return false or file contents, so falsyness is a failure
+        $json = $this->decodeFixture($contents);
         if (!$json) {
             $this->throwEmpty($feed);
         } else {
-            return json_decode($json);
+            return $json;
         }
     }
 
-    private function throwEmpty($feed)
-    {
-        throw new EmptyFeed('Could not find file in /Assets/ for feed: ' . $feed);
+    public function decodeFixture($fixture) {
+        $response = explode('UTF-8', $fixture);
+
+        if (isset($response[1])) {
+            $body = $response[1];
+        } else {
+            $body = $fixture;
+        }
+
+        return json_decode($body);
+    }
+
+    private function throwEmpty($feed) {
+        throw new EmptyFeed('Could not find feed in /Assets/ for feed: '. $feed);
     }
 
     private function fetchFile($feed) {
-        return file_get_contents(dirname(__FILE__) . '/../Assets/' . $feed . '.json');
+        $filePath = dirname(__FILE__) . '/../Assets/' . $feed . '.json';
+
+        if ( !file_exists($filePath) ) {
+            throw new NotFound('Could not find file in /Assets/ for feed: '. $feed);
+        }
+
+        return file_get_contents($filePath);
     }
 }

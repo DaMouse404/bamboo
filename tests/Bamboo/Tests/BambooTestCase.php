@@ -57,5 +57,4 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
 
         Client::getInstance()->setServiceProxy(true);
     }
-
 }

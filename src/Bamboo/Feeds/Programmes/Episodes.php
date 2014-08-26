@@ -18,7 +18,7 @@ class Episodes extends Base
     }
 
     private function _setId($id) {
-        $this->_feed = str_replace("{id}", $id, $this->_feed); 
+        $this->_feed = str_replace("{id}", $id, $this->_feed);
     }
 
     public function getEpisodes() {
@@ -28,12 +28,8 @@ class Episodes extends Base
             $className = $this->_className($item->type);
             $elements[] = new $className($item);
         }
-        
-        return $elements;
-    }
 
-    public function getResponse() {
-        return $this->_response->programme_episodes->elements;
+        return $elements;
     }
 
     public function getTotalCount() {
