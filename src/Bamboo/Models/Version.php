@@ -98,6 +98,23 @@ class Version extends Base
     }
 
     /**
+     * Get the version duration in seconds
+     * by parsing the duration code
+     *
+     * @return int
+     */
+    public function getDurationInSecs()
+    {
+        $secs = 0;
+        if (isset($this->_duration->value)) {
+            $date = new \DateInterval($this->_duration->value);
+            $dt = (new \DateTime());
+            $secs = $dt->setTimeStamp(0)->add($date)->getTimestamp();
+        }
+        return $secs;
+    }
+
+    /**
      * Get the version duration in minutes
      * by parsing the duration code
      *
@@ -105,12 +122,8 @@ class Version extends Base
      */
     public function getDurationInMins()
     {
-        $mins = 0;
-        if (isset($this->_duration->value)) {
-            $date = new \DateInterval($this->_duration->value);
-            $dt = (new \DateTime());
-            $mins = $dt->setTimeStamp(0)->add($date)->getTimestamp()  / 60;
-        }
+        $secs = $this->getDurationInSecs();
+        $mins = $secs / 60;
         return ceil($mins);
     }
 

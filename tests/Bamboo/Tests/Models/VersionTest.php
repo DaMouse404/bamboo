@@ -90,34 +90,45 @@ class VersionTest extends BambooTestCase
         $this->assertEquals('HD', $hd->getAbbreviation());
     }
 
-    public function testDurationInMins() {
-        $ver = $this->_createVersion(array(
-            'duration' => (object) array(
-                'text' => '80 mins',
-                'value' => 'PT1H20M'
-            )
-        ));
+    public function testDurationInSecs() {
 
-        $this->assertEquals(80, $ver->getDurationInMins());
+        $ver = $this->_createVersion(array());
+        $this->assertEquals(0, $ver->getDurationInSecs());
 
-        $ver = $this->_createVersion(array(
-            'duration' => (object) array(
-                'text' => '10 mins',
-                'value' => 'PT10M'
-            )
-        ));
-
-        $this->assertEquals(10, $ver->getDurationInMins());
-
-        $ver = $this->_createVersion(array(
-            'duration' => (object) array(
-                'text' => '11 mins',
-                'value' => 'PT10M30S'
-            )
-        ));
-
-        $this->assertEquals(11, $ver->getDurationInMins());
+        $this->assertEquals(4800, $this->_getSecsForDuration('80 mins', 'PT1H20M'));
+        $this->assertEquals(600, $this->_getSecsForDuration('10 mins', 'PT10M'));
+        $this->assertEquals(630, $this->_getSecsForDuration('11 mins', 'PT10M30S'));
     }
+
+    private function _getSecsForDuration($text, $value) {
+        $ver = $this->_getDuration($text, $value);
+        return $ver->getDurationInSecs();
+   }
+
+    public function testDurationInMins() {
+
+        $ver = $this->_createVersion(array());
+        $this->assertEquals(0, $ver->getDurationInMins());
+
+        $this->assertEquals(80, $this->_getMinsForDuration('80 mins', 'PT1H20M'));
+        $this->assertEquals(10, $this->_getMinsForDuration('10 mins', 'PT10M'));
+        $this->assertEquals(11, $this->_getMinsForDuration('11 mins', 'PT10M30S'));
+    }
+
+    private function _getMinsForDuration($text, $value) {
+        $ver = $this->_getDuration($text, $value);
+        return $ver->getDurationInMins();
+    }
+
+    private function _getDuration($text, $value) {
+        $ver = $this->_createVersion(array(
+           'duration' => (object) array(
+                'text' => $text,
+                'value' => $value
+            )
+	));
+        return $ver;
+   }
 
     private function _createVersion($params) {
         return new Version((object) $params);
