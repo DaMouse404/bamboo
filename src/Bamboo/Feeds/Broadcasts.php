@@ -16,7 +16,7 @@ class Broadcasts extends Base
     }
 
     private function _setChannel($channel) {
-        $this->_feed = str_replace("{channel}", $channel, $this->_feed); 
+        $this->_feed = str_replace("{channel_id}", $channel, $this->_feed); 
     }
 
     public function getBroadcasts() {
