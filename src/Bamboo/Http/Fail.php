@@ -51,6 +51,8 @@ class Fail extends Base implements GuzzleInterface
      */
     public function send() {
 
+        $fixture = $this->_loadFixture();
+
         $exception = new $this->_errorClass(
             $this->_errorMessage,
             $this->_statusCode
@@ -59,7 +61,7 @@ class Fail extends Base implements GuzzleInterface
         $response = new Response(
             $this->_statusCode,
             array(), // Headers
-            file_get_contents($this->_path)  // Response contents
+            $fixture['body']  // Response contents
         );
         Log::info('BAMBOO: Failing with contents from:' . $this->_path);
 
@@ -80,5 +82,23 @@ class Fail extends Base implements GuzzleInterface
         return;
     }
 
+    private function _loadFixture() {
+        //return body of fixture, return array of data
+        // Split file so header is ignored
+        $fixture = file_get_contents($this->_path);
+        $contents = explode('UTF-8', $fixture);
 
+        $response = array();
+
+        if (isset($contents[1])) {
+            $response['head'] = $contents[0];
+            $response['body'] = $contents[1];
+        } else {
+            // No header found
+            $response['head'] = '';
+            $response['body'] = $fixture;
+        }
+
+        return $response;
+    }
 }
