@@ -1,6 +1,8 @@
 #PHP client library for iBL
 
 [![](http://hubson.cloud.bbc.co.uk/badges/bamboo)](https://ci-pal.int.bbc.co.uk/hudson/view/iPlayer/job/bamboo/)
+[![Code Climate](https://codeclimate.com/github/iplayer/bamboo/badges/gpa.svg)](https://codeclimate.com/github/iplayer/bamboo)
+
 
 Setup dependencies.
 
