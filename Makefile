@@ -4,7 +4,7 @@ PHPCS_OPTIONS = -n -v --extensions=php
 
 phpcs:
 	@echo "PHP Codesniffer"
-	phpcs --standard=$(PHPCS_STANDARD) $(PHPCS_OPTIONS) $(PHPCS_PATH)
+	./vendor/bin/phpcs --standard=$(PHPCS_STANDARD) $(PHPCS_OPTIONS) $(PHPCS_PATH)
 
 
 phpunit:
