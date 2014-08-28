@@ -5,8 +5,10 @@ namespace Bamboo\Models;
 class Broadcast extends Elements
 {
     // @codingStandardsIgnoreStart
-    protected $_start_time = "";
-    protected $_end_time = "";
+    protected $_scheduled_start = "";
+    protected $_scheduled_end = "";
+    protected $_transmission_start = "";
+    protected $_transmission_end = "";
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_episode;
@@ -18,9 +20,12 @@ class Broadcast extends Elements
      * 
      * @return string
      */
-    public function getStartTime() {
+    public function getStartTime($useTransmission = false) {
         // @codingStandardsIgnoreStart
-        return $this->_start_time;
+        if ($useTransmission && $this->_transmission_start) {
+            return $this->_transmission_start;
+        }
+        return $this->_scheduled_start;
         // @codingStandardsIgnoreEnd
     }
 
@@ -29,9 +34,12 @@ class Broadcast extends Elements
      * 
      * @return string
      */
-    public function getEndTime() {
+    public function getEndTime($useTransmission = false) {
         // @codingStandardsIgnoreStart
-        return $this->_end_time;
+        if ($useTransmission && $this->_transmission_end) {
+            return $this->_transmission_end;
+        }
+        return $this->_scheduled_end;
         // @codingStandardsIgnoreEnd
     }
 

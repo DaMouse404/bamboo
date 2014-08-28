@@ -16,15 +16,19 @@ class BroadcastTest extends BambooTestCase
         $this->assertEquals('broadcast', $broadcast->getType());
     }
 
-    public function testStartEndTimeExists() {
+    public function testCorrectStartAndEndTimeReturned() {
         $params = array(
-            'start_time' => '2013-04-09T16:00:00Z',
-            'end_time' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => '2014-08-21T12:30:00.000Z',
+            'scheduled_end' => '2014-08-21T12:45:00.000Z',
+            'transmission_start' => '2014-08-21T12:31:30.000Z',
+            'transmission_end' => '2014-08-21T12:43:20.000Z',
         );
         $broadcast = $this->_createBroadcast($params);
 
-        $this->assertEquals('2013-04-09T16:00:00Z', $broadcast->getStartTime());
-        $this->assertEquals('2013-04-09T17:00:00Z', $broadcast->getEndTime());
+        $this->assertEquals('2014-08-21T12:30:00.000Z', $broadcast->getStartTime());
+        $this->assertEquals('2014-08-21T12:45:00.000Z', $broadcast->getEndTime());
+        $this->assertEquals('2014-08-21T12:31:30.000Z', $broadcast->getStartTime(true));
+        $this->assertEquals('2014-08-21T12:43:20.000Z', $broadcast->getEndTime(true));
     }
 
     public function testRepeat() {
@@ -53,5 +57,4 @@ class BroadcastTest extends BambooTestCase
     private function _createBroadcast($params) {
         return new Broadcast((object) $params);
     }
-
 }
