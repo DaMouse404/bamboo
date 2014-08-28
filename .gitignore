@@ -1,6 +1,14 @@
+# Composer
 vendor
 composer.lock
-coverage
 .composer
 composer.phar
 
+# PHPUnit Coverage
+coverage
+
+# Node
+node_modules
+
+# Fixtures
+tests/fixtures/

@@ -1,0 +1,10 @@
+{
+  "name": "bamboo",
+  "version": "0.0.0",
+  "description": "PHP client library for iBL",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "fixturator": "git+https://github.com/iplayer/fixturator#v0.1.12"
+  }
+}

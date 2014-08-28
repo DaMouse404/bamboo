@@ -4,7 +4,6 @@ namespace Bamboo\Http;
 use Bamboo\Log;
 class Fake extends Base implements GuzzleInterface
 {
-
     public function get($feed, $params = array(), $queryParams = array()) {
         //setup request object
         $this->_buildPath($feed);
@@ -40,15 +39,23 @@ class Fake extends Base implements GuzzleInterface
         return $responses;
     }
 
-    public function json() {
+    public function getBody($asString = false)
+    {
         //return body of fixture, return array of data
-
         // Split file so header is ignored
         $response = explode('UTF-8', $this->_response);
+
         if (isset($response[1])) {
-            return json_decode($response[1], true);
+            $body = $response[1];
+        } else {
+            // No header found
+            $body = $this->_response;
         }
-        // No header found
-        return json_decode($this->_response, true);
+
+        return $asString ? (string) $body : $body;
+    }
+
+    public function json() {
+        return json_decode($this->getBody(true), true);
     }
 }

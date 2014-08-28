@@ -18,13 +18,13 @@ class BroadcastsTest extends BambooTestCase
 
     public function testBroadcastItemType() {
         $this->assertEquals(
-            get_class($this->_broadcasts[0]), 
+            get_class($this->_broadcasts[0]),
             "Bamboo\Models\Broadcast"
         );
     }
 
     public function testCountBroadcasts() {
-        $this->assertCount(1, $this->_broadcasts);
+        $this->assertCount(20, $this->_broadcasts);
     }
 
 }
