@@ -9,7 +9,7 @@ class Counter
 {
 
     protected static $_counter = null;
-    
+
     /**
      * Set the logger to use
      */
@@ -17,13 +17,13 @@ class Counter
         self::$_counter = $counter;
     }
 
-    /* 
+    /*
      * A proxy method for the counter. Dynamically looks up real counter name.
      */
     public static function increment($counterName) {
         $counter = self::$_counter;
         $counter::increment(
             constant("$counter::$counterName")
-        ); 
+        );
     }
 }

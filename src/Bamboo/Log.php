@@ -15,7 +15,7 @@ class Log
     const NOTICE  = 5;  // Notice: normal but significant condition
     const INFO    = 6;  // Informational: informational messages
     const DEBUG   = 7;  // Debug: debug messages
-    const DEFAULT_LOG_LEVEL = self::DEBUG; 
+    const DEFAULT_LOG_LEVEL = self::DEBUG;
 
     protected static $_logger = null;
 

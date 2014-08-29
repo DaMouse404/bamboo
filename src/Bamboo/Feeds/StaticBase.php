@@ -15,7 +15,7 @@ class StaticBase extends Base
      * Fetch a feed by reading a JSON file from /Assets
      */
     public function fetchAssetFeed($feed) {
-        Log::info('Fetching Static feed from /Assets: ' . $feed);
+        Log::info('Fetching Static feed from /Assets: %s', $feed);
         try {
             $json = $this->fetchFile($feed);
         } catch (\Exception $e) {
@@ -31,7 +31,7 @@ class StaticBase extends Base
 
     private function throwEmpty($feed)
     {
-        throw new EmptyFeed('Could not find file in /Assets/ for feed: '. $feed);
+        throw new EmptyFeed('Could not find file in /Assets/ for feed: ' . $feed);
     }
 
     private function fetchFile($feed) {
