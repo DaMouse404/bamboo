@@ -16,6 +16,6 @@ phpcs:
 
 phpunit:
 	@echo "PHP Unit"
-	./vendor/bin/phpunit --coverage-html ./coverage
+	./vendor/bin/phpunit
 
 test: fixtures phpcs phpunit
