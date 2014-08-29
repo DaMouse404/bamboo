@@ -9,7 +9,7 @@ class Group extends Elements
     protected $_initial_children = array();
     protected $_count = 0;
     protected $_labels = "";
-    protected $_related_links = "";
+    protected $_related_links = array();
     protected $_stacked = "";
     // @codingStandardsIgnoreEnd
     private $_broadcastType = 'broadcast';
@@ -17,12 +17,33 @@ class Group extends Elements
    /**
      * Returns the related links
      *
-     * @return object
+     * @return array
      */
     public function getRelatedLinks() {
+        $relatedLinksArray = array();
         // @codingStandardsIgnoreStart
-        return $this->_related_links;
+        $relatedLinks = $this->_related_links;
         // @codingStandardsIgnoreEnd
+        foreach ($relatedLinks as $relatedLink) {
+            $relatedLinksArray[] = new Related($relatedLink);
+        }
+        return $relatedLinksArray;
+    }
+
+   /**
+     * Returns the first related link of the
+     * type specified
+     *
+     * @return array
+     */
+    public function getRelatedLinksByKind($kind) {
+        $relatedLinksArray = array();
+        foreach ($this->getRelatedLinks() as $link) {
+            if ($link->getKind() === $kind) {
+                $relatedLinksArray[] = $link;
+            }
+        }
+        return $relatedLinksArray;
     }
 
     /**

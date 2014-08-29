@@ -29,10 +29,50 @@ class GroupTest extends BambooTestCase
         $this->assertEquals('most-popular', $group->getIstatsType());
     }
 
+
+    public function testGetNoRelatedLinks() {
+        $group = $this->_createGroup();
+        $links = $group->getRelatedLinks();
+
+        $this->assertEmpty($group->getRelatedLinks());
+        $this->assertEmpty($group->getRelatedLinksByKind('standard'));
+    }
+
+    public function testGetRelatedLinks() {
+        $related = $this->_createRelatedLinks(array('priority_content', 'standard', 'standard'));
+        $group = $this->_createGroup(array('related_links' => $related));
+        $links = $group->getRelatedLinks();
+
+        $this->assertCount(3, $links);
+        $this->assertInstanceOf(
+            'Bamboo\Models\Related',
+            $links[0]
+        );
+
+        $standardLinks = $group->getRelatedLinksByKind('standard');
+        $this->assertCount(2, $standardLinks);
+        $this->assertInstanceOf(
+            'Bamboo\Models\Related',
+            $standardLinks[0]
+        );
+        $this->assertEquals('standard', $standardLinks[1]->getKind());
+
+        $this->assertEmpty($group->getRelatedLinksByKind('invalid'));
+    }
+
     private function _createGroup($params = array()) {
         $group = array(
             "id" => "fake_id"
         );
         return new Group((object) array_merge($group, $params));
     }
+
+    private function _createRelatedLinks($kinds) {
+        $links = array();
+        foreach ($kinds as $kind) {
+            $links[] = (object) array('kind' => $kind);
+        }
+        return $links;
+    }
+
 }
