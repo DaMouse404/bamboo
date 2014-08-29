@@ -157,7 +157,7 @@ class Client
                 $params = array_merge($this->_defaultParams, $this->_config, $feed[1]);
 
                 $fullUrl = $this->_host . $this->_baseUrl . $feed[0];
-                Log::info('BAMBOO: Parallel iBL feed: ' . $fullUrl . '.json?' . http_build_query($params));
+                Log::info('BAMBOO: Parallel iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
                 $requests[] = $client->get(
                     $this->_baseUrl . $feed[0] . '.json',
                     array(),
@@ -191,7 +191,7 @@ class Client
 
         $fullUrl = $this->_host . $this->_baseUrl . $feed;
 
-        Log::info('Fetching iBL feed: ' . $fullUrl . '.json with params: "' . http_build_query($params) . '"');
+        Log::info('Fetching iBL feed: %s.json with params: "%s"', $fullUrl, http_build_query($params));
 
         try {
             $request = $client->get(
@@ -403,12 +403,18 @@ class Client
 
         // Log Error
         Log::err(
-            "Bamboo Error: $errorClass, " .
-            "Feed: $feed, " .
-            "Status code: $statusCode, " .
-            "Message: $message, " .
-            "Source: $errorSource, " .
-            "Source Message: $sourceMessage"
+            "Bamboo Error: %s, " .
+            "Feed: %s, " .
+            "Status code: %d, " .
+            "Message: %s, " .
+            "Source: %s, " .
+            "Source Message: %s",
+            $errorClass,
+            $feed,
+            $statusCode,
+            $message,
+            $errorSource,
+            $sourceMessage
         );
 
         // Increment Counter

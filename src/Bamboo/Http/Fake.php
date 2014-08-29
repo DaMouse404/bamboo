@@ -7,7 +7,7 @@ class Fake extends Base implements GuzzleInterface
     public function get($feed, $params = array(), $queryParams = array()) {
         //setup request object
         $this->_buildPath($feed);
-        Log::info('BAMBOO: Faking feed: ' . $feed);
+        Log::info('BAMBOO: Faking feed: %s', $feed);
 
         return $this;
     }
@@ -17,7 +17,7 @@ class Fake extends Base implements GuzzleInterface
             return $this->sendAll($requests);
         }
 
-        Log::info('BAMBOO: Using Fixture: ' . $this->_path);
+        Log::info('BAMBOO: Using Fixture: %s', $this->_path);
 
         //grab json from fixture
         $this->_response = file_get_contents($this->_path);
@@ -27,7 +27,7 @@ class Fake extends Base implements GuzzleInterface
 
     public function sendAll($requests) {
 
-        Log::info('BAMBOO: Using Fixture for all ' . count($requests) . ' parallel requests: ' . $this->_path);
+        Log::info('BAMBOO: Using Fixture for all %d parallel requests: %s', count($requests), $this->_path);
         $this->_response = array();
         $responses = array();
         $feedContents = file_get_contents($this->_path);
