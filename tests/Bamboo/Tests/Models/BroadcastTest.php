@@ -54,6 +54,18 @@ class BroadcastTest extends BambooTestCase
         $this->assertInstanceOf('Bamboo\Models\Episode', $broadcast->getEpisode());
     }
 
+    public function testIsBlanked() {
+        $params = array(
+            'blanked' => false
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $this->assertFalse($broadcast->isBlanked());
+
+        $params['blanked'] = true;
+        $broadcast = $this->_createBroadcast($params);
+        $this->assertTrue($broadcast->isBlanked());        
+    }
+
     private function _createBroadcast($params) {
         return new Broadcast((object) $params);
     }
