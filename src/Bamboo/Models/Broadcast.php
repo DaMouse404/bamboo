@@ -14,6 +14,7 @@ class Broadcast extends Elements
     protected $_episode;
     protected $_blanked;
     protected $_repeat;
+    protected $_nowNextTimeFormat = "Y-m-d\TH:i";
 
     /**
      * Get start time from episode
@@ -69,5 +70,15 @@ class Broadcast extends Elements
      */
     public function isRepeat() {
         return !!$this->_repeat;
+    }
+
+    public function isOnNow($time) {
+        $formattedTime = $time->format($this->_nowNextTimeFormat);
+        return ($this->getStartTime() <= $formattedTime && $this->getEndTime() > $formattedTime);
+    }
+
+    public function isOnNext($time) {
+        $formattedTime = $time->format($this->_nowNextTimeFormat);
+        return $this->getStartTime() > $formattedTime;
     }
 }
