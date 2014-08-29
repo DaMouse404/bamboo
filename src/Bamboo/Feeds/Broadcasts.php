@@ -20,10 +20,6 @@ class Broadcasts extends Base
     }
 
     public function getBroadcasts() {
-        $broadcasts = array();
-        foreach ($this->_response->broadcasts->elements as $broadcast) {
-            $broadcasts[] = new Broadcast($broadcast);
-        }
-        return $broadcasts;
+        return $this->_buildModels($this->_response->broadcasts->elements);
     }
 }

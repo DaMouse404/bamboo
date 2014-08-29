@@ -23,12 +23,7 @@ class Atoz extends Base
      * Return array of Channel models
      */
     public function getElements() {
-        $programmes = array();
-        foreach ($this->_response->atoz_programmes->elements as $programme) {
-            $programmes[] = new Programme($programme);
-        }
-
-        return $programmes;
+        return $this->_buildModels($this->_response->atoz_programmes->elements);
     }
 
 }

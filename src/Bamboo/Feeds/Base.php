@@ -13,6 +13,17 @@ class Base
         );
     }
 
+    protected function _buildModels($elements) {
+        $models = array();
+
+        foreach ( $elements as $element ) {
+            $className = $this->_className($element->type);
+            $models[] = new $className($element);
+        }
+
+        return $models;
+    }
+
     /*
      * Translate Class name into Model name.
      *  $words[0] as most only have first index.
