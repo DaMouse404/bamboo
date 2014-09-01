@@ -18,4 +18,8 @@ phpunit:
 	@echo "PHP Unit"
 	./vendor/bin/phpunit
 
+codeclimate:
+	@echo "Sending data to Code Climate"
+	./vendor/bin/test-reporter --coverage-report=./coverage/clover.xml
+
 test: fixtures phpcs phpunit
