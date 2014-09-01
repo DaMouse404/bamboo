@@ -14,6 +14,17 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
     const FIXTURE_PATH =  '/../../../tests/fixtures/';
 
     /*
+     * Generically clean up after setupRequests
+     */
+    public function tearDown() {
+        unset($_GET['_fake']);
+        Client::getInstance()->setFakeHttpClient(null);
+        Client::getInstance()->setServiceProxy(false);
+
+        parent::tearDown();
+    }
+
+    /*
      * By default we will use fixtures..use fake client.
      */
     protected function setupRequest($feed, $httpFake=false) {
