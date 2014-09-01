@@ -108,21 +108,13 @@ class ClientTest extends BambooTestCase
     }
 
     public function testCurlExceptionsInRequestAll() {
-        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
-        $stub->method('send')->will($this->returnCallback(function ($requests) {
-            $err = new \Guzzle\Http\Exception\CurlException('Timed Out');
-            $multi = new \Guzzle\Http\Exception\MultiTransferException();
-            $multi->setExceptions(array($err));
-            throw $multi;
-        }));
-
         $requests = array(
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array())
         );
-        $client = Client::getInstance();
-        $this->setupParallelRequest($requests, $stub);
+
+        $client = $this->_multiRequestException($requests, new \Guzzle\Http\Exception\CurlException('Timed Out'));
 
         $this->setExpectedException('Bamboo\Exception\CurlError');
         try {
@@ -135,21 +127,13 @@ class ClientTest extends BambooTestCase
     }
 
     public function testNormalExceptionsInRequestAll() {
-        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
-        $stub->method('send')->will($this->returnCallback(function ($requests) {
-            $err = new \Exception('Parse Error');
-            $multi = new \Guzzle\Http\Exception\MultiTransferException();
-            $multi->setExceptions(array($err));
-            throw $multi;
-        }));
-
         $requests = array(
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array())
         );
-        $client = Client::getInstance();
-        $this->setupParallelRequest($requests, $stub);
+
+        $client = $this->_multiRequestException($requests, new \Exception('Parse Error'));
 
         $this->setExpectedException('Exception');
         try {
@@ -229,6 +213,21 @@ class ClientTest extends BambooTestCase
 
         // Check that the cache plugin was properly attached
         $this->assertInstanceOf('Guzzle\Plugin\Cache\CachePlugin', $l['request.sent'][0][0]);
+    }
+
+    private function _multiRequestException($requests, $err) {
+        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
+        $stub->method('send')->will($this->returnCallback(function ($requests) use ($err) {
+            $multi = new \Guzzle\Http\Exception\MultiTransferException();
+            $multi->setExceptions(array($err));
+
+            throw $multi;
+        }));
+
+        $client = Client::getInstance();
+        $this->setupParallelRequest($requests, $stub);
+
+        return $client;
     }
 
     private function _counterTest($fixture, $counter, $wrongCounter) {
