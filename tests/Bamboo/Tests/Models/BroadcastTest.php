@@ -63,7 +63,51 @@ class BroadcastTest extends BambooTestCase
 
         $params['blanked'] = true;
         $broadcast = $this->_createBroadcast($params);
-        $this->assertTrue($broadcast->isBlanked());        
+        $this->assertTrue($broadcast->isBlanked());
+    }
+
+    public function testIsOnNow() {
+        $params = array(
+            'start_time' => '2013-04-09T16:00:00Z',
+            'end_time' => '2013-04-09T17:00:00Z'
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 16:30:00'));
+
+        $this->assertEquals($onNow, true);
+    }
+
+    public function testIsNotOnNow() {
+        $params = array(
+            'start_time' => '2013-04-09T16:00:00Z',
+            'end_time' => '2013-04-09T17:00:00Z'
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 19:30:00'));
+
+        $this->assertEquals($onNow, false);
+    }
+
+    public function testIsOnNext() {
+        $params = array(
+            'start_time' => '2013-04-09T16:00:00Z',
+            'end_time' => '2013-04-09T17:00:00Z'
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 15:55:00'));
+
+        $this->assertEquals($onNext, true);
+    }
+
+    public function testIsNotOnNext() {
+        $params = array(
+            'start_time' => '2013-04-09T16:00:00Z',
+            'end_time' => '2013-04-09T17:00:00Z'
+        );
+        $broadcast = $this->_createBroadcast($params);
+        $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 19:30:00'));
+
+        $this->assertEquals($onNext, false);
     }
 
     private function _createBroadcast($params) {
