@@ -68,46 +68,46 @@ class BroadcastTest extends BambooTestCase
 
     public function testIsOnNow() {
         $params = array(
-            'start_time' => '2013-04-09T16:00:00Z',
-            'end_time' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => '2013-04-09T16:00:00Z',
+            'scheduled_end' => '2013-04-09T17:00:00Z'
         );
         $broadcast = $this->_createBroadcast($params);
         $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 16:30:00'));
 
-        $this->assertEquals($onNow, true);
+        $this->assertEquals(true, $onNow);
     }
 
     public function testIsNotOnNow() {
         $params = array(
-            'start_time' => '2013-04-09T16:00:00Z',
-            'end_time' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => '2013-04-09T16:00:00Z',
+            'scheduled_end' => '2013-04-09T17:00:00Z'
         );
         $broadcast = $this->_createBroadcast($params);
         $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 19:30:00'));
 
-        $this->assertEquals($onNow, false);
+        $this->assertEquals(false, $onNow);
     }
 
     public function testIsOnNext() {
         $params = array(
-            'start_time' => '2013-04-09T16:00:00Z',
-            'end_time' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => '2013-04-09T16:00:00Z',
+            'scheduled_end' => '2013-04-09T17:00:00Z'
         );
         $broadcast = $this->_createBroadcast($params);
         $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 15:55:00'));
 
-        $this->assertEquals($onNext, true);
+        $this->assertEquals(true, $onNext);
     }
 
     public function testIsNotOnNext() {
         $params = array(
-            'start_time' => '2013-04-09T16:00:00Z',
-            'end_time' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => '2013-04-09T16:00:00Z',
+            'scheduled_end' => '2013-04-09T17:00:00Z'
         );
         $broadcast = $this->_createBroadcast($params);
         $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 19:30:00'));
 
-        $this->assertEquals($onNext, false);
+        $this->assertEquals(false, $onNext);
     }
 
     private function _createBroadcast($params) {
