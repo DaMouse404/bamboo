@@ -30,14 +30,10 @@ class Programmes extends BaseParallel
     }
 
     /*
-     * Return array of Channel models
+     * Return array of Programme models
      */
     public function getElements() {
         return $this->_buildModels($this->_response->programmes);
-    }
-
-    public function getResponse() {
-        return $this->_response;
     }
 
 }
