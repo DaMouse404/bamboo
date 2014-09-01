@@ -22,12 +22,7 @@ class Category extends Base
     }
 
     public function getElements() {
-        $elements = array();
-        foreach ($this->_response->category_highlights->elements as $item) {
-            $className = $this->_className($item->type);
-            $elements[] = new $className($item);
-        }
-        return $elements;
+        return $this->_buildModels($this->_response->category_highlights->elements);
     }
 
     public function getCategory() {
