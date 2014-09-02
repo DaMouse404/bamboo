@@ -41,6 +41,55 @@ class Version extends Base
     }
 
     /**
+     * Get total days availability for this Version
+     *
+     * @return integer
+     */
+    public function getTotalDaysAvailable() {
+        $start = $this->getAvailability('start');
+        $end = $this->getAvailability('end');
+
+        if ( $start && $end ) {
+            $start = strtotime($start);
+            $end = strtotime($end);
+
+            return ceil(($end - $start) / (24 * 60 * 60));
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get remaining availability for this Version
+     *
+     * @return integer
+     */
+    public function getRemainingDaysAvailable() {
+        $end = $this->getAvailability('end');
+
+        if ( $end ) {
+            $end = strtotime($end);
+            return ceil(($end - time()) / (24 * 60 * 60));
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get availability period of for this Version in days
+     *
+     * i.e. If it's 30 days available and there are 25 remaining
+     * then we're on the 6th day of our availability as 5 have already
+     * elapsed and thus the +1 is there to ensure we're on the next day slot.
+     *
+     * @return integer
+     */
+    public function getAvailabilityDay() {
+        return (1 + $this->getTotalDaysAvailable() - $this->getRemainingDaysAvailable());
+    }
+
+
+    /**
      * Get the availability for this version
      *
      * @param string $type start, end or remaining
