@@ -19,7 +19,7 @@ class Episodes extends Base
         if (is_array($pids)) {
             $pids = join($pids, ",");
         }
-        $this->_feed = str_replace("{pids}", $pids, $this->_feed); 
+        $this->_feed = str_replace("{pids}", $pids, $this->_feed);
     }
 
     /*
@@ -33,5 +33,4 @@ class Episodes extends Base
 
         return $episodes;
     }
-
 }
