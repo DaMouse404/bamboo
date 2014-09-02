@@ -36,4 +36,10 @@ class Programmes extends BaseParallel
         return $this->_buildModels($this->_response->programmes);
     }
 
+    /*
+     * Returns the raw response
+     */
+    public function getResponse() {
+        return $this->_response;
+    }
 }

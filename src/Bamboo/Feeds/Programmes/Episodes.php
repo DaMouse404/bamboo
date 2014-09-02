@@ -35,4 +35,11 @@ class Episodes extends Base
     public function getTotalCount() {
         return $this->_response->programme_episodes->count;
     }
+
+    /*
+     * Returns the raw episodes response
+     */
+    public function getResponse() {
+        return $this->_response->programme_episodes->elements;
+    }
 }
