@@ -85,7 +85,15 @@ class Version extends Base
      * @return integer
      */
     public function getAvailabilityDay() {
-        return (1 + $this->getTotalDaysAvailable() - $this->getRemainingDaysAvailable());
+        $start = $this->getAvailability('start');
+
+        if ( $start ) {
+            $start = strtotime($start);
+
+            return ceil((time() - $start) / (24 * 60 * 60));
+        }
+
+        return 0;
     }
 
 
