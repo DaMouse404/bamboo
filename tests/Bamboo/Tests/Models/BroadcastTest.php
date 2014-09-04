@@ -7,6 +7,9 @@ use Bamboo\Models\Broadcast;
 
 class BroadcastTest extends BambooTestCase
 {
+
+    protected $_timeFormat = "Y-m-d\TH:i";
+
     public function testTypeExists() {
         $params = array(
             'type' => 'broadcast'
@@ -67,45 +70,60 @@ class BroadcastTest extends BambooTestCase
     }
 
     public function testIsOnNow() {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+
         $params = array(
-            'scheduled_start' => '2013-04-09T16:00:00Z',
-            'scheduled_end' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => $startTime->modify('-1 hour')->format($this->_timeFormat),
+            'scheduled_end' => $endTime->modify('+1 hour')->format($this->_timeFormat)
         );
+
         $broadcast = $this->_createBroadcast($params);
-        $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 16:30:00'));
+        $onNow = $broadcast->isOnNow();
 
         $this->assertEquals(true, $onNow);
     }
 
     public function testIsNotOnNow() {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+
         $params = array(
-            'scheduled_start' => '2013-04-09T16:00:00Z',
-            'scheduled_end' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => $startTime->modify('-2 hours')->format($this->_timeFormat),
+            'scheduled_end' => $endTime->modify('-1 hour')->format($this->_timeFormat)
         );
+
         $broadcast = $this->_createBroadcast($params);
-        $onNow = $broadcast->isOnNow(new \DateTime('2013-04-09 19:30:00'));
+        $onNow = $broadcast->isOnNow();
 
         $this->assertEquals(false, $onNow);
     }
 
     public function testIsOnNext() {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+
         $params = array(
-            'scheduled_start' => '2013-04-09T16:00:00Z',
-            'scheduled_end' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => $startTime->modify('+5 minutes')->format($this->_timeFormat),
+            'scheduled_end' => $endTime->modify('+1 hour')->format($this->_timeFormat)
         );
+
         $broadcast = $this->_createBroadcast($params);
-        $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 15:55:00'));
+        $onNext = $broadcast->isOnNext();
 
         $this->assertEquals(true, $onNext);
     }
 
     public function testIsNotOnNext() {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+
         $params = array(
-            'scheduled_start' => '2013-04-09T16:00:00Z',
-            'scheduled_end' => '2013-04-09T17:00:00Z'
+            'scheduled_start' => $startTime->modify('-2 hours')->format($this->_timeFormat),
+            'scheduled_end' => $endTime->modify('-1 hour')->format($this->_timeFormat)
         );
         $broadcast = $this->_createBroadcast($params);
-        $onNext = $broadcast->isOnNext(new \DateTime('2013-04-09 19:30:00'));
+        $onNext = $broadcast->isOnNext();
 
         $this->assertEquals(false, $onNext);
     }
