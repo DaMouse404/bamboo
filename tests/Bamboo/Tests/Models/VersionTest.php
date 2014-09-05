@@ -32,12 +32,22 @@ class VersionTest extends BambooTestCase
 
     public function testGetAvailabilityDay() {
         $version = $this->_createVersion(array('availability' => (object) array(
-            'start' => date('c', strtotime('-3 days')),
+            'start' => date('c', strtotime('-3 days -1 hour')),
             'end' => date('c', strtotime('+5 days'))
         )));
 
-        // This is in the 4th period
+        // This is past the 3rd day and thus in the 4th period
         $this->assertEquals(4, $version->getAvailabilityDay());
+    }
+
+    public function testGetAvailabilityDayOne() {
+        $version = $this->_createVersion(array('availability' => (object) array(
+            'start' => date('c', strtotime('today')),
+            'end' => date('c', strtotime('+5 days'))
+        )));
+
+        // This in the 1st period
+        $this->assertEquals(1, $version->getAvailabilityDay());
     }
 
     public function testNoDaysRemainingAvailabile() {
