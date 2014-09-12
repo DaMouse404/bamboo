@@ -44,15 +44,6 @@ class Broadcast extends Elements
     }
 
     /**
-     * Sets the end time of the broadcast
-     */
-    public function setEndTime($endTime) {
-        // @codingStandardsIgnoreStart
-        $this->_end_time = $endTime;
-        // @codingStandardsIgnoreEnd
-    }
-
-    /**
      * Get episode inside Broadcast
      * 
      * @return Bamboo\Models\Episode
