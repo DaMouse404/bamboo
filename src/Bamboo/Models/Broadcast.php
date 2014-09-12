@@ -70,4 +70,20 @@ class Broadcast extends Elements
     public function isRepeat() {
         return !!$this->_repeat;
     }
+
+    public function isOnNow() {
+        $time = new \DateTime();
+        $startTime = new \DateTime($this->getStartTime());
+        $endTime = new \DateTime($this->getEndTime());
+
+        return ($startTime->getTimestamp() <= $time->getTimestamp() &&
+                $endTime->getTimestamp() > $time->getTimestamp());
+    }
+
+    public function isOnNext() {
+        $time = new \DateTime();
+        $startTime = new \DateTime($this->getStartTime());
+
+        return $startTime->getTimestamp() > $time->getTimestamp();
+    }
 }
