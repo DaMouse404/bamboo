@@ -36,10 +36,18 @@ class PromotionTest extends BambooTestCase
     }
 
     public function testEmptyData() {
-        $promotion = $this->_createPromotion(array('title'=>'', 'subtitle'=>'','synopses'=>array()));
+        $promotion = $this->_createPromotion(
+            array(
+                'title'    => '',
+                'subtitle' => '',
+                'synopses' => array(),
+                'labels'   => array()
+            )
+        );
         $this->assertEquals('', $promotion->getTitle());
         $this->assertEquals('', $promotion->getSubtitle());
         $this->assertEquals('', $promotion->getDescription());
+        $this->assertEquals('', $promotion->getPromotionLabel());
     }
 
 
