@@ -70,65 +70,42 @@ class BroadcastTest extends BambooTestCase
     }
 
     public function testIsOnNow() {
-        $startTime = new \DateTime();
-        $endTime = new \DateTime();
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours');
 
-        $params = array(
-            'scheduled_start' => $startTime->modify('-1 hour')->format($this->_timeFormat),
-            'scheduled_end' => $endTime->modify('+1 hour')->format($this->_timeFormat)
-        );
-
-        $broadcast = $this->_createBroadcast($params);
-        $onNow = $broadcast->isOnNow();
-
-        $this->assertEquals(true, $onNow);
+        $this->assertTrue($broadcast->isOnNow());
     }
 
     public function testIsNotOnNow() {
-        $startTime = new \DateTime();
-        $endTime = new \DateTime();
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours');
 
-        $params = array(
-            'scheduled_start' => $startTime->modify('-2 hours')->format($this->_timeFormat),
-            'scheduled_end' => $endTime->modify('-1 hour')->format($this->_timeFormat)
-        );
-
-        $broadcast = $this->_createBroadcast($params);
-        $onNow = $broadcast->isOnNow();
-
-        $this->assertEquals(false, $onNow);
+        $this->assertFalse($broadcast->isOnNow());
     }
 
     public function testIsOnNext() {
-        $startTime = new \DateTime();
-        $endTime = new \DateTime();
+        $broadcast = $this->_createTimedBroadcast('+5 minutes', '+1 hour');
 
-        $params = array(
-            'scheduled_start' => $startTime->modify('+5 minutes')->format($this->_timeFormat),
-            'scheduled_end' => $endTime->modify('+1 hour')->format($this->_timeFormat)
-        );
-
-        $broadcast = $this->_createBroadcast($params);
-        $onNext = $broadcast->isOnNext();
-
-        $this->assertEquals(true, $onNext);
+        $this->assertTrue($broadcast->isOnNext());
     }
 
     public function testIsNotOnNext() {
-        $startTime = new \DateTime();
-        $endTime = new \DateTime();
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours');
 
-        $params = array(
-            'scheduled_start' => $startTime->modify('-2 hours')->format($this->_timeFormat),
-            'scheduled_end' => $endTime->modify('-1 hour')->format($this->_timeFormat)
-        );
-        $broadcast = $this->_createBroadcast($params);
-        $onNext = $broadcast->isOnNext();
-
-        $this->assertEquals(false, $onNext);
+        $this->assertFalse($broadcast->isOnNext());
     }
 
     private function _createBroadcast($params) {
         return new Broadcast((object) $params);
+    }
+
+    private function _createTimedBroadcast($startOffset, $endOffset) {
+        $startTime = new \DateTime();
+        $endTime = new \DateTime();
+
+        $params = array(
+            'scheduled_start' => $startTime->modify($startOffset)->format($this->_timeFormat),
+            'scheduled_end' => $endTime->modify($endOffset)->format($this->_timeFormat)
+        );
+
+        return $this->_createBroadcast($params);
     }
 }
