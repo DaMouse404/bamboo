@@ -141,24 +141,6 @@ class ElementsTest extends BambooTestCase
         $this->assertEmpty($mockedEpisode->getMasterBrandIdentId());
     }
 
-    public function testGetEpisodeImageRecipe() {
-        $mockedEpisode = $this->_mockEpisode(array());
-        $this->assertEmpty($mockedEpisode->getImageRecipe('portrait'));
-        $this->assertEmpty($mockedEpisode->getPortraitImage());
-        $this->assertEmpty($mockedEpisode->getPortraitImageRecipe());
-
-        $params = array(
-            'images' => (object) array(
-                'portrait' => 'http://ichef.bbci.co.uk/images/ic/832x468/p025l9p1.jpg'
-            )
-        );
-        $mockedEpisode = $this->_mockEpisode($params);
-
-        $this->assertEquals('http://ichef.bbci.co.uk/images/ic/832x468/p025l9p1.jpg', $mockedEpisode->getPortraitImage());
-        $this->assertEquals('http://ichef.bbci.co.uk/images/ic/832x468/p025l9p1.jpg', $mockedEpisode->getPortraitImageRecipe());
-        $this->assertEquals('http://ichef.bbci.co.uk/images/ic/832x468/p025l9p1.jpg', $mockedEpisode->getImageRecipe('portrait'));
-    }
-
     public function testFetchStatus() {
         $episode = $this->_createElement(array('status' => 'unavailable'));
         $this->assertEquals('unavailable', $episode->getStatus());

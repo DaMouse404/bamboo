@@ -519,17 +519,6 @@ class EpisodeTest extends BambooTestCase
         $this->assertEquals('2014', $episode->getReleaseDate());
     }
 
-    public function testGetPriorityDuration() {
-        $episode = $this->_createEpisode(array());
-        $this->assertEquals('', $episode->getPriorityDuration(array()));
-        $episode = $this->_createEpisode(
-            array(
-                'duration' => (object) array('text' => '40 mins')
-            )
-        );
-        $this->assertEquals('40 mins', $episode->getPriorityDuration(array()));
-    }
-
     public function testGetLabels() {
         $episode = $this->_createEpisode(array());
         $this->assertEquals('', $episode->getTimelinessLabel());
