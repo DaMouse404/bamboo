@@ -68,10 +68,12 @@ class GroupTest extends BambooTestCase
     public function testGetLabels() {
         $labels = array('label1', 'label2');
         $group = $this->_createGroup(array('labels' => $labels));
-        $this->assertTrue(is_array($group->getLabels()));
+        $labels = $group->getLabels();
+        $this->assertInternalType('array', $labels);
+        $this->assertEquals('label1', $labels[0]);
     }
 
-    public function testgetEpisodes() {
+    public function testGetEpisodes() {
         $group = $this->_createGroup(
             array(
                 'count' => 3,

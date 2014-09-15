@@ -59,7 +59,14 @@ class ElementsTest extends BambooTestCase
         $this->assertEquals($element->getMasterBrand(), '');
         $this->assertEquals($element->getMediumMasterBrand(), '');
 
-        $params =  array('master_brand' => (object) array('titles' => (object) array('small' => 'BBC Two', 'medium' => 'BBC Two England')));
+        $params =  array(
+            'master_brand' => (object) array(
+                'titles' => (object) array(
+                    'small' => 'BBC Two',
+                    'medium' => 'BBC Two England'
+                )
+            )
+        );
         $element = $this->_createElement($params);
 
         $this->assertEquals($element->getMasterBrand(), 'BBC Two');
