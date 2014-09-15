@@ -208,13 +208,6 @@ class Episode extends Elements
         // @codingStandardsIgnoreEnd
     }
 
-    public function getPriorityDuration($version) {
-        if (isset($this->_duration->text)) {
-            return $this->_duration->text;
-        }
-        return "";
-    }
-
     /**
      * Checks if we need to show version flags
      *

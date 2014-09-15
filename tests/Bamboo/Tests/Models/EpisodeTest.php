@@ -107,6 +107,8 @@ class EpisodeTest extends BambooTestCase
     public function testPriorityVersionWithMultipleVersions() {
         $versions = $this->_createVersions(array('original', 'audio-described', 'signed', 'other'));
         $episode = $this->_createEpisode(array('versions' => $versions));
+        $versions = $episode->getVersions();
+        $this->assertEquals('Bamboo\Models\Version', get_class($versions[0]));
         $priorityVersion = $episode->getPriorityVersion();
         $this->assertEquals('original', $priorityVersion->getKind());
     }
@@ -302,6 +304,28 @@ class EpisodeTest extends BambooTestCase
         $this->assertFalse($notDownloadable->hasDownloads());
     }
 
+    public function testShowFlags() {
+        $episode = $this->_createEpisode(array());
+        $this->assertFalse($episode->showFlags());
+        $versions = $this->_createVersions(array('original', 'audio-described'), false, false);
+        $episode = $this->_createEpisode(array('versions' => $versions));
+        $this->assertTrue($episode->showFlags());
+        $versions = $this->_createVersions(array('original'), false, false);
+        $episode = $this->_createEpisode(array('versions' => $versions));
+        $this->assertFalse($episode->showFlags());
+    }
+
+    public function testhasHd() {
+        $episode = $this->_createEpisode(array());
+        $this->assertFalse($episode->hasHD());
+        $versions = $this->_createVersions(array('original', 'audio-described'), false, false);
+        $episode = $this->_createEpisode(array('versions' => $versions));
+        $this->assertFalse($episode->hasHD());
+        $versions = $this->_createVersions(array('original', 'audio-described'), false, true);
+        $episode = $this->_createEpisode(array('versions' => $versions));
+        $this->assertTrue($episode->hasHD());
+    }
+
     public function testDownloadsFirstSDVersion() {
         $this->_assertDownloadVersionsMatch(
             array(
@@ -461,6 +485,53 @@ class EpisodeTest extends BambooTestCase
         );
     }
 
+    public function testIsStacked() {
+        $episode = $this->_createEpisode(array());
+        $this->assertFalse($episode->isStacked());
+        $episode = $this->_createEpisode(array('stacked' => true));
+        $this->assertTrue($episode->isStacked());
+    }
+
+    public function testIsFilm() {
+        $episode = $this->_createEpisode(array());
+        $this->assertFalse($episode->isFilm());
+        $episode = $this->_createEpisode(array('film' => true));
+        $this->assertTrue($episode->isFilm());
+    }
+
+    public function testGetHref() {
+        $episode = $this->_createEpisode(array('href' => 'www.bbc.co.uk'));
+        $this->assertEquals('www.bbc.co.uk', $episode->getHref());
+    }
+
+    public function testGetTleoId() {
+        $episode = $this->_createEpisode(array('tleo_id' => 'tleo_pid'));
+        $this->assertEquals('tleo_pid', $episode->getTleoId());
+    }
+
+    public function testGetSubtitle() {
+        $episode = $this->_createEpisode(array('subtitle' => 'Dr Who'));
+        $this->assertEquals('Dr Who', $episode->getSubtitle());
+    }
+
+    public function testGetReleaseDate() {
+        $episode = $this->_createEpisode(array('release_date' => '2014'));
+        $this->assertEquals('2014', $episode->getReleaseDate());
+    }
+
+    public function testGetLabels() {
+        $episode = $this->_createEpisode(array());
+        $this->assertEquals('', $episode->getTimelinessLabel());
+        $this->assertEquals('', $episode->getEditorialLabel());
+        $label = (object) array(
+            'time' => 123,
+            'editorial' => 'Bake Off'
+        );
+        $episode = $this->_createEpisode(array('labels' => $label));
+        $this->assertEquals(123, $episode->getTimelinessLabel());
+        $this->assertEquals('Bake Off', $episode->getEditorialLabel());
+    }
+
     private function _assertDownloadVersionsMatch ($versions, $expectation) {
         $episode = $this->_createEpisode(array('versions' => $versions));
 
@@ -473,10 +544,10 @@ class EpisodeTest extends BambooTestCase
         return new Episode((object) $params);
     }
 
-    private function _createVersions($kinds, $downloadable = true) {
+    private function _createVersions($kinds, $downloadable = true, $hd = false) {
         $versions = array();
         foreach ($kinds as $kind) {
-            $versions[] = (object) array('kind' => $kind, 'download' => $downloadable);
+            $versions[] = (object) array('kind' => $kind, 'download' => $downloadable, 'hd' => $hd);
         }
         return $versions;
     }

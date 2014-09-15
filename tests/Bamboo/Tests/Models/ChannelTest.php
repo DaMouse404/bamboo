@@ -27,6 +27,13 @@ class ChannelTest extends BambooTestCase
         $this->_channel->getUnregionalisedID(),
         'bbc_one'
     );
+    $newChannel = $this->_mockChannelObject();
+    $newChannel->id = 'cbbc';
+    $newChannel = new Channel($newChannel);
+    $this->assertEquals(
+        $newChannel->getUnregionalisedID(),
+        'cbbc'
+    );
   }
 
   public function testGetSlug() {

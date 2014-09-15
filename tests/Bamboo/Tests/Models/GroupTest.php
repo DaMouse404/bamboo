@@ -60,11 +60,45 @@ class GroupTest extends BambooTestCase
         $this->assertEmpty($group->getRelatedLinksByKind('invalid'));
     }
 
+    public function testGetSubtitle() {
+        $group = $this->_createGroup(array('subtitle' => 'Dr Who'));
+        $this->assertEquals('Dr Who', $group->getSubtitle());
+    }
+
+    public function testGetLabels() {
+        $labels = array('label1', 'label2');
+        $group = $this->_createGroup(array('labels' => $labels));
+        $labels = $group->getLabels();
+        $this->assertInternalType('array', $labels);
+        $this->assertEquals('label1', $labels[0]);
+    }
+
+    public function testGetEpisodes() {
+        $group = $this->_createGroup(
+            array(
+                'count' => 3,
+                'initial_children' => $this->_createEpisodes(array('broadcast', 'episode'))
+            )
+        );
+        $episodes = $group->getEpisodes();
+        $this->assertEquals('broadcast', $episodes[0]->getType());
+        $this->assertEquals(2, $group->getEpisodeCount());
+        $this->assertEquals(3, $group->getTotalEpisodeCount());
+    }
+
     private function _createGroup($params = array()) {
         $group = array(
             "id" => "fake_id"
         );
         return new Group((object) array_merge($group, $params));
+    }
+
+    private function _createEpisodes($episodes) {
+        $links = array();
+        foreach ($episodes as $episode) {
+            $links[] = (object) array('type' => $episode);
+        }
+	return $links;
     }
 
     private function _createRelatedLinks($kinds) {

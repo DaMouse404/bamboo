@@ -81,38 +81,6 @@ class Elements extends Base
     }
 
     /**
-     * Get the portrait image url for an element
-     *
-     * @param string|int $width  Desired width of image (default 336).
-     *                           if not an integer indicates a recipe name
-     * @param int $height Desired height of image (default 581)
-     *
-     * @return string
-     */
-    public function getPortraitImage($width = 336, $height = 581) {
-        if (isset($this->_images->portrait)) {
-            return str_replace(
-                '{recipe}',
-                $this->_getRecipe($width, $height),
-                $this->_images->portrait
-            );
-        }
-        return "";
-    }
-
-    /**
-     * Get the raw portrait image for an element. This is a url which includes the recipe.
-     *
-     * @return string
-     */
-    public function getPortraitImageRecipe() {
-        if (isset($this->_images->portrait)) {
-            return $this->_images->portrait;
-        }
-        return "";
-    }
-
-    /**
      * Get the $type image url for an element
      *
      * @param string $type Type of image to get (standard|vertical|portrait)
@@ -129,19 +97,6 @@ class Elements extends Base
                 $this->_getRecipe($width, $height),
                 $this->_images->$type
             );
-        }
-        return "";
-    }
-
-    /**
-     * Get the raw $type image for an element. This is a url which includes the recipe
-     *
-     * @param string $type Type of image to get (standard|vertical|portrait)
-     * @return string
-     */
-    public function getImageRecipe($type) {
-        if (isset($this->_images->$type)) {
-            return $this->_images->portrait;
         }
         return "";
     }
