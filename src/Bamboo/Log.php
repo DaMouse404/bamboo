@@ -7,15 +7,11 @@ namespace Bamboo;
  */
 class Log
 {
-    const EMERG   = 0;  // Emergency: system is unusable
-    const ALERT   = 1;  // Alert: action must be taken immediately
-    const CRIT    = 2;  // Critical: critical conditions
     const ERR     = 3;  // Error: error conditions
     const WARN    = 4;  // Warning: warning conditions
     const NOTICE  = 5;  // Notice: normal but significant condition
     const INFO    = 6;  // Informational: informational messages
     const DEBUG   = 7;  // Debug: debug messages
-    const DEFAULT_LOG_LEVEL = self::DEBUG;
 
     protected static $_logger = null;
 
@@ -50,41 +46,8 @@ class Log
     protected static function _log($message, $level) {
         $logger = self::getLogger();
         if ($logger) {
-            self::getLogger()->log($message, $level);
+            $logger->log($message, $level);
         }
-    }
-
-   /**
-     * Log a given message, wrapping around sprintf
-     * for readability
-     */
-    public static function log() {
-        $message = self::_getMessage(func_get_args());
-        self::_log($message, self::DEFAULT_LOG_LEVEL);
-    }
-
-    /**
-     * Send an emergency message
-     */
-    public static function emerg() {
-        $message = self::_getMessage(func_get_args());
-        self::_log($message, self::EMERG);
-    }
-
-    /**
-     * Send an alert message
-     */
-    public static function alert() {
-        $message = self::_getMessage(func_get_args());
-        self::_log($message, self::ALERT);
-    }
-
-    /**
-     * Send an critical message
-     */
-    public static function crit() {
-        $message = self::_getMessage(func_get_args());
-        self::_log($message, self::CRIT);
     }
 
     /**
