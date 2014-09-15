@@ -32,45 +32,45 @@ class Schedules extends Base
     private function _cleanBroadcasts($broadcasts) {
         $filtered = array();
         foreach ($broadcasts as $i => $current) {
-            if ($i > 0) {
-                $previous = $broadcasts[$i - 1];
+            if ($i === 0) {
+                $filtered[] = $current;
+                continue;
+            }
+            $previous = $broadcasts[$i - 1];
 
-                //The previous broadcast was marked as useless
-                if (!$previous) {
-                    $filtered[] = $current;
-                    continue;
-                }
-                
-                $currentStart = $current->getStartTime();
-                $currentEnd = $current->getEndTime();
-                $previousStart = $previous->getStartTime();
-                $previousEnd = $previous->getEndTime();
+            //The previous broadcast was marked as useless
+            if (!$previous) {
+                $filtered[] = $current;
+                continue;
+            }
 
-                $previousEndDate = new \DateTime($previousEnd); 
-                $currentEndDate = new \DateTime($currentEnd);
-                $currentStartDate = new \DateTime($currentStart);
+            $currentStart = $current->getStartTime();
+            $currentEnd = $current->getEndTime();
+            $previousStart = $previous->getStartTime();
+            $previousEnd = $previous->getEndTime();
 
-                //Insert off-air gap
-                if ($currentStartDate > $previousEndDate) {
-                    $filtered[] = $this->_getEmptyBroadcast($previousEnd, $currentStart);
-                    $filtered[] = $current;
+            $previousEndDate = new \DateTime($previousEnd); 
+            $currentEndDate = new \DateTime($currentEnd);
+            $currentStartDate = new \DateTime($currentStart);
+
+            //Insert off-air gap
+            if ($currentStartDate > $previousEndDate) {
+                $filtered[] = $this->_getEmptyBroadcast($previousEnd, $currentStart);
+                $filtered[] = $current;
 
                 //Duplicates: get rid of both
-                } else if ($currentStart === $previousStart && $currentEnd === $previousEnd) {
-                    $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $previousEnd);
+            } else if ($currentStart === $previousStart && $currentEnd === $previousEnd) {
+                $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $previousEnd);
 
                 //One programme inside another: get rid of both
-                } else if ($currentEndDate < $previousEndDate) {
-                    $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $previousEnd);
-                    $broadcasts[$i] = false; //Don't take this programme into account for the next iteration
+            } else if ($currentEndDate < $previousEndDate) {
+                $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $previousEnd);
+                $broadcasts[$i] = false; //Don't take this programme into account for the next iteration
 
                 //Overlap: get rid of both
-                } else if ($currentStartDate < $previousEndDate) {
-                    $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $currentEnd);
+            } else if ($currentStartDate < $previousEndDate) {
+                $filtered[count($filtered) - 1] = $this->_getEmptyBroadcast($previousStart, $currentEnd);
 
-                } else {
-                    $filtered[] = $current;
-                }
             } else {
                 $filtered[] = $current;
             }
@@ -85,8 +85,7 @@ class Schedules extends Base
                 'start_time' => $startDate,
                 'end_time' => $endDate,
                 'scheduled_start' => $startDate,
-                'scheduled_end' => $endDate,
-                'episode' => false
+                'scheduled_end' => $endDate
             )
         );
     }
