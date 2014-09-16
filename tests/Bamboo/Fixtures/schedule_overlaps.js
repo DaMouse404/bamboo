@@ -2,41 +2,41 @@ var util = require('util');
 
 module.exports = function (creator, fixtureName) {
 
-    var date = new Date();
-    var today = date.getFullYear() + "-";
-    var month = date.getMonth() + 1;
-    today += month < 10 ? '0' + month : month;
-    var date = date.getDate();
-    today += "-";
-    today += date < 10 ? '0' + date : date;
+    var date = new Date(),
+        year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        day = date.getDate(),
+        today;
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+    today = [year, month, day].join("-");
 
     return creator.createFixture('channels/cbeebies/schedule/' + today).then(function (fixture) {
 
        var broadcast = JSON.parse(JSON.stringify(fixture.data.schedule.elements[0]));
-       fixture.data.schedule.elements = [];
+           fixture.data.schedule.elements = [];
+           hours = [
+               ['06:00', '07:00'],
+               ['07:00', '08:00'],
+               ['08:00', '09:00'],
+               ['09:00', '10:00'],
+               ['10:00', '11:00'],
+               ['11:00', '12:00'],
+               ['12:00', '13:00'],
+               ['13:00', '14:00']
+           ];
 
        function createBroadcastsFromTimeSeries() {
-           var broadcasts = [];
-           var i = 0;
-           for (var hour in hours) {
-               var newBroadcast = JSON.parse(JSON.stringify(broadcast));
+           var broadcasts = [],
+               i = 0, hour, newBroadcast;
+           for (hour in hours) {
+               newBroadcast = JSON.parse(JSON.stringify(broadcast));
                newBroadcast.scheduled_start = today + "T"+hours[hour][0]+":00.000Z";
                newBroadcast.scheduled_end = today + "T"+hours[hour][1]+":00.000Z";
                broadcasts.push(newBroadcast);
            }
            return broadcasts;
        }
-
-       var hours = [
-           ['06:00', '07:00'],
-           ['07:00', '08:00'],
-           ['08:00', '09:00'],
-           ['09:00', '10:00'],
-           ['10:00', '11:00'],
-           ['11:00', '12:00'],
-           ['12:00', '13:00'],
-           ['13:00', '14:00']
-       ];
 
        fixture.data.schedule.elements = createBroadcastsFromTimeSeries();
        fixture.save(fixtureName + '_correct');

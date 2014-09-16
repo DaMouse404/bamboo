@@ -40,7 +40,6 @@ class SchedulesTest extends BambooTestCase
         $this->_assertStartEndTimes($broadcasts[1], '07:00', '09:00');
         $this->assertCount(7, $broadcasts);
 
-
         //There's a gap between second and third
         $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_gap');
         $this->assertEquals(null, $broadcasts[2]->getEpisode()->getId());
