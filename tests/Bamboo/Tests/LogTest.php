@@ -18,32 +18,32 @@ class LogTest extends BambooTestCase {
     }
 
     public function testErr() {
-        $this->_setupLogLevel('Cake', Log::ERR);
+        $this->_setupLogLevelTest('Cake', Log::ERR);
         Log::err('Cake');
     }
 
     public function testWarn() {
-        $this->_setupLogLevel('Cake', Log::WARN);
+        $this->_setupLogLevelTest('Cake', Log::WARN);
         Log::warn('Cake');
     }
 
     public function testNotice() {
-        $this->_setupLogLevel('Cake', Log::NOTICE);
+        $this->_setupLogLevelTest('Cake', Log::NOTICE);
         Log::notice('Cake');
     }
 
     public function testInfo() {
-        $this->_setupLogLevel('Cake', Log::INFO);
+        $this->_setupLogLevelTest('Cake', Log::INFO);
         Log::info('Cake');
     }
 
     public function testDebug() {
-        $this->_setupLogLevel('Cake', Log::DEBUG);
+        $this->_setupLogLevelTest('Cake', Log::DEBUG);
         Log::debug('Cake');
     }
 
 
-    private function _setupLogLevel($msg, $level) {
+    private function _setupLogLevelTest($msg, $level) {
         $mock = $this->getMock('Bamboo\Tests\MockLogger', array('log'));
 
         $mock->expects($this->once())
