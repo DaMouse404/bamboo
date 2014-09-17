@@ -10,7 +10,7 @@ class BaseTest extends BambooTestCase
   
   private $_base;
 
-  public function setup() {
+  public function setUp() {
     $object = $this->_mockBaseObject();
     $this->_base = new Base($object);
   }

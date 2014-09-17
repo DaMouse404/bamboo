@@ -10,7 +10,7 @@ class ChannelTest extends BambooTestCase
 
   private $_channel;
 
-  public function setup() {
+  public function setUp() {
     $object = $this->_mockChannelObject();
     $this->_channel = new Channel($object);
   }

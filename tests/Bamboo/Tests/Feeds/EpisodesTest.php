@@ -9,7 +9,7 @@ class EpisodesTest extends BambooTestCase
 {
     private $_episodes = array();
 
-    public function setup() {
+    public function setUp() {
         parent::setupRequest("episodes@episodes_proms");
         $feedObject = new Episodes(array(), 'gggggggg');
         $this->_episodes = $feedObject->getElements();
