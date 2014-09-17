@@ -10,7 +10,7 @@ class BroadcastsTest extends BambooTestCase
 
     private $_broadcasts;
 
-    public function setup() {
+    public function setUp() {
         parent::setupRequest("broadcasts@channel_bbcone_broadcasts");
         $feedObject = new Broadcasts(array(), 'bbc_one_london');
         $this->_broadcasts = $feedObject->getBroadcasts();

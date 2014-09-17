@@ -9,23 +9,22 @@ class ProgrammesTest extends BambooTestCase
 {
     private $_programmes = array();
 
-    public function setup() {
+    public function setUp() {
         parent::setupRequest("programmes@programmes_proms");
-        $feedObject = new Programmes(array(), array('gggggggg'));
-        $this->_programmes = $feedObject->getElements();
+        $this->_programmes = new Programmes(array(), array('gggggggg'));
     }
 
     public function testProgrammeItemType() {
-        $this->assertEquals(
-                get_class($this->_programmes[0]),
-                "Bamboo\Models\Programme"
+        $elements = $this->_programmes->getElements();
+        $this->assertInstanceOf(
+                "Bamboo\Models\Programme",
+                $elements[0]
         );
     }
 
-    // TODO: Fixturator trimTo
-    //public function testProgrammeItemCount() {
-    //    $this->assertCount(3, $this->_programmes);
-    //}
+    public function testGetResponse() {
+        $this->assertInternalType('object', $this->_programmes->getResponse());
+    }
 
     public function testMultiFeed() {
         $feedObject = new Programmes(array(), array('a', 'b'));

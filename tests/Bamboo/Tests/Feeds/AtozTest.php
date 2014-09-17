@@ -8,7 +8,7 @@ use Bamboo\Feeds\Atoz;
 class AtozTest extends BambooTestCase
 {
 
-  public function setup() {
+  public function setUp() {
     parent::setupRequest("atoz@atoz_a_programmes");
     $feedObject = new Atoz(array(), 'a');
     $this->_programmes = $feedObject->getElements();
