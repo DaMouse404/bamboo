@@ -2,9 +2,9 @@
 
 namespace Bamboo\Feeds\Highlights;
 
-use Bamboo\Feeds\Base;
+use Bamboo\Feeds;
 
-class Home extends Base
+class Home extends Feeds\Base
 {
 
     protected $_feed = 'home/highlights';
