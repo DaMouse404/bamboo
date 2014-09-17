@@ -47,6 +47,31 @@ class ClientTest extends BambooTestCase
         $this->assertEquals('cy', $newLang);
     }
 
+    public function testConfigSetters() {
+        $client = new Client();
+
+        $client->setHost('Take Cake');
+        $this->assertAttributeEquals('Take Cake', '_host', $client);
+
+        $client->setBaseUrl('Bake Cake');
+        $this->assertAttributeEquals('Bake Cake', '_baseUrl', $client);
+
+        $client->setConfig('Make Cake');
+        $this->assertAttributeEquals('Make Cake', '_config', $client);
+
+        $client->setNetworkProxy('Drake Cake');
+        $this->assertAttributeEquals('Drake Cake', '_networkProxy', $client);
+
+        $client->setServiceProxy('Fake Cake');
+        $this->assertAttributeEquals('Fake Cake', '_serviceProxy', $client);
+
+        $client->setFakeHttpClient('Quake Cake');
+        $this->assertAttributeEquals('Quake Cake', '_fakeHttpClient', $client);
+
+        $client->setFailHttpClient('Snake Cake');
+        $this->assertAttributeEquals('Snake Cake', '_failHttpClient', $client);
+    }
+
     /*
      * Test Post Fetch
      * - Correct response parsing
@@ -108,39 +133,36 @@ class ClientTest extends BambooTestCase
     }
 
     public function testCurlExceptionsInRequestAll() {
-        $requests = array(
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array())
+        $this->_requestAllExceptionTest(
+            new \Guzzle\Http\Exception\CurlException('Timed Out'),
+            'Bamboo\Exception\CurlError',
+            'BAMBOO_PROXY_CURLERROR'
         );
-
-        $client = $this->_multiRequestException($requests, new \Guzzle\Http\Exception\CurlException('Timed Out'));
-
-        $this->setExpectedException('Bamboo\Exception\CurlError');
-        try {
-            $responses = $client->requestAll($requests);
-        } catch (\Exception $e) {
-            $this->assertEquals(1, CounterFake::getCount('BAMBOO_PROXY_CURLERROR'));
-            CounterFake::resetCount('BAMBOO_PROXY_CURLERROR');
-            throw $e;
-        }
     }
 
     public function testNormalExceptionsInRequestAll() {
+        $this->_requestAllExceptionTest(
+            new \Exception('Parse Error'),
+            'Exception',
+            'BAMBOO_PROXY_OTHER'
+        );
+    }
+
+    private function _requestAllExceptionTest($errorIn, $errorExpected, $counter) {
         $requests = array(
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array()),
             array('atoz@atoz_a_programmes', array())
         );
 
-        $client = $this->_multiRequestException($requests, new \Exception('Parse Error'));
+        $client = $this->_multiRequestException($requests, $errorIn);
 
-        $this->setExpectedException('Exception');
+        $this->setExpectedException($errorExpected);
         try {
             $responses = $client->requestAll($requests);
         } catch (\Exception $e) {
-            $this->assertEquals(1, CounterFake::getCount('BAMBOO_PROXY_OTHER'));
-            CounterFake::resetCount('BAMBOO_PROXY_OTHER');
+            $this->assertEquals(1, CounterFake::getCount($counter));
+            CounterFake::resetCount($counter);
             throw $e;
         }
     }
