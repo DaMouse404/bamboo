@@ -29,7 +29,7 @@ class SchedulesTest extends BambooTestCase
         $this->assertCount(7, $broadcasts);
 
         //Second and third are overlapped
-        $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_duplicated');
+        $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_overlap');
         $this->assertEquals(null, $broadcasts[1]->getEpisode()->getId());
         $this->assertCount(7, $broadcasts);
         $this->_assertStartEndTimes($broadcasts[1], '07:00', '09:00');
