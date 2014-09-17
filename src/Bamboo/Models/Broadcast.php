@@ -30,7 +30,7 @@ class Broadcast extends Elements
     }
 
     /**
-     * Get end time from episode
+     * Get end time from broadcast
      * 
      * @return string
      */
