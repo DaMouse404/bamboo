@@ -17,19 +17,15 @@ class StaticBase extends Base
     public function fetchAssetFeed($feed) {
         Log::info('Fetching Static feed from /Assets: ' . $feed);
 
-        try {
-            $contents = $this->fetchFile($feed);
-        } catch (Exception $e) {
-            $this->throwEmpty($feed);
-        }
+        $contents = $this->fetchFile($feed);
 
         // can return false or file contents, so falsyness is a failure
         $json = $this->decodeFixture($contents);
         if (!$json) {
-            $this->throwEmpty($feed);
-        } else {
-            return $json;
+            throw new EmptyFeed('Could not find feed in /Assets/ for feed: '. $feed);
         }
+
+        return $json;
     }
 
     public function decodeFixture($fixture) {
@@ -42,10 +38,6 @@ class StaticBase extends Base
         }
 
         return json_decode($body);
-    }
-
-    private function throwEmpty($feed) {
-        throw new EmptyFeed('Could not find feed in /Assets/ for feed: '. $feed);
     }
 
     private function fetchFile($feed) {
