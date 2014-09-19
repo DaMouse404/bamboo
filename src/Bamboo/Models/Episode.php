@@ -19,6 +19,7 @@ class Episode extends Elements
     protected $_href;
     protected $_stacked;
     protected $_guidance;
+    protected $_promoted;
 
     /**
      * Is the episode stacked
@@ -29,7 +30,7 @@ class Episode extends Elements
     public function isStacked() {
         return !!$this->_stacked;
     }
-    
+
     /**
      * Get the episode HREF
      *
@@ -46,6 +47,15 @@ class Episode extends Elements
      */
     public function isFilm() {
         return !!$this->_film;
+    }
+
+    /**
+     * Is this episode promoted up the feed
+     *
+     * @return bool
+     */
+    public function isPromoted() {
+        return !!$this->_promoted;
     }
 
     /**
@@ -108,9 +118,9 @@ class Episode extends Elements
 
 
     /**
-     * Gets the priority version and returns its slug. 
-     * If no version exists it returns an empty string. 
-     * An optional preference can be specified, which case the version of that kind is returned 
+     * Gets the priority version and returns its slug.
+     * If no version exists it returns an empty string.
+     * An optional preference can be specified, which case the version of that kind is returned
      * if it exists, else the version with highest priority is returned.
      *
      * @param string $preference a specific version to return
@@ -127,8 +137,8 @@ class Episode extends Elements
     }
 
       /**
-     * Gets the version with highest priority attached to the episode. 
-     * A preference can be provided to override the default. 
+     * Gets the version with highest priority attached to the episode.
+     * A preference can be provided to override the default.
      * If the preference is not found then the default will be returned instead.
      *
      * @param string $preference a specific version to look for
@@ -218,7 +228,7 @@ class Episode extends Elements
         // if the episode has any versions at all
         if (isset($this->_versions[0])) {
             $version = new Version($this->_versions[0]);
-            // we won't need version flags in this scenario: 
+            // we won't need version flags in this scenario:
             //  there's only the original version and has no HD
             if ((count($this->_versions) === 1) &&
                 ($version->getKind() === 'original') &&
@@ -250,7 +260,7 @@ class Episode extends Elements
     }
 
     /**
-     * Get the versions attached to this episode. 
+     * Get the versions attached to this episode.
      * Returns an array of {@link Bamboo\Models\Version} objects
      *
      * @return array

@@ -499,6 +499,13 @@ class EpisodeTest extends BambooTestCase
         $this->assertTrue($episode->isFilm());
     }
 
+    public function testIsPromoted() {
+        $episode = $this->_createEpisode(array());
+        $this->assertFalse($episode->isPromoted());
+        $episode = $this->_createEpisode(array('promoted' => true));
+        $this->assertTrue($episode->isPromoted());
+    }
+
     public function testGetHref() {
         $episode = $this->_createEpisode(array('href' => 'www.bbc.co.uk'));
         $this->assertEquals('www.bbc.co.uk', $episode->getHref());
