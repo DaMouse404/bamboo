@@ -3,7 +3,6 @@
 namespace Bamboo\Feeds\Highlights;
 
 use Bamboo\Feeds\Base;
-use Bamboo\Models\Episode;
 
 class Home extends Base
 {
@@ -14,4 +13,5 @@ class Home extends Base
     public function getElements() {
         return $this->_buildModels($this->_response->home_highlights->elements);
     }
+
 }
