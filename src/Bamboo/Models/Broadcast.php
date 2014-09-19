@@ -86,4 +86,66 @@ class Broadcast extends Elements
 
         return $startTime->getTimestamp() > $time->getTimestamp();
     }
+
+    public static function cleanBroadcasts($broadcasts) {
+        $filtered = array();
+        foreach ($broadcasts as $i => $current) {
+            if ($i === 0) {
+                $filtered[] = $current;
+                continue;
+            }
+            $previous = $broadcasts[$i - 1];
+
+            //The previous broadcast was marked as useless
+            if (!$previous) {
+                $filtered[] = $current;
+                continue;
+            }
+
+            $currentStart = $current->getStartTime();
+            $currentEnd = $current->getEndTime();
+            $previousStart = $previous->getStartTime();
+            $previousEnd = $previous->getEndTime();
+
+            $previousEndDate = new \DateTime($previousEnd);
+            $currentEndDate = new \DateTime($currentEnd);
+            $currentStartDate = new \DateTime($currentStart);
+
+            //Insert off-air gap
+            if ($currentStartDate > $previousEndDate) {
+                $filtered[] = self::getEmptyBroadcast($previousEnd, $currentStart);
+                $filtered[] = $current;
+
+                //Duplicates: get rid of both
+            } else if ($currentStart === $previousStart && $currentEnd === $previousEnd) {
+                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $previousEnd);
+
+                //One programme inside another: get rid of both
+            } else if ($currentEndDate < $previousEndDate) {
+                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $previousEnd);
+                $broadcasts[$i] = false; //Don't take this programme into account for the next iteration
+
+                //Overlap: get rid of both
+            } else if ($currentStartDate < $previousEndDate) {
+                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $currentEnd);
+
+            } else {
+                $filtered[] = $current;
+            }
+        }
+        return $filtered;
+    }
+
+    public static function getEmptyBroadcast($startDate, $endDate) {
+        return new Broadcast(
+            (object) array(
+                'id' => null,
+                'type' => 'broadcast',
+                'start_time' => $startDate,
+                'end_time' => $endDate,
+                'scheduled_start' => $startDate,
+                'scheduled_end' => $endDate
+            )
+        );
+    }
 }
