@@ -34,6 +34,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         }
         $path =  dirname(__FILE__) . self::FIXTURE_PATH;
         $httpFake->setFixturesPath($path);
+        \Bamboo\Counter::setCounter("Bamboo\CounterFake");
 
         Client::getInstance()->setFakeHttpClient(
             $httpFake
