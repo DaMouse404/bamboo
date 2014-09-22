@@ -9,11 +9,22 @@ class Programmes extends BaseParallel
 
     protected $_feedName = 'programmes/{pids}';
     protected $_feeds = array();
+    protected $_responses;
     protected $_response;
 
     public function __construct($params, $pids) {
         $this->_setPids($pids);
         parent::__construct($params);
+
+        // grab all the parallel responses and add them all to a single response object for easy access
+        $responses = $this->_responses;
+
+        $baseResponse = array_shift($responses);
+        foreach ($responses as $response) {
+            $baseResponse->programmes = array_merge($baseResponse->programmes, $response->programmes);
+        }
+
+        $this->_response = $baseResponse;
     }
 
     private function _setPids($pidSets) {

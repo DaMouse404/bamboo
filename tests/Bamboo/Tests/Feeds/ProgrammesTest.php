@@ -39,6 +39,17 @@ class ProgrammesTest extends BambooTestCase
         );
     }
 
+    public function testResponsesAreGrouped() {
+        $feedObject = new Programmes(array(), array('a'));
+        $this->assertCount(2, $feedObject->getElements());
+
+        $feedObject = new Programmes(array(), array('a', 'b'));
+        $this->assertCount(4, $feedObject->getElements());
+
+        $feedObject = new Programmes(array(), array('a', 'b', 'c'));
+        $this->assertCount(6, $feedObject->getElements());
+    }
+
     public function testMultiFeedMultiPid() {
         $feedObject = new Programmes(
             array(),

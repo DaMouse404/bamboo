@@ -8,7 +8,6 @@ class Fake extends Base implements GuzzleInterface
         //setup request object
         $this->_buildPath($feed);
         Log::info('BAMBOO: Faking feed: %s', $feed);
-
         return $this;
     }
 
