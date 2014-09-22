@@ -69,6 +69,58 @@ class BroadcastTest extends BambooTestCase
         $this->assertTrue($broadcast->isBlanked());
     }
 
+    public function testIsSimulcast() {
+        $params = array(
+            'blanked' => false
+        );
+        // Not blanked and on now
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
+        $this->assertTrue($broadcast->isSimulcast());
+
+        // Not blanked and on in the future
+        $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
+
+        // Blanked and on now
+        $params['blanked'] = true;
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
+        
+        // Blanked and on in the future
+        $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
+    }
+
+    public function testIsCatchup() {
+        $episode = $this->_createEpisode('available');
+        $broadcast = $this->_createBroadcast($episode);
+        $this->assertTrue($broadcast->isCatchUp());
+
+        $episode = $this->_createEpisode('unavailable');
+        $broadcast = $this->_createBroadcast($episode);
+        $this->assertFalse($broadcast->isCatchUp());
+    }
+
+    public function testIsAvailableToWatch() {
+        $episode = $this->_createEpisode('available');
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $episode);
+        $this->assertTrue($broadcast->isAvailableToWatch());
+        
+        $episode = $this->_createEpisode('unavailable');
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $episode);
+        $this->assertFalse($broadcast->isAvailableToWatch());
+    }
+
+    public function testIsComingSoon() {
+        $params = $this->_createEpisode('coming_soon');
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $params);
+        $this->assertTrue($broadcast->isComingSoon());
+
+        $params = $this->_createEpisode('unavailable');
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $params);
+        $this->assertFalse($broadcast->isComingSoon());
+    }
+
     public function testIsOnNow() {
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours');
 
@@ -93,11 +145,20 @@ class BroadcastTest extends BambooTestCase
         $this->assertFalse($broadcast->isOnNext());
     }
 
+    private function _createEpisode($status = 'available') {
+        return array(
+            'episode' => (object) array(
+                'title' => 'Episode Title',
+                'status' => $status
+            )
+        );
+    }
+
     private function _createBroadcast($params) {
         return new Broadcast((object) $params);
     }
 
-    private function _createTimedBroadcast($startOffset, $endOffset) {
+    private function _createTimedBroadcast($startOffset, $endOffset, $opts = array()) {
         $startTime = new \DateTime();
         $endTime = new \DateTime();
 
@@ -105,6 +166,10 @@ class BroadcastTest extends BambooTestCase
             'scheduled_start' => $startTime->modify($startOffset)->format($this->_timeFormat),
             'scheduled_end' => $endTime->modify($endOffset)->format($this->_timeFormat)
         );
+
+        if(!empty($opts)) {
+            $params = array_merge($params, $opts);
+        }
 
         return $this->_createBroadcast($params);
     }
