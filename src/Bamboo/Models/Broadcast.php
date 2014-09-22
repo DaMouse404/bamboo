@@ -4,6 +4,10 @@ namespace Bamboo\Models;
 
 class Broadcast extends Elements
 {
+
+    const AVAILABLE = 'available';
+    const COMING_SOON = 'coming_soon';
+
     // @codingStandardsIgnoreStart
     protected $_scheduled_start = "";
     protected $_scheduled_end = "";
@@ -63,6 +67,37 @@ class Broadcast extends Elements
     }
 
     /**
+     * Calculates whether this broadcast has a simulcast available
+     * @return type boolean
+     */
+    public function isSimulcast() {
+        return !$this->isBlanked() && $this->isOnNow();
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function isCatchUp() {
+        return ($this->getEpisode()->getStatus() === self::AVAILABLE);
+    }
+
+    /**
+     * Returns whether this broadcast is available to watch either via catchup or simulcast
+     * @return type boolean
+     */
+    public function isAvailableToWatch() {
+        return $this->isCatchUp() || $this->isSimulcast();
+    }
+
+    /**
+     * Returns whether this broadcast will be available on catchup in the future
+     * @return type boolean
+     */
+    public function isComingSoon() {
+        return ($this->getEpisode()->getStatus() === self::COMING_SOON);
+    }
+
+    /**
      * Is broadcast a repetition
      *
      * @return boolean
@@ -76,8 +111,10 @@ class Broadcast extends Elements
         $startTime = new \DateTime($this->getStartTime());
         $endTime = new \DateTime($this->getEndTime());
 
-        return ($startTime->getTimestamp() <= $time->getTimestamp() &&
-                $endTime->getTimestamp() > $time->getTimestamp());
+        return (
+            $startTime->getTimestamp() <= $time->getTimestamp() &&
+            $endTime->getTimestamp() > $time->getTimestamp()
+        );
     }
 
     public function isOnNext() {

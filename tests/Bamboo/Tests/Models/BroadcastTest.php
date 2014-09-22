@@ -69,6 +69,39 @@ class BroadcastTest extends BambooTestCase
         $this->assertTrue($broadcast->isBlanked());
     }
 
+    public function testIsSimulcast() {
+        $params = array(
+            'blanked' => false
+        );
+        // On now and not blanked
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
+        $this->assertTrue($broadcast->isSimulcast());
+        // Not on now
+        $broadcast = $this->_createBroadcast('+1 hours', '+2 hours', $params);
+        $this->assertFalse($broadcast->isBlanked());
+        // On now and blanked
+        $params['blanked'] = true;
+        $broadcast = $this->_createBroadcast('-1 hours', '+1 hours', $params);
+        $this->assertFalse($broadcast->isBlanked());
+    }
+
+    public function testIsCatchup() {
+        $this->assertTrue(true);   
+    }
+
+    public function testIsAvailableToWatch() {
+        $this->assertTrue(true);
+    }
+
+    public function testIsComingSoon() {
+        $params = array(
+            'status' => 'coming_soon'
+        );
+        // On now and not blanked
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $params);
+        $this->assertTrue($broadcast->isComingSoon());
+    }
+
     public function testIsOnNow() {
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours');
 
@@ -97,7 +130,7 @@ class BroadcastTest extends BambooTestCase
         return new Broadcast((object) $params);
     }
 
-    private function _createTimedBroadcast($startOffset, $endOffset) {
+    private function _createTimedBroadcast($startOffset, $endOffset, $opts = array()) {
         $startTime = new \DateTime();
         $endTime = new \DateTime();
 
@@ -105,6 +138,10 @@ class BroadcastTest extends BambooTestCase
             'scheduled_start' => $startTime->modify($startOffset)->format($this->_timeFormat),
             'scheduled_end' => $endTime->modify($endOffset)->format($this->_timeFormat)
         );
+
+        if(!empty($opts)) {
+            $params = array_merge($params, $opts);
+        }
 
         return $this->_createBroadcast($params);
     }
