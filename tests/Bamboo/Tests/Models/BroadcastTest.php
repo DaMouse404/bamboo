@@ -76,13 +76,16 @@ class BroadcastTest extends BambooTestCase
         // Not blanked and on now
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
         $this->assertTrue($broadcast->isSimulcast());
+
         // Not blanked and on in the future
         $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
         $this->assertFalse($broadcast->isSimulcast());
+
         // Blanked and on now
         $params['blanked'] = true;
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
         $this->assertFalse($broadcast->isSimulcast());
+        
         // Blanked and on in the future
         $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
         $this->assertFalse($broadcast->isSimulcast());
