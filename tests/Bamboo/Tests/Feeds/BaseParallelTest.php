@@ -8,7 +8,7 @@ class BaseParllelTest extends BambooTestCase
 {
 	private $originalClient;
 	public function setUp() {
-		$this->originalClient = clone Client::$instance;
+		$this->originalClient = clone Client::getInstance();
 
 	}
 	public function tearDown() {
@@ -16,24 +16,31 @@ class BaseParllelTest extends BambooTestCase
 	}
 
 	public function testFetchSingleFeed () {
-		$singleResponse = (object) array(
-			'programmes' => array('programm'=>'programmes here')
+		$singleResponse = array(
+			(object) array(
+				'programmes' => array('programm' => 'programmes here')
+			)
 		);
 		$params =array('someParam'=>'someValue');
-		$feedName = 'home/highlights';
+		$feedName = array('home/highlights');
 
-		$stub = $this->getMock('Bamboo\Client');
+		$stub = $this->getMock(
+			'Bamboo\Client',
+			array(
+				'requestAll'
+			)
+		);
 		$stub
 			->expects($this->once())
-			->method('request')
-			->with($this->equalTo($feedName), $this->identicalTo($params))
+			->method('requestAll')
+			->with($this->identicalTo(array(array($feedName[0], $params))))
 			->will($this->returnValue($singleResponse));
 
 		Client::$instance = $stub;
 
-		$feed = new FakeParallelFeed(array($feedName), $params);
+		$feed = new FakeParallelFeed($feedName, $params);
 
-		$this->assertEquals($singleResponse, $feed->_response);
+		$this->assertEquals($singleResponse, $feed->_responses);
 	}
 
 	public function testFetchMultipleFeeds () {
@@ -69,11 +76,13 @@ class BaseParllelTest extends BambooTestCase
 			$feedName
 		), $params);
 
-		$this->assertEquals($programmes, $feed->_response->programmes);
+		$this->assertCount(3, $feed->_responses);
+		$this->assertEquals($programmes[1], $feed->_responses[1]->programmes[0]);
 	}
 }
 
 class FakeParallelFeed extends \Bamboo\Feeds\BaseParallel {
+	public $_responses;
 	public function __construct ($feeds, $params) {
 		$this->_feeds = $feeds;
 		parent::__construct($params);
