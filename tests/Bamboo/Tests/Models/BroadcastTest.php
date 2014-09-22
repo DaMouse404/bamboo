@@ -73,34 +73,38 @@ class BroadcastTest extends BambooTestCase
         $params = array(
             'blanked' => false
         );
+        // Not blanked and on now
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
         $this->assertTrue($broadcast->isSimulcast());
-
-        $broadcast = $this->_createBroadcast('+1 hours', '+2 hours', $params);
-        $this->assertFalse($broadcast->isBlanked());
-
+        // Not blanked and on in the future
+        $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
+        // Blanked and on now
         $params['blanked'] = true;
-        $broadcast = $this->_createBroadcast('-1 hours', '+1 hours', $params);
-        $this->assertFalse($broadcast->isBlanked());
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
+        // Blanked and on in the future
+        $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
+        $this->assertFalse($broadcast->isSimulcast());
     }
 
     public function testIsCatchup() {
-        $params = $this->_createEpisode('available');
-        $broadcast = $this->_createBroadcast($params);
+        $episode = $this->_createEpisode('available');
+        $broadcast = $this->_createBroadcast($episode);
         $this->assertTrue($broadcast->isCatchUp());
 
-        $params = $this->_createEpisode('unavailable');
-        $broadcast = $this->_createBroadcast($params);
+        $episode = $this->_createEpisode('unavailable');
+        $broadcast = $this->_createBroadcast($episode);
         $this->assertFalse($broadcast->isCatchUp());
     }
 
     public function testIsAvailableToWatch() {
-        $params = $this->_createEpisode('available');
-        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
+        $episode = $this->_createEpisode('available');
+        $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $episode);
         $this->assertTrue($broadcast->isAvailableToWatch());
         
-        $params = $this->_createEpisode('unavailable');
-        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $params);
+        $episode = $this->_createEpisode('unavailable');
+        $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $episode);
         $this->assertFalse($broadcast->isAvailableToWatch());
     }
 
