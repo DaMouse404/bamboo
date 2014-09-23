@@ -149,7 +149,8 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function requestAll($feeds) {
-        $client = $this->getClient($feeds[0][0]);
+        $firstFeed = array_shift(array_values($feeds));
+        $client = $this->getClient($firstFeed[0]);
 
         try {
             $requests = array();
