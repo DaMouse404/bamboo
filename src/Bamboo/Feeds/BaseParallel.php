@@ -17,6 +17,5 @@ class BaseParallel extends Base
         );
 
         $this->_responses = Client::getInstance()->requestAll($requests);
-
     }
 }
