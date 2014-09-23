@@ -8,23 +8,30 @@ use Bamboo\Feeds\Broadcasts;
 class BroadcastsTest extends BambooTestCase
 {
 
-    private $_broadcasts;
-
     public function setUp() {
         parent::setupRequest("broadcasts@channel_bbcone_broadcasts");
-        $feedObject = new Broadcasts(array(), 'bbc_one_london');
-        $this->_broadcasts = $feedObject->getBroadcasts();
     }
 
     public function testBroadcastItemType() {
-        $this->assertEquals(
-            get_class($this->_broadcasts[0]),
-            "Bamboo\Models\Broadcast"
+        $feedObject = new Broadcasts(array(), 'bbc_one_london');
+        $channels = $feedObject->getBroadcasts();
+        $this->assertCount(20, $channels['bbc_one_london']);
+        $this->assertInstanceOf(
+            "Bamboo\Models\Broadcast",
+            $channels['bbc_one_london'][0]
         );
     }
 
-    public function testCountBroadcasts() {
-        $this->assertCount(20, $this->_broadcasts);
-    }
+    public function testMultiFeed() {
+        $feedObject = new Broadcasts(array(), array('bbc_cake', 'bbc_foo'));
 
+        $this->assertAttributeEquals(
+            array(
+                '/channels/bbc_cake/broadcasts',
+                '/channels/bbc_foo/broadcasts'
+            ),
+            '_feeds',
+            $feedObject
+        );
+    }
 }

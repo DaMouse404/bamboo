@@ -4,22 +4,38 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Broadcast;
 
-class Broadcasts extends Base
+class Broadcasts extends BaseParallel
 {
 
-    protected $_feed = '/channels/{channel_id}/broadcasts';
-    protected $_response;
+    protected $_feedName = '/channels/{channel_id}/broadcasts';
+    protected $_feeds = array();
+    protected $_responses;
 
-    public function __construct($params, $channel) {
-        $this->_setChannel($channel);
+    public function __construct($params, $channels) {
+        $this->_feeds = $this->_buildFeeds($channels);
         parent::__construct($params);
     }
 
-    private function _setChannel($channel) {
-        $this->_feed = str_replace("{channel_id}", $channel, $this->_feed);
+    public function getBroadcasts() {
+        $channels = array();
+        foreach ($this->_responses as $resp) {
+            $id = $resp->broadcasts->channel->id;
+            $channels[$id] = $this->_buildModels($resp->broadcasts->elements);
+        }
+
+        return $channels;
     }
 
-    public function getBroadcasts() {
-        return $this->_buildModels($this->_response->broadcasts->elements);
+    private function _buildFeeds($channels) {
+        $feedName = $this->_feedName;
+        if (!is_array($channels)) {
+            $channels = array($channels);
+        }
+        return array_map(
+            function ($channel) use ($feedName) {
+                return str_replace("{channel_id}", $channel, $feedName);
+            },
+            $channels
+        );
     }
 }
