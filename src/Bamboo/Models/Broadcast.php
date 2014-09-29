@@ -21,7 +21,7 @@ class Broadcast extends Elements
 
     /**
      * Get start time from episode
-     * 
+     *
      * @return string
      */
     public function getStartTime($useTransmission = false) {
@@ -35,7 +35,7 @@ class Broadcast extends Elements
 
     /**
      * Get end time from broadcast
-     * 
+     *
      * @return string
      */
     public function getEndTime($useTransmission = false) {
@@ -49,7 +49,7 @@ class Broadcast extends Elements
 
     /**
      * Get episode inside Broadcast
-     * 
+     *
      * @return Bamboo\Models\Episode
      */
     public function getEpisode() {
@@ -59,7 +59,7 @@ class Broadcast extends Elements
 
     /**
      * Is broadcast banned from simulcast
-     * 
+     *
      * @return boolean
      */
     public function isBlanked() {
