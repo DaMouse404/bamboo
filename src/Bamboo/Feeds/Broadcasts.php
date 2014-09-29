@@ -6,7 +6,7 @@ use Bamboo\Models\Broadcast;
 
 class Broadcasts extends BaseParallel
 {
-
+    const TIME_FORMAT = 'Y-m-d\TH:i';
     protected $_feedName = '/channels/{channel_id}/broadcasts';
     protected $_feeds = array();
     protected $_responses;
