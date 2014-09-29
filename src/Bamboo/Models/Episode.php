@@ -20,6 +20,7 @@ class Episode extends Elements
     protected $_stacked;
     protected $_guidance;
     protected $_promoted;
+    protected $_external_link;
 
     /**
      * Is the episode stacked
@@ -77,6 +78,12 @@ class Episode extends Elements
     public function getTleoType() {
         // @codingStandardsIgnoreStart
         return $this->_tleo_type;
+        // @codingStandardsIgnoreEnd
+    }
+
+    public function getExternalLink() {
+        // @codingStandardsIgnoreStart
+        return $this->_external_link;
         // @codingStandardsIgnoreEnd
     }
 
