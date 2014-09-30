@@ -13,6 +13,7 @@ class Episode extends Elements
     protected $_tleo_id;
     protected $_tleo_type;
     protected $_related_links;
+    protected $_external_link;
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_film = false;
@@ -20,7 +21,6 @@ class Episode extends Elements
     protected $_stacked;
     protected $_guidance;
     protected $_promoted;
-    protected $_external_link;
 
     /**
      * Is the episode stacked
