@@ -13,6 +13,7 @@ class Episode extends Elements
     protected $_tleo_id;
     protected $_tleo_type;
     protected $_related_links;
+    protected $_external_link;
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_film = false;
@@ -77,6 +78,12 @@ class Episode extends Elements
     public function getTleoType() {
         // @codingStandardsIgnoreStart
         return $this->_tleo_type;
+        // @codingStandardsIgnoreEnd
+    }
+
+    public function getExternalLink() {
+        // @codingStandardsIgnoreStart
+        return $this->_external_link;
         // @codingStandardsIgnoreEnd
     }
 

@@ -104,6 +104,12 @@ class EpisodeTest extends BambooTestCase
         $this->assertEquals('brand', $episode->getTleoType());
     }
 
+    public function testExternalLink() {
+        $link = 'external_link_url';
+        $episode = $this->_createEpisode(array('external_link' => $link));
+        $this->assertEquals($link, $episode->getExternalLink());
+    }
+
     public function testPriorityVersionWithMultipleVersions() {
         $versions = $this->_createVersions(array('original', 'audio-described', 'signed', 'other'));
         $episode = $this->_createEpisode(array('versions' => $versions));
