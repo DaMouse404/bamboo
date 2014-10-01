@@ -50,6 +50,14 @@ class SchedulesTest extends BambooTestCase
         $this->assertCount(9, $broadcasts);
     }
 
+    public function testMultiOverlap() {
+        $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_multi_overlap');
+
+        $this->_assertStartEndTimes($broadcasts[0], '06:00', '08:00');
+        $this->_assertStartEndTimes($broadcasts[1], '08:00', '10:00');
+        $this->assertCount(2, $broadcasts);
+    }
+
     private function _assertStartEndTimes($broadcast, $start, $end) {
         $today = date('Y-m-d');
         $this->assertEquals($today . 'T' . $start . ':00.000Z', $broadcast->getStartTime());
