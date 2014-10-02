@@ -17,13 +17,13 @@ class TvTest extends BambooTestCase
   }
 
   public function testGetElements() {
-    $this->assertTrue(is_array($this->_elements));
+    $this->assertInternalType("array", $this->_elements);
   }
 
   public function testFeedItemType() {
-    $this->assertEquals(
-        get_class($this->_elements[0]),
-        "Bamboo\Models\Promotion"
+    $this->assertInstanceOf(
+        "Bamboo\Models\Promotion",
+        $this->_elements[0]
     );
   }
 
