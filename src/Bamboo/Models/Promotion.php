@@ -9,7 +9,6 @@ class Promotion extends Elements
     protected $_subtitle = "";
     protected $_labels;
 
-
     /**
      * Returns the subtitle of the promotion, which is stored in the synopses
      *
