@@ -126,7 +126,11 @@ class Broadcast extends Elements
 
     public static function cleanBroadcasts($broadcasts) {
         $filtered = array();
+        $errTimePeriodStart = null;
+        $errTimePeriodEnd = null;
+
         foreach ($broadcasts as $i => $current) {
+            $errTimePeriodUpdated = false;
             if ($i === 0) {
                 $filtered[] = $current;
                 continue;
@@ -135,7 +139,9 @@ class Broadcast extends Elements
 
             //The previous broadcast was marked as useless
             if (!$previous) {
-                $filtered[] = $current;
+                if ($current->getEndTime() >= $errTimePeriodEnd) {
+                    $filtered[] = $current;
+                }
                 continue;
             }
 
@@ -147,6 +153,15 @@ class Broadcast extends Elements
             $previousEndDate = new \DateTime($previousEnd);
             $currentEndDate = new \DateTime($currentEnd);
             $currentStartDate = new \DateTime($currentStart);
+
+            //Check and set fault params
+            if ($currentStart <= $errTimePeriodStart && $currentEnd >= $errTimePeriodEnd
+                || $currentStart >= $errTimePeriodEnd) {
+                
+                $errTimePeriodStart = $currentStart;
+                $errTimePeriodEnd = $currentEnd;
+                $errTimePeriodUpdated = true;
+            }
 
             //Insert off-air gap
             if ($currentStartDate > $previousEndDate) {
@@ -167,7 +182,9 @@ class Broadcast extends Elements
                 $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $currentEnd);
 
             } else {
-                $filtered[] = $current;
+                if ($errTimePeriodUpdated) {
+                    $filtered[] = $current;
+                }
             }
         }
         return $filtered;
