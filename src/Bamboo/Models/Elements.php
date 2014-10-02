@@ -4,6 +4,7 @@ namespace Bamboo\Models;
 
 class Elements extends Base
 {
+    const PLACEHOLDER_IMAGE_URL = 'http://' . PAL_STATIC_HOST . '/tviplayer/img/default.jpeg';
 
     protected $_type = '';
     protected $_synopses;
@@ -59,13 +60,7 @@ class Elements extends Base
      * @return string
      */
     public function getStandardImage($width = 336, $height = 189) {
-        if (isset($this->_images->standard)) {
-            return str_replace(
-                '{recipe}', $this->_getRecipe($width, $height),
-                $this->_images->standard
-            );
-        }
-        return "";
+        return $this->getImage('standard', $width, $height);
     }
 
     /**
@@ -77,7 +72,8 @@ class Elements extends Base
         if (isset($this->_images->standard)) {
             return $this->_images->standard;
         }
-        return "";
+
+        return self::PLACEHOLDER_IMAGE_URL;
     }
 
     /**
@@ -98,7 +94,8 @@ class Elements extends Base
                 $this->_images->$type
             );
         }
-        return "";
+
+        return self::PLACEHOLDER_IMAGE_URL;
     }
 
     /**
