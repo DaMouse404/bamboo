@@ -16,7 +16,7 @@ class ChannelsTest extends BambooTestCase {
     }
 
     public function testChannelCount() {
-        $this->assertCount(9, $this->_channels);
+        $this->assertCount(10, $this->_channels);
     }
 
     public function testChannelClass() {
