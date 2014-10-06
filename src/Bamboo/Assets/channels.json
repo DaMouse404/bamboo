@@ -47,6 +47,11 @@
       "id": "bbc_alba",
       "title": "BBC ALBA",
       "type": "channel"
+    },
+    {
+      "id": "radio1",
+      "title": "BBC Radio One",
+      "type": "channel"
     }
   ]
 }

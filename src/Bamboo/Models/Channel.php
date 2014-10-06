@@ -12,6 +12,9 @@ class Channel extends Elements
     // @codingStandardsIgnoreEnd
 
     public function getUnregionalisedID() {
+        if ($this->_id === 'bbc_radio_one') {
+            return $this->_id;
+        }
         if (preg_match('/(bbc_[a-z]+)(_.+)/i', $this->_id, $matches)) {
             return $matches[1];
         }
@@ -19,7 +22,7 @@ class Channel extends Elements
     }
 
     public function getSlug() {
-        return preg_replace('/[0-9_]/', '', $this->getUnregionalisedID());
+        return preg_replace('/[24_]/', '', $this->getUnregionalisedID());
     }
 
     public function getRegion() {
