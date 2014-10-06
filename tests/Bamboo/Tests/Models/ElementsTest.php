@@ -5,6 +5,7 @@ namespace Bamboo\Tests\Models;
 use Bamboo\Tests\BambooTestCase;
 use Bamboo\Models\Episode;
 use Bamboo\Models\Elements;
+use Bamboo\Configuration;
 
 class ElementsTest extends BambooTestCase
 {
@@ -74,10 +75,11 @@ class ElementsTest extends BambooTestCase
     }
 
     public function testGetImage() {
+        $placeholderImageUrl = Configuration::getPlaceholderImageUrl();
         $element = $this->_createElement(array());
-        $this->assertEquals($element->getImage(), Elements::PLACEHOLDER_IMAGE_URL);
-        $this->assertEquals($element->getStandardImage(), Elements::PLACEHOLDER_IMAGE_URL);
-        $this->assertEquals($element->getStandardImageRecipe(), Elements::PLACEHOLDER_IMAGE_URL);
+        $this->assertEquals($element->getImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImageRecipe(), $placeholderImageUrl);
 
         $params = array('images' =>
             (object) array('standard' => 'http://ichef.live.bbci.co.uk/images/ic/{recipe}/legacy/episode/p01b2b5c.jpg')

@@ -2,9 +2,10 @@
 
 namespace Bamboo\Models;
 
+use Bamboo\Configuration;
+
 class Elements extends Base
 {
-    const PLACEHOLDER_IMAGE_URL = 'http://' . PAL_STATIC_HOST . '/tviplayer/img/default.jpeg';
 
     protected $_type = '';
     protected $_synopses;
@@ -73,7 +74,7 @@ class Elements extends Base
             return $this->_images->standard;
         }
 
-        return self::PLACEHOLDER_IMAGE_URL;
+        return Configuration::getPlaceholderImageUrl();
     }
 
     /**
@@ -95,7 +96,7 @@ class Elements extends Base
             );
         }
 
-        return self::PLACEHOLDER_IMAGE_URL;
+        return Configuration::getPlaceholderImageUrl();
     }
 
     /**
