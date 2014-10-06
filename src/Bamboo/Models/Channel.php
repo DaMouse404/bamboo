@@ -22,6 +22,7 @@ class Channel extends Elements
     }
 
     public function getSlug() {
+        // This filters out the 24 in bbc_news_24 as well as _'s
         return preg_replace('/[24_]/', '', $this->getUnregionalisedID());
     }
 
