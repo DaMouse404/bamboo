@@ -56,12 +56,31 @@ class ChannelTest extends BambooTestCase
     );
   }
 
-  private function _mockChannelObject() {
-    $object = (object) array(
-        "id" => "bbc_one_london",
-        "title" => "BBC One",
-        "type" => "channel",
-        "region" => "LONDON"
+  public function testHasSchedule() {
+      $channelData = $this->_mockChannelObject(
+                    array("has_schedule"=>true)
+                 );
+      $channel = new Channel($channelData);
+      $this->assertTrue($channel->hasSchedule());
+
+      $channelData = $this->_mockChannelObject(
+                    array("has_schedule"=>false)
+                );
+      $channel = new Channel($channelData);
+      $this->assertFalse($channel->hasSchedule());
+
+      $this->assertFalse($this->_channel->hasSchedule());
+  }
+
+  private function _mockChannelObject($override = array()) {
+    $object = (object) array_merge(
+        array(
+            "id" => "bbc_one_london",
+            "title" => "BBC One",
+            "type" => "channel",
+            "region" => "LONDON"
+        ),
+        $override
     );
 
     return $object;

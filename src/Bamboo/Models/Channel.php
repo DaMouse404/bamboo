@@ -7,6 +7,10 @@ class Channel extends Elements
 
     protected $_region = "";
 
+    // @codingStandardsIgnoreStart
+    protected $_has_schedule = false;
+    // @codingStandardsIgnoreEnd
+
     public function getUnregionalisedID() {
         if (preg_match('/(bbc_[a-z]+)(_.+)/i', $this->_id, $matches)) {
             return $matches[1];
@@ -30,4 +34,13 @@ class Channel extends Elements
         return $this->_id === 'cbbc' || $this->_id === 'cbeebies';
     }
 
+    /**
+     * Returns whether this channel has a schedule available
+     * @return bool
+     */
+    public function hasSchedule() {
+        // @codingStandardsIgnoreStart
+        return !!$this->_has_schedule;
+        // @codingStandardsIgnoreEnd
+    }
 }
