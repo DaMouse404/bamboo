@@ -25,19 +25,19 @@ class SchedulesTest extends BambooTestCase
 
         //Second and third are duplicated
         $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_duplicated');
-        $this->assertEquals(null, $broadcasts[1]->getEpisode()->getId());
         $this->assertCount(7, $broadcasts);
 
         //Second and third are overlapped
         $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_overlap');
-        $this->assertEquals(null, $broadcasts[1]->getEpisode()->getId());
-        $this->assertCount(7, $broadcasts);
-        $this->_assertStartEndTimes($broadcasts[1], '07:00', '09:00');
+        $this->assertEquals(null, $broadcasts[2]->getEpisode()->getId());
+        $this->assertCount(8, $broadcasts);
+        $this->_assertStartEndTimes($broadcasts[1], '07:00', '08:00');
+        $this->_assertStartEndTimes($broadcasts[2], '08:00', '09:00');
 
         //Third is inside second
         $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_inside');
-        $this->assertEquals(null, $broadcasts[1]->getEpisode()->getId());
         $this->_assertStartEndTimes($broadcasts[1], '07:00', '09:00');
+        $this->_assertStartEndTimes($broadcasts[2], '09:00', '10:00');
         $this->assertCount(7, $broadcasts);
 
         //There's a gap between second and third
@@ -53,9 +53,22 @@ class SchedulesTest extends BambooTestCase
     public function testMultiOverlap() {
         $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_multi_overlap');
 
-        $this->_assertStartEndTimes($broadcasts[0], '06:00', '08:00');
-        $this->_assertStartEndTimes($broadcasts[1], '08:00', '10:00');
-        $this->assertCount(2, $broadcasts);
+        $this->_assertStartEndTimes($broadcasts[0], '06:00', '06:10');
+        $this->_assertStartEndTimes($broadcasts[1], '06:10', '06:20');
+        $this->_assertStartEndTimes($broadcasts[2], '06:20', '06:35');
+        $this->_assertStartEndTimes($broadcasts[11], '08:00', '10:00');
+        $this->assertCount(12, $broadcasts);
+    }
+
+    public function testMultiOverlapContinuous() {
+        $broadcasts = $this->_getBroadcastsForFixture('schedule_overlaps_continuous_overlap');
+
+        $this->assertCount(14, $broadcasts);
+
+        $this->_assertStartEndTimes($broadcasts[2], '08:15', '09:15');
+        $this->_assertStartEndTimes($broadcasts[3], '09:15', '09:45');
+        $this->_assertStartEndTimes($broadcasts[6], '12:50', '15:00');
+        $this->_assertStartEndTimes($broadcasts[12], '19:00', '19:30');
     }
 
     private function _assertStartEndTimes($broadcast, $start, $end) {
