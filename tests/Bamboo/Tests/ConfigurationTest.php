@@ -68,10 +68,10 @@ class ConfigurationTest extends BambooTestCase
 
         $client = Client::getInstance()->getClient('atoz');
 
-        $l = $client->getEventDispatcher()->getListeners();
+        $clientListeners = $client->getEventDispatcher()->getListeners();
 
         // Check that the cache plugin was properly attached
-        $this->assertInstanceOf('Guzzle\Plugin\Cache\CachePlugin', $l['request.sent'][0][0]);
+        $this->assertInstanceOf('Guzzle\Plugin\Cache\CachePlugin', $clientListeners['request.sent'][0][0]);
     }
 }
 
