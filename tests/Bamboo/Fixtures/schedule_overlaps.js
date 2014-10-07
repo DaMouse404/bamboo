@@ -80,6 +80,28 @@ module.exports = function (creator, fixtureName) {
        fixture.data.schedule.elements = createBroadcastsFromTimeSeries();
        fixture.save(fixtureName + '_multi_overlap');
 
+       hours = [
+            ['07:00', '07:15'], 
+            ['07:15', '08:15'], 
+            ['07:45', '08:45'], //overlap
+            ['08:15', '09:15'], //overlap
+            ['08:45', '09:15'], //overlap
+            ['09:15', '09:45'],
+            ['09:45', '12:15'],
+            ['12:15', '12:50'],
+            ['15:00', '16:05'], //gap
+            ['16:05', '16:30'],
+            ['16:30', '17:00'],
+            ['17:00', '18:00'],
+            ['18:00', '19:00'],
+            ['18:30', '19:00'], //overlap
+            ['19:00', '19:30'],
+            ['19:30', '20:00']
+       ];
+
+       fixture.data.schedule.elements = createBroadcastsFromTimeSeries();
+       fixture.save(fixtureName + '_continuous_overlap');
+
     });
 
 };

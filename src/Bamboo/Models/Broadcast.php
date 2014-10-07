@@ -126,66 +126,37 @@ class Broadcast extends Elements
 
     public static function cleanBroadcasts($broadcasts) {
         $filtered = array();
-        $errTimePeriodStart = null;
-        $errTimePeriodEnd = null;
 
-        foreach ($broadcasts as $i => $current) {
-            $errTimePeriodUpdated = false;
-            if ($i === 0) {
+        foreach ($broadcasts as $current) {
+            if (count($filtered) === 0) {
                 $filtered[] = $current;
                 continue;
             }
-            $previous = $broadcasts[$i - 1];
-
-            //The previous broadcast was marked as useless
-            if (!$previous) {
-                if ($current->getEndTime() >= $errTimePeriodEnd) {
-                    $filtered[] = $current;
-                }
-                continue;
-            }
+            $previous = end($filtered);
 
             $currentStart = $current->getStartTime();
-            $currentEnd = $current->getEndTime();
-            $previousStart = $previous->getStartTime();
             $previousEnd = $previous->getEndTime();
 
             $previousEndDate = new \DateTime($previousEnd);
-            $currentEndDate = new \DateTime($currentEnd);
             $currentStartDate = new \DateTime($currentStart);
 
-            //Check and set fault params
-            if ($currentStart <= $errTimePeriodStart && $currentEnd >= $errTimePeriodEnd
-                || $currentStart >= $errTimePeriodEnd) {
-                
-                $errTimePeriodStart = $currentStart;
-                $errTimePeriodEnd = $currentEnd;
-                $errTimePeriodUpdated = true;
+            // All is good
+            if ($currentStart === $previousEnd) {
+                $filtered[] = $current;
+                continue;
             }
 
-            //Insert off-air gap
+            // Gap
             if ($currentStartDate > $previousEndDate) {
                 $filtered[] = self::getEmptyBroadcast($previousEnd, $currentStart);
                 $filtered[] = $current;
-
-                //Duplicates: get rid of both
-            } else if ($currentStart === $previousStart && $currentEnd === $previousEnd) {
-                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $previousEnd);
-
-                //One programme inside another: get rid of both
-            } else if ($currentEndDate < $previousEndDate) {
-                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $previousEnd);
-                $broadcasts[$i] = false; //Don't take this programme into account for the next iteration
-
-                //Overlap: get rid of both
-            } else if ($currentStartDate < $previousEndDate) {
-                $filtered[count($filtered) - 1] = self::getEmptyBroadcast($previousStart, $currentEnd);
-
-            } else {
-                if ($errTimePeriodUpdated) {
-                    $filtered[] = $current;
-                }
+                continue;
             }
+            // Overlap
+            if ($currentStartDate < $previousEndDate) {
+                continue;
+            }
+
         }
         return $filtered;
     }
