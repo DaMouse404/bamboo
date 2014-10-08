@@ -154,11 +154,14 @@ class Client
 
         try {
             $requests = array();
+            // Get a key to use to group requests together in the logs
+            $requestGroupKey = mb_substr(microtime(), 3, 4);
             foreach ($feeds as $feed) {
                 $params = array_merge($this->_defaultParams, $this->_config, $feed[1]);
 
                 $fullUrl = $this->_host . $this->_baseUrl . $feed[0];
-                Log::info('BAMBOO: Parallel iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
+                $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
+                Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
                 $requests[] = $client->get(
                     $this->_baseUrl . $feed[0] . '.json',
                     array(),
@@ -192,7 +195,7 @@ class Client
 
         $fullUrl = $this->_host . $this->_baseUrl . $feed;
 
-        Log::info('Fetching iBL feed: %s.json with params: "%s"', $fullUrl, http_build_query($params));
+        Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
             $request = $client->get(
