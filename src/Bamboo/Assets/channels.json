@@ -47,6 +47,11 @@
       "id": "bbc_alba",
       "title": "BBC ALBA",
       "type": "channel"
+    },
+    {
+      "id": "s4cpbs",
+      "title": "S4C",
+      "type": "channel"
     }
   ]
 }
