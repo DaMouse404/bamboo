@@ -19,7 +19,10 @@ class Channel extends Elements
     }
 
     public function getSlug() {
-        return preg_replace('/[0-9_]/', '', $this->getUnregionalisedID());
+	// News24 only
+        $slug = str_replace('24', '', $this->getUnregionalisedID());
+
+        return str_replace('_', '', $slug);
     }
 
     public function getRegion() {
