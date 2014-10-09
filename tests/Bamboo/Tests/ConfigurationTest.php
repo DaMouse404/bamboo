@@ -75,8 +75,6 @@ class ConfigurationTest extends BambooTestCase
     }
 }
 
-class MockCounter {}
-
 class MockConfigurationLogger {
     public function log() {}
 }

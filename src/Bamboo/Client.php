@@ -94,6 +94,7 @@ class Client
                 $fullUrl = Configuration::getHost() . $baseUrl . $feed[0];
                 $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
                 Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
+
                 $requests[] = $this->_getRequestObject($client, $baseUrl, $feed[0], $params);
             }
 
@@ -117,7 +118,6 @@ class Client
         $params = array_merge($this->_defaultParams, Configuration::getConfig(), $params);
         $baseUrl = Configuration::getBaseUrl();
         $fullUrl = Configuration::getHost() . $baseUrl . $feed;
-
         Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
@@ -134,14 +134,15 @@ class Client
 
     private function _getRequestObject($client, $baseUrl, $feed, $params) {
         $feedUrl = $baseUrl . $feed . ".json";
+        $networkProxy = Configuration::getNetworkProxy();
 
         return $client->get(
             $feedUrl,
             array(),
             array(
                 'query' => $params,
-                'proxy' => Configuration::getNetworkProxy(),
-                'timeout'         => 6, // 6 seconds
+                'proxy' => $networkProxy,
+                'timeout' => 6, // 6 seconds
                 'connect_timeout' => 5 // 5 seconds
             )
         );
