@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    path = require('path'),
     blowupOnFeedError = process.argv[2] !== '--ignoreErrors',
     config = {
         savePath: __dirname + '/../tests/fixtures/',
@@ -13,11 +14,14 @@ var fs = require('fs'),
     Fixtures = require('fixturator'),
     creator = new Fixtures(config);
 
-function deleteFilesRecursive(path) {
-    if( fs.existsSync(path) ) {
-        fs.readdirSync(path).forEach(function(file,index){
-            var curPath = path + "/" + file;
+function deleteFilesRecursive(filePath) {
+    if(fs.existsSync(filePath)) {
+        fs.readdirSync(filePath).forEach(function(file,index){
+            var curPath = filePath + "/" + file;
             if (file == '.gitkeep')
+                return true;
+
+            if (path.resolve(curPath) === path.resolve(config.cacheDir))
                 return true;
 
             if(fs.lstatSync(curPath).isDirectory()) {
