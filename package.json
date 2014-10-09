@@ -5,6 +5,6 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "fixturator": "git+https://github.com/iplayer/fixturator#v0.1.14"
+    "fixturator": "git+https://github.com/iplayer/fixturator#v0.1.15"
   }
 }
