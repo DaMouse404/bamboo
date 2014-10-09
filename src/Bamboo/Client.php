@@ -94,16 +94,7 @@ class Client
                 $fullUrl = Configuration::getHost() . $baseUrl . $feed[0];
                 $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
                 Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
-                $requests[] = $client->get(
-                    $baseUrl . $feed[0] . '.json',
-                    array(),
-                    array(
-                        'query' => $params,
-                        'proxy' => Configuration::getNetworkProxy(),
-                        'timeout'         => 6, // 6 seconds
-                        'connect_timeout' => 5 // 5 seconds
-                    )
-                );
+                $requests[] = $this->_getRequestObject($client, $baseUrl, $feed[0], $params);
             }
 
             $responses = $client->send($requests);
@@ -130,16 +121,7 @@ class Client
         Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
-            $request = $client->get(
-                $baseUrl . $feed . ".json",
-                array(),
-                array(
-                    'query' => $params,
-                    'proxy' => Configuration::getNetworkProxy(),
-                    'timeout'         => 6, // 6 seconds
-                    'connect_timeout' => 5 // 5 seconds
-                )
-            );
+            $request = $this->_getRequestObject($client, $baseUrl, $feed, $params);
             $response = $request->send();
         } catch (\Exception $e) {
             $this->_parseRequestException($e, $feed);
@@ -148,6 +130,21 @@ class Client
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
+    }
+
+    private function _getRequestObject($client, $baseUrl, $feed, $params) {
+        $feedUrl = $baseUrl . $feed . ".json";
+
+        return $client->get(
+            $feedUrl,
+            array(),
+            array(
+                'query' => $params,
+                'proxy' => Configuration::getNetworkProxy(),
+                'timeout'         => 6, // 6 seconds
+                'connect_timeout' => 5 // 5 seconds
+            )
+        );
     }
 
     private function _parseRequestException ($e, $feed) {
