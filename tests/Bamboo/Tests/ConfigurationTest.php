@@ -49,10 +49,10 @@ class ConfigurationTest extends BambooTestCase
         $this->assertEquals('Take Cake', Configuration::getHost());
     }
 
-    public function testLoggerGetterAndSetter() {
+    public function tesSetLogger() {
         $mockLogger = new MockConfigurationLogger;
         Configuration::setLogger($mockLogger);
-        $this->assertInstanceOf('Bamboo\Tests\MockConfigurationLogger', Configuration::getLogger());
+        $this->assertAttributeEquals($mockLogger, '_logger', '\Bamboo\Log');
     }
 
     public function testNetworkProxyGetterAndSetter() {

@@ -129,10 +129,6 @@ class Configuration
         return self::$_failHttpClient;
     }
 
-    public static function getLogger() {
-       return Log::getLogger();
-    }
-
     public static function getPlaceholderImageUrl() {
         return self::$_placeholderImageUrl;
     }
