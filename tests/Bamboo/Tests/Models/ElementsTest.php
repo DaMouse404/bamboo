@@ -81,6 +81,18 @@ class ElementsTest extends BambooTestCase
         $this->assertEquals($element->getStandardImage(), $placeholderImageUrl);
         $this->assertEquals($element->getStandardImageRecipe(), $placeholderImageUrl);
 
+        $params = array('images' => (object) array());
+        $element = $this->_createElement($params);
+        $this->assertEquals($element->getImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImageRecipe(), $placeholderImageUrl);
+
+        $params = array('images' => (object) array('standard' => ''));
+        $element = $this->_createElement($params);
+        $this->assertEquals($element->getImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImage(), $placeholderImageUrl);
+        $this->assertEquals($element->getStandardImageRecipe(), $placeholderImageUrl);
+
         $params = array('images' =>
             (object) array('standard' => 'http://ichef.live.bbci.co.uk/images/ic/{recipe}/legacy/episode/p01b2b5c.jpg')
         );

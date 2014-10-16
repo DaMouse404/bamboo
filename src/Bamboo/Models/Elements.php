@@ -70,7 +70,7 @@ class Elements extends Base
      * @return string
      */
     public function getStandardImageRecipe() {
-        if (isset($this->_images->standard)) {
+        if (isset($this->_images->standard) && !empty($this->_images->standard)) {
             return $this->_images->standard;
         }
 
@@ -88,7 +88,7 @@ class Elements extends Base
      * @return string
      */
     public function getImage($type = 'standard', $width = 336, $height = 581) {
-        if (isset($this->_images->$type)) {
+        if (isset($this->_images->$type) && !empty($this->_images->$type)) {
             return str_replace(
                 '{recipe}',
                 $this->_getRecipe($width, $height),
