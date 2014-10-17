@@ -11,10 +11,17 @@ class Counter
     protected static $_counter = null;
 
     /**
-     * Set the logger to use
+     * Set the counter to use
      */
     public static function setCounter($counter) {
         self::$_counter = $counter;
+    }
+
+    /**
+     * Get the counter used
+     */
+    public static function getCounter() {
+        return self::$_counter;
     }
 
     /*

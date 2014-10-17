@@ -12,6 +12,7 @@ use Guzzle\Http\Exception\MultiTransferException;
 use Guzzle\Http\Exception\CurlException;
 use Bamboo\Log;
 use Bamboo\Counter;
+use Bamboo\Configuration;
 use Bamboo\Exception;
 use Bamboo\Exception\EmptyFeed;
 
@@ -29,45 +30,10 @@ class Client
     const LOCALE_LENGTH = 2;
 
     /*
-     * Hostname used for the request.
-     * @var string
-     */
-    private $_host = "";
-    /*
-     * URL prepended to all feeds for the service. Contains provider name and version.
-     * @var string
-     */
-    private $_baseUrl = "";
-    /*
-     * Tells the HTTP Client what proxy it must route traffic through if necessary.
-     * @var string
-     */
-    private $_networkProxy = "";
-    /*
      * The service used by iBL to respond to clients. Default state is off. Errors are handled differently.
      * @var boolean
      */
     private $_serviceProxy = false;
-    /*
-     *
-     * @var CacheInterface
-     */
-    private $_cache = false;
-    /*
-     * Used to set api_key and any other important feed info which is later merged over $_defaultParams.
-     * @var array
-     */
-    private $_config = array();
-    /*
-     * The HTTP Client to use for normal unit tests, cukes and reading fixtures.
-     * @var object
-     */
-    private $_fakeHttpClient;
-    /*
-     * The HTTP Client to use to to do all the above except for error and fail states/responses.
-     * @var object
-     */
-    private $_failHttpClient;
     /*
      * An array of params appended onto every request as a query string.
      * @var array
@@ -78,7 +44,6 @@ class Client
                                 "lang" => "en",
                                 "rights" => "web"
             );
-
     /*
      * Singleton interface for the client.
      */
@@ -92,41 +57,8 @@ class Client
         return self::$instance;
     }
 
-    public function setHost($host) {
-        $this->_host = $host;
-    }
-
-    public function setBaseUrl($baseUrl) {
-        $this->_baseUrl = $baseUrl;
-    }
-
-    public function setFakeHttpClient($fakeHttpClient) {
-        $this->_fakeHttpClient = $fakeHttpClient;
-    }
-
-    public function setFailHttpClient($failHttpClient) {
-        $this->_failHttpClient = $failHttpClient;
-    }
-
-    public function setConfig($config) {
-        $this->_config = $config;
-    }
-
-    public function setNetworkProxy($proxy) {
-        $this->_networkProxy = $proxy;
-    }
-
     public function setServiceProxy($bool) {
         $this->_serviceProxy = $bool;
-    }
-
-    /**
-     *  Binds the cacheadapter to the cache as a plugin to Guzzle
-     */
-    public function setCache($cache) {
-        $cachePlugin = new CachePlugin($cache);
-
-        $this->_cache = $cachePlugin;
     }
 
     /*
@@ -157,21 +89,13 @@ class Client
             // Get a key to use to group requests together in the logs
             $requestGroupKey = mb_substr(microtime(), 3, 4);
             foreach ($feeds as $feed) {
-                $params = array_merge($this->_defaultParams, $this->_config, $feed[1]);
-
-                $fullUrl = $this->_host . $this->_baseUrl . $feed[0];
+                $params = array_merge($this->_defaultParams, Configuration::getConfig(), $feed[1]);
+                $baseUrl = Configuration::getBaseUrl();
+                $fullUrl = Configuration::getHost() . $baseUrl . $feed[0];
                 $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
                 Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
-                $requests[] = $client->get(
-                    $this->_baseUrl . $feed[0] . '.json',
-                    array(),
-                    array(
-                        'query' => $params,
-                        'proxy' =>  $this->_networkProxy,
-                        'timeout'         => 6, // 6 seconds
-                        'connect_timeout' => 5 // 5 seconds
-                    )
-                );
+
+                $requests[] = $this->_getRequestObject($client, $baseUrl, $feed[0], $params);
             }
 
             $responses = $client->send($requests);
@@ -191,23 +115,13 @@ class Client
      */
     public function request($feed, $params) {
         $client = $this->getClient($feed);
-        $params = array_merge($this->_defaultParams, $this->_config, $params);
-
-        $fullUrl = $this->_host . $this->_baseUrl . $feed;
-
+        $params = array_merge($this->_defaultParams, Configuration::getConfig(), $params);
+        $baseUrl = Configuration::getBaseUrl();
+        $fullUrl = Configuration::getHost() . $baseUrl . $feed;
         Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
-            $request = $client->get(
-                $this->_baseUrl . $feed . ".json",
-                array(),
-                array(
-                    'query' => $params,
-                    'proxy' =>  $this->_networkProxy,
-                    'timeout'         => 6, // 6 seconds
-                    'connect_timeout' => 5 // 5 seconds
-                )
-            );
+            $request = $this->_getRequestObject($client, $baseUrl, $feed, $params);
             $response = $request->send();
         } catch (\Exception $e) {
             $this->_parseRequestException($e, $feed);
@@ -216,6 +130,22 @@ class Client
         $object = $this->_parseResponse($response, $feed, $params);
 
         return $object;
+    }
+
+    private function _getRequestObject($client, $baseUrl, $feed, $params) {
+        $feedUrl = $baseUrl . $feed . ".json";
+        $networkProxy = Configuration::getNetworkProxy();
+
+        return $client->get(
+            $feedUrl,
+            array(),
+            array(
+                'query' => $params,
+                'proxy' => $networkProxy,
+                'timeout' => 6, // 6 seconds
+                'connect_timeout' => 5 // 5 seconds
+            )
+        );
     }
 
     private function _parseRequestException ($e, $feed) {
@@ -317,17 +247,17 @@ class Client
     public function getClient($feed) {
 
         if ($this->_useFixture($feed)) {
-            return $this->_fakeHttpClient;
+            return Configuration::getFakeHttpClient();
         }
 
         if ($this->_useFailure($feed)) {
-            return $this->_failHttpClient;
+            return Configuration::getFailHttpClient();
         }
 
-        $client = new Http\Client($this->_host);
+        $client = new Http\Client(Configuration::getHost());
 
-        if ( $this->_cache ) {
-            $client->addSubscriber($this->_cache);
+        if (Configuration::getCache()) {
+            $client->addSubscriber(Configuration::getCache());
         }
 
         return $client;

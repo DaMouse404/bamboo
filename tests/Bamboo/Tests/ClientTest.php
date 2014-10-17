@@ -48,28 +48,10 @@ class ClientTest extends BambooTestCase
     }
 
     public function testConfigSetters() {
-        $client = new Client();
+        $client = Client::getInstance();
 
-        $client->setHost('Take Cake');
-        $this->assertAttributeEquals('Take Cake', '_host', $client);
-
-        $client->setBaseUrl('Bake Cake');
-        $this->assertAttributeEquals('Bake Cake', '_baseUrl', $client);
-
-        $client->setConfig('Make Cake');
-        $this->assertAttributeEquals('Make Cake', '_config', $client);
-
-        $client->setNetworkProxy('Drake Cake');
-        $this->assertAttributeEquals('Drake Cake', '_networkProxy', $client);
-
-        $client->setServiceProxy('Fake Cake');
-        $this->assertAttributeEquals('Fake Cake', '_serviceProxy', $client);
-
-        $client->setFakeHttpClient('Quake Cake');
-        $this->assertAttributeEquals('Quake Cake', '_fakeHttpClient', $client);
-
-        $client->setFailHttpClient('Snake Cake');
-        $this->assertAttributeEquals('Snake Cake', '_failHttpClient', $client);
+        $client->setServiceProxy('Proxy Cake');
+        $this->assertAttributeEquals('Proxy Cake', '_serviceProxy', $client);
     }
 
     /*
@@ -221,20 +203,6 @@ class ClientTest extends BambooTestCase
             $this->assertEquals(1, $endCount);
             $this->assertInstanceOf('\Bamboo\Exception\BadRequest', $e);
         }
-    }
-
-    public function testSetCache() {
-        $cache = $this->getMockBuilder('Guzzle\Cache\CacheAdapterInterface')
-                    ->getMockForAbstractClass();
-
-        Client::getInstance()->setCache($cache);
-
-        $client = Client::getInstance()->getClient('atoz');
-
-        $l = $client->getEventDispatcher()->getListeners();
-
-        // Check that the cache plugin was properly attached
-        $this->assertInstanceOf('Guzzle\Plugin\Cache\CachePlugin', $l['request.sent'][0][0]);
     }
 
     private function _multiRequestException($requests, $err) {

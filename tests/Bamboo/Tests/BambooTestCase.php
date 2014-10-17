@@ -3,6 +3,7 @@
 namespace Bamboo\Tests;
 
 use \Bamboo\Client;
+use \Bamboo\Configuration;
 use \Bamboo\Http\Fake;
 use \Bamboo\Http\Fail;
 
@@ -18,7 +19,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
      */
     public function tearDown() {
         unset($_GET['_fake']);
-        Client::getInstance()->setFakeHttpClient(null);
+        Configuration::setFakeHttpClient(null);
         Client::getInstance()->setServiceProxy(false);
 
         parent::tearDown();
@@ -36,9 +37,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         $httpFake->setFixturesPath($path);
         \Bamboo\Counter::setCounter("Bamboo\CounterFake");
 
-        Client::getInstance()->setFakeHttpClient(
-            $httpFake
-        );
+        Configuration::setFakeHttpClient($httpFake);
 
         Client::getInstance()->setServiceProxy(true);
     }
@@ -63,9 +62,7 @@ abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
         $path =  dirname(__FILE__) . self::FIXTURE_PATH;
         $httpFail->setFixturesPath($path);
 
-        Client::getInstance()->setFailHttpClient(
-            $httpFail
-        );
+        Configuration::setFailHttpClient($httpFail);
 
         Client::getInstance()->setServiceProxy(true);
     }
