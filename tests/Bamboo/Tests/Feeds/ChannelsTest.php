@@ -10,13 +10,11 @@ class ChannelsTest extends BambooTestCase {
     private $_channels = array();
 
     public function setUp() {
+        parent::setupRequest("channels@channels");
+
         $channelModel = new Channels();
 
         $this->_channels = $channelModel->getChannels();
-    }
-
-    public function testChannelCount() {
-        $this->assertCount(9, $this->_channels);
     }
 
     public function testChannelClass() {
