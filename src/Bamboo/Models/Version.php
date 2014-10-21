@@ -69,7 +69,7 @@ class Version extends Base
 
         if ( $end ) {
             $end = strtotime($end);
-            return ceil(($end - time()) / (24 * 60 * 60));
+            return ceil(($end - gmmktime()) / (24 * 60 * 60));
         }
 
         return 0;
@@ -90,7 +90,7 @@ class Version extends Base
         if ( $start ) {
             $start = strtotime($start);
 
-            return ceil((time() - $start) / (24 * 60 * 60));
+            return ceil((gmmktime() - $start) / (24 * 60 * 60));
         }
 
         return 0;

@@ -24,9 +24,8 @@ class VersionTest extends BambooTestCase
 
     public function testGetRemainingDaysAvailable() {
         $version = $this->_createVersion(array('availability' => (object) array(
-            'end' => date('c', strtotime('+5 days'))
+            'end' => $this->_createAdjustedUTCTime('+5 days')
         )));
-
         $this->assertEquals(5, $version->getRemainingDaysAvailable());
     }
 
@@ -35,8 +34,8 @@ class VersionTest extends BambooTestCase
         $this->assertEquals(0, $version->getAvailabilityDay());
 
         $version = $this->_createVersion(array('availability' => (object) array(
-            'start' => date('c', strtotime('-3 days -1 hour')),
-            'end' => date('c', strtotime('+5 days'))
+            'start' => $this->_createAdjustedUTCTime('-3 days -1 hour'),
+            'end' => $this->_createAdjustedUTCTime('+5 days')
         )));
 
         // This is past the 3rd day and thus in the 4th period
@@ -44,9 +43,10 @@ class VersionTest extends BambooTestCase
     }
 
     public function testGetAvailabilityDayOne() {
+        $dt = new \DateTime('today UTC');
         $version = $this->_createVersion(array('availability' => (object) array(
-            'start' => date('c', strtotime('today')),
-            'end' => date('c', strtotime('+5 days'))
+            'start' => $dt->format('c'),
+            'end' => $this->_createAdjustedUTCTime('+5 days')
         )));
 
         // This in the 1st period
@@ -277,9 +277,18 @@ class VersionTest extends BambooTestCase
                 'text' => $text,
                 'value' => $value
             )
-	));
+        ));
+
         return $ver;
-   }
+    }
+
+    public function _createAdjustedUTCTime($adjustment) {
+        $dt = new \DateTime('UTC');
+        $di = \DateInterval::createFromDateString($adjustment);
+        $dt->add($di);
+
+        return $dt->format('c');
+    }
 
     private function _createVersion($params) {
         return new Version((object) $params);
