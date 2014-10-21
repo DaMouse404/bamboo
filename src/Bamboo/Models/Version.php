@@ -50,10 +50,10 @@ class Version extends Base
         $end = $this->getAvailability('end');
 
         if ( $start && $end ) {
-            $start = strtotime($start);
-            $end = strtotime($end);
+            $start = new \DateTime($start);
+            $end = new \DateTime($end);
 
-            return ceil(($end - $start) / (24 * 60 * 60));
+            return $end->diff($start)->format('%d');
         }
 
         return 0;
@@ -68,8 +68,10 @@ class Version extends Base
         $end = $this->getAvailability('end');
 
         if ( $end ) {
-            $end = strtotime($end);
-            return ceil(($end - gmmktime()) / (24 * 60 * 60));
+            $now = new \DateTime('UTC');
+            $end = new \DateTime($end);
+
+            return $end->diff($now)->format('%d');
         }
 
         return 0;
@@ -88,9 +90,10 @@ class Version extends Base
         $start = $this->getAvailability('start');
 
         if ( $start ) {
-            $start = strtotime($start);
+            $now = new \DateTime('UTC');
+            $start = new \DateTime($start);
 
-            return ceil((gmmktime() - $start) / (24 * 60 * 60));
+            return $now->add(new \DateInterval('P1D'))->diff($start)->format('%d');
         }
 
         return 0;
