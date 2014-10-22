@@ -4,7 +4,7 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Episode;
 
-class Episodes extends Base
+class Episodes extends BaseParallel
 {
 
     protected $_feed = 'episodes/{pids}';
@@ -13,13 +13,31 @@ class Episodes extends Base
     public function __construct($params, $pids) {
         $this->_setPids($pids);
         parent::__construct($params);
+
+        // grab all the parallel responses and add them all to a single response object for easy access
+        $responses = $this->_responses;
+
+        $baseResponse = array_shift($responses);
+        foreach ($responses as $response) {
+            $baseResponse->episodes = array_merge($baseResponse->episodes, $response->episodes);
+        }
+
+        $this->_response = $baseResponse;
     }
 
     private function _setPids($pids) {
-        if (is_array($pids)) {
-            $pids = join($pids, ",");
+        $feedName = $this->_feed;
+
+        if (!is_array($pids)) {
+            $pids = array($pids);
         }
-        $this->_feed = str_replace("{pids}", $pids, $this->_feed);
+
+        $this->_feeds = array_map(
+            function ($pid) use ($feedName) {
+                return str_replace("{pids}", $pid, $feedName);
+            },
+            $pids
+        );
     }
 
     /*
