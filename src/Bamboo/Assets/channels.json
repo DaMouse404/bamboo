@@ -6,47 +6,56 @@
     {
       "id": "bbc_one_london",
       "title": "BBC One",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_two_england",
       "title": "BBC Two",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_three",
       "title": "BBC Three",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_four",
       "title": "BBC Four",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "cbbc",
       "title": "CBBC",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "cbeebies",
       "title": "CBeebies",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_news24",
       "title": "BBC News",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_parliament",
       "title": "BBC Parliament",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     },
     {
       "id": "bbc_alba",
       "title": "BBC ALBA",
-      "type": "channel"
+      "type": "channel",
+      "has_schedule": true
     }
   ]
 }
