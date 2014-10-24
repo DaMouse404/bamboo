@@ -296,7 +296,7 @@ class Client
             $fakedFeed = $fakePath;
         }
 
-        if ($this->_doesHaveMatches($feed, $fakedFeed)) {
+        if ($this->_doesHaveMatches($feed . ".json", $fakedFeed)) {
             return true;
         }
     }
