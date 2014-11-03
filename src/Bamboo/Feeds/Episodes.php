@@ -8,6 +8,7 @@ class Episodes extends BaseParallel
 {
 
     protected $_feed = 'episodes/{pids}';
+    protected $_feeds = array();
     protected $_response;
 
     public function __construct($params, $pids) {
