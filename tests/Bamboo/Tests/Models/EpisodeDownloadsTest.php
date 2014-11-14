@@ -1,11 +1,11 @@
 <?php
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Version;
 use Bamboo\Models\Episode;
 
-class EpisodeDownloadsTest extends BambooTestCase
+class EpisodeDownloadsTest extends BambooBaseTestCase
 {
     public function testItReturnsAnArray() {
         $version = $this->_createVersions(array('original' => true));

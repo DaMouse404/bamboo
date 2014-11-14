@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Feeds;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Atoz;
 
-class AtozTest extends BambooTestCase
+class AtozTest extends BambooClientTestCase
 {
 
   public function setUp() {
@@ -16,7 +16,7 @@ class AtozTest extends BambooTestCase
 
   public function testProgrammeItemType() {
     $this->assertEquals(
-        get_class($this->_programmes[0]), 
+        get_class($this->_programmes[0]),
         "Bamboo\Models\Programme"
     );
   }

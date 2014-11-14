@@ -4,7 +4,7 @@ namespace Bamboo\Tests;
 
 use Bamboo\Log;
 
-class LogTest extends BambooTestCase {
+class LogTest extends BambooBaseTestCase {
 
     public function tearDown() {
         Log::setLogger(null);

@@ -2,11 +2,11 @@
 
 namespace Bamboo\Tests\Feeds;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Schedules;
 use Bamboo\Models\Broadcast;
 
-class SchedulesTest extends BambooTestCase
+class SchedulesTest extends BambooClientTestCase
 {
     private $_broadcasts;
 

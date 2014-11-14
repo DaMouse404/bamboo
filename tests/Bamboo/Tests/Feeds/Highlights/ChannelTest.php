@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Feeds\Highlights;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Highlights\Channel;
 
-class ChannelTest extends BambooTestCase
+class ChannelTest extends BambooClientTestCase
 {
 
   private $_elements;

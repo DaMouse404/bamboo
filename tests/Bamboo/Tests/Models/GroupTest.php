@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Group;
 
-class GroupTest extends BambooTestCase
+class GroupTest extends BambooBaseTestCase
 {
     /**
      * This tests checks the generation of the group model

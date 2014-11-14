@@ -2,12 +2,12 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Base;
 
-class BaseTest extends BambooTestCase
+class BaseTest extends BambooBaseTestCase
 {
-  
+
   private $_base;
 
   public function setUp() {
@@ -25,7 +25,7 @@ class BaseTest extends BambooTestCase
 
   private function _mockBaseObject() {
     $object = (object) array(
-      'id' => 12, 
+      'id' => 12,
       'title' => 'James Bond Movie 1'
     );
 

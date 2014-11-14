@@ -5,7 +5,7 @@ namespace Bamboo\Tests;
 use \Bamboo\Client;
 use \Bamboo\Configuration;
 
-class ConfigurationTest extends BambooTestCase
+class ConfigurationTest extends BambooBaseTestCase
 {
     public function tearDown() {
         Configuration::setBaseUrl('');

@@ -9,7 +9,7 @@ use Bamboo\Feeds\Atoz;
 /*
  * Using ATOZ as the example feed testing Clients responsibilities.
  */
-class ClientTest extends BambooTestCase
+class ClientTest extends BambooClientTestCase
 {
 
     /*

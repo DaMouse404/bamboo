@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Version;
 
-class VersionTest extends BambooTestCase
+class VersionTest extends BambooBaseTestCase
 {
     public function testGetTotalDaysAvailabile() {
         $version = $this->_createVersion(array('availability' => (object) array(

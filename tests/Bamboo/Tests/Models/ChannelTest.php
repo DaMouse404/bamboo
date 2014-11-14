@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Channel;
 
-class ChannelTest extends BambooTestCase
+class ChannelTest extends BambooBaseTestCase
 {
 
   private $_channel;

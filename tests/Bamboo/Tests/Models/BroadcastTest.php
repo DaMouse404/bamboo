@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Broadcast;
 
-class BroadcastTest extends BambooTestCase
+class BroadcastTest extends BambooBaseTestCase
 {
 
     protected $_timeFormat = "Y-m-d\TH:i";
@@ -85,7 +85,7 @@ class BroadcastTest extends BambooTestCase
         $params['blanked'] = true;
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $params);
         $this->assertFalse($broadcast->isSimulcast());
-        
+
         // Blanked and on in the future
         $broadcast = $this->_createTimedBroadcast('+1 hours', '+2 hours', $params);
         $this->assertFalse($broadcast->isSimulcast());
@@ -105,7 +105,7 @@ class BroadcastTest extends BambooTestCase
         $episode = $this->_createEpisode('available');
         $broadcast = $this->_createTimedBroadcast('-1 hours', '+1 hours', $episode);
         $this->assertTrue($broadcast->isAvailableToWatch());
-        
+
         $episode = $this->_createEpisode('unavailable');
         $broadcast = $this->_createTimedBroadcast('-2 hours', '-1 hours', $episode);
         $this->assertFalse($broadcast->isAvailableToWatch());

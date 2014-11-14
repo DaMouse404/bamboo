@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Programme;
 
-class ProgrammeTest extends BambooTestCase
+class ProgrammeTest extends BambooBaseTestCase
 {
     public function testGetEpisodes() {
         $params = array(

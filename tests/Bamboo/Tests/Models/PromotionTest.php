@@ -2,14 +2,14 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Promotion;
 
-class PromotionTest extends BambooTestCase
+class PromotionTest extends BambooBaseTestCase
 {
     /**
      * This tests checks the generation of the Promotion model
-     * 
+     *
      * @access public
      * @return void
      */

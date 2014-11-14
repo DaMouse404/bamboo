@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Feeds\Programmes;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Programmes\Episodes;
 
-class EpisodesTest extends BambooTestCase
+class EpisodesTest extends BambooClientTestCase
 {
 
   private $_feedObject;

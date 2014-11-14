@@ -6,11 +6,12 @@ use \Bamboo\Client;
 use \Bamboo\Configuration;
 use \Bamboo\Http\Fake;
 use \Bamboo\Http\Fail;
+use \Bamboo\Tests\BambooBaseTestCase;
 
 /**
  * Base testcase class for all Bamboo testcases.
  */
-abstract class BambooTestCase extends \PHPUnit_Framework_TestCase
+abstract class BambooClientTestCase extends BambooBaseTestCase
 {
     const FIXTURE_PATH =  '/../../../tests/fixtures/';
 
