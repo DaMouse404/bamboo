@@ -10,7 +10,9 @@ class ChannelsTest extends BambooClientTestCase {
     private $_channels = array();
 
     public function setUp() {
-        parent::setupRequest("channels@channels");
+        parent::setup();
+
+        \Bamboo\Configuration::addFakeRequest('channels', 'channels');
 
         $channelModel = new Channels();
 

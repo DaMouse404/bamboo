@@ -10,7 +10,8 @@ class ProgrammesTest extends BambooClientTestCase
     private $_programmes = array();
 
     public function setUp() {
-        parent::setupRequest("programmes@programmes_proms");
+        parent::setup();
+        \Bamboo\Configuration::addFakeRequest('programmes', 'programmes_proms');
         $this->_programmes = new Programmes(array(), array('gggggggg'));
     }
 

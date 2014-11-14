@@ -19,39 +19,30 @@ abstract class BambooClientTestCase extends BambooBaseTestCase
      * Generically clean up after setupRequests
      */
     public function tearDown() {
-        unset($_GET['_fake']);
         Configuration::setFakeHttpClient(null);
+        Configuration::clearFakeRequests();
+        Configuration::clearFailRequests();
         Client::getInstance()->setServiceProxy(false);
 
         parent::tearDown();
     }
 
-    /*
-     * By default we will use fixtures..use fake client.
-     */
-    protected function setupRequest($feed, $httpFake=false) {
-        $_GET['_fake'] = $feed;
-        if (!$httpFake) {
-            $httpFake = new Fake();
-        }
+    public function setup() {
         $path =  dirname(__FILE__) . self::FIXTURE_PATH;
+
+        $httpFake = new Fake();
         $httpFake->setFixturesPath($path);
         \Bamboo\Counter::setCounter("Bamboo\CounterFake");
 
         Configuration::setFakeHttpClient($httpFake);
 
         Client::getInstance()->setServiceProxy(true);
+        parent::setup();
     }
 
-    protected function setupParallelRequest($feed, $fakeClient=false) {
-        return $this->setupRequest($feed[0][0], $fakeClient);
-    }
-
-    protected function setupFailRequest($feed, $errorClass = null, $statusCode = "") {
-
+    protected function setupFailRequest($feed, $fixture, $errorClass = null, $statusCode = "") {
         // As deals with errors, set fake Counter
         \Bamboo\Counter::setCounter("Bamboo\CounterFake");
-        $_GET['_fail'] = $feed;
 
         $httpFail = new Fail();
         if ($errorClass) {
@@ -64,6 +55,8 @@ abstract class BambooClientTestCase extends BambooBaseTestCase
         $httpFail->setFixturesPath($path);
 
         Configuration::setFailHttpClient($httpFail);
+
+        Configuration::addFailRequest($feed, $fixture);
 
         Client::getInstance()->setServiceProxy(true);
     }

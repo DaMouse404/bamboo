@@ -78,7 +78,8 @@ class SchedulesTest extends BambooClientTestCase
     }
 
     private function _getBroadcastsForFixture($fixture) {
-        parent::setupRequest("schedule@" . $fixture);
+        \Bamboo\Configuration::addFakeRequest('schedule', $fixture);
+
         $feedObject = new Schedules(array(), 'bbc_one_london', '2014-08-13');
         return $feedObject->getBroadcasts();
     }

@@ -23,21 +23,21 @@ class ClientTest extends BambooClientTestCase
     }
 
     public function testGetHttpClientFake() {
-        parent::setupRequest('atoz@atoz_a_programmes');
+        \Bamboo\Configuration::addFakeRequest('atoz', 'atoz_a_programmes');
         $client = Client::getInstance()->getClient("atoz");
 
         $this->assertInstanceOf('Bamboo\Http\Fake', $client);
     }
 
     public function testGetHttpClientFail() {
-        parent::setupFailRequest('atoz@atoz_a_programmes');
-        $client = Client::getInstance()->getClient("atoz");
+        parent::setupFailRequest('atoz', 'atoz_a_programmes');
+        $client = Client::getInstance()->getClient("atoz/a/programmes");
 
         $this->assertInstanceOf('Bamboo\Http\Fail', $client);
     }
 
     public function testSetLang() {
-        parent::setupRequest('atoz_a_programmes');
+        \Bamboo\Configuration::addFakeRequest('atoz', 'atoz_a_programmes');
 
         $defaultLang = Client::getInstance()->getParam('lang');
         Client::getInstance()->setLang('cy');
@@ -61,7 +61,7 @@ class ClientTest extends BambooClientTestCase
      * Very few testing this as more in FEED tests
      */
     public function testParsesResponse() {
-        parent::setupRequest("atoz@atoz_a_programmes");
+        \Bamboo\Configuration::addFakeRequest('atoz', 'atoz_a_programmes');
         $feedObject = new Atoz(array(), 'a');
 
         $this->assertInstanceOf('Bamboo\Feeds\Atoz', $feedObject);
@@ -72,14 +72,15 @@ class ClientTest extends BambooClientTestCase
      * - Test Translate response Exception
      */
     public function testServerError() {
-        parent::setupFailRequest('atoz@atoz_a_programmes');
+        parent::setupFailRequest('atoz', 'atoz_a_programmes');
         $this->setExpectedException('Bamboo\Exception\ServerError');
         $feedObject = new Atoz(array(), 'a');
     }
 
     public function testBadRequest() {
         parent::setupFailRequest(
-            'atoz@atoz_a_programmes',
+            'atoz',
+            'atoz_a_programmes',
             'Guzzle\Http\Exception\ClientErrorResponseException',
             400
         );
@@ -91,7 +92,8 @@ class ClientTest extends BambooClientTestCase
 
     public function testNotFound() {
         parent::setupFailRequest(
-            'atoz@atoz_a_programmes',
+            'atoz',
+            'atoz_a_programmes',
             'Guzzle\Http\Exception\ClientErrorResponseException',
             404
         );
@@ -103,12 +105,12 @@ class ClientTest extends BambooClientTestCase
 
     public function testRequestAll() {
         $requests = array(
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array())
+            array('atoz', array()),
+            array('atoz', array()),
+            array('atoz', array())
         );
         $client = Client::getInstance();
-        $this->setupParallelRequest($requests);
+        \Bamboo\Configuration::addFakeRequest('atoz', 'atoz_a_programmes');
         $responses = $client->requestAll($requests);
 
         $this->assertEquals(3,count($responses));
@@ -132,12 +134,12 @@ class ClientTest extends BambooClientTestCase
 
     private function _requestAllExceptionTest($errorIn, $errorExpected, $counter) {
         $requests = array(
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array()),
-            array('atoz@atoz_a_programmes', array())
+            array('atoz', array()),
+            array('atoz', array()),
+            array('atoz', array())
         );
 
-        $client = $this->_multiRequestException($requests, $errorIn);
+        $client = $this->_multiRequestException($requests, 'atoz_a_programmes', $errorIn);
 
         $this->setExpectedException($errorExpected);
         try {
@@ -150,7 +152,7 @@ class ClientTest extends BambooClientTestCase
     }
 
 
-    /*
+    /**
      * Test Post Fetch more
      * - Translate reponse exception+response into Counters
      */
@@ -191,7 +193,8 @@ class ClientTest extends BambooClientTestCase
             CounterFake::resetCount('BAMBOO_PROXY_BADREQUEST');
             $startCount = CounterFake::getCount('BAMBOO_PROXY_BADREQUEST');
             parent::setupFailRequest(
-                'atoz@atoz_a_programmes',
+                'atoz',
+                'atoz_a_programmes',
                 'Guzzle\Http\Exception\ClientErrorResponseException',
                 400
             );
@@ -205,8 +208,8 @@ class ClientTest extends BambooClientTestCase
         }
     }
 
-    private function _multiRequestException($requests, $err) {
-        $stub = $this->getMock('Bamboo\Http\Fake', array('send'));
+    private function _multiRequestException($requests, $fixture, $err) {
+        $stub = $this->getMock('Bamboo\Http\Fail', array('send'));
         $stub->method('send')->will($this->returnCallback(function ($requests) use ($err) {
             $multi = new \Guzzle\Http\Exception\MultiTransferException();
             $multi->setExceptions(array($err));
@@ -215,7 +218,11 @@ class ClientTest extends BambooClientTestCase
         }));
 
         $client = Client::getInstance();
-        $this->setupParallelRequest($requests, $stub);
+
+        \Bamboo\Configuration::setFailHttpClient($stub);
+        \Bamboo\Configuration::addFailRequest($requests[0][0], $fixture);
+
+        Client::getInstance()->setServiceProxy(true);
 
         return $client;
     }
@@ -225,7 +232,7 @@ class ClientTest extends BambooClientTestCase
             CounterFake::resetCount($counter);
             CounterFake::resetCount($wrongCounter);
             $startCount = CounterFake::getCount($counter);
-            parent::setupFailRequest('atoz@' . $fixture);
+            parent::setupFailRequest('atoz', $fixture);
             $feedObject = new Atoz(array(), 'a');
         } catch (\Bamboo\Exception\ServerError $e) {
             $endCount = CounterFake::getCount($counter);

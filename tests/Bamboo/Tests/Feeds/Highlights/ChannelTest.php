@@ -12,7 +12,8 @@ class ChannelTest extends BambooClientTestCase
   private $_channel;
 
   public function setUp() {
-    parent::setupRequest("highlights@channel_highlights");
+    parent::setup();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'channel_highlights');
     $feedObject = new Channel(array(), 'bbc_one_london');
     $this->_elements = $feedObject->getElements();
     $this->_channel = $feedObject->getChannel();

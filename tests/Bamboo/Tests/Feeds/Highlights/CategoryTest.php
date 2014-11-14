@@ -12,7 +12,8 @@ class CategoryTest extends BambooClientTestCase
   private $_category;
 
   public function setUp() {
-    parent::setupRequest("highlights@category_highlights");
+    parent::setup();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'category_highlights');
     $feedObject = new Category(array(), 'arts');
     $this->_elements = $feedObject->getElements();
     $this->_category = $feedObject->getCategory();

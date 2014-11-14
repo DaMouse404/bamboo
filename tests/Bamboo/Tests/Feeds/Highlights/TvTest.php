@@ -11,7 +11,8 @@ class TvTest extends BambooClientTestCase
   private $_elements;
 
   public function setUp() {
-    parent::setupRequest("highlights@tv_highlights");
+    parent::setup();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'tv_highlights');
     $feedObject = new Tv();
     $this->_elements = $feedObject->getElements();
   }

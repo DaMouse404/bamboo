@@ -2,7 +2,6 @@
 
 namespace Bamboo;
 
-use Guzzle\Http;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Plugin\Cache\DefaultCacheStorage;
 use Guzzle\Http\Exception\ClientErrorResponseException;
@@ -245,16 +244,15 @@ class Client
      * Return Client to use for this request.
      */
     public function getClient($feed) {
-
-        if ($this->_useFixture($feed)) {
+        if ($this->_useFixture($feed) !== false) {
             return Configuration::getFakeHttpClient();
         }
 
-        if ($this->_useFailure($feed)) {
+        if ($this->_useFailure($feed) !== false) {
             return Configuration::getFailHttpClient();
         }
 
-        $client = new Http\Client(Configuration::getHost());
+        $client = new \Guzzle\Http\Client(Configuration::getHost());
 
         if (Configuration::getCache()) {
             $client->addSubscriber(Configuration::getCache());
@@ -267,7 +265,7 @@ class Client
      * Check if the current feed matches ?_fail one
      */
     private function _useFailure($feed) {
-        return $this->_setupAndCheckMatches($feed, self::PARAM_FAIL);
+        return \Bamboo\Http\Base::findMatchingFeed($feed, Configuration::getFailRequests());
     }
 
     /*
@@ -275,48 +273,7 @@ class Client
      * Does part before @ pattern match current Feed?
      */
     private function _useFixture($feed) {
-        return $this->_setupAndCheckMatches($feed, self::PARAM_DEGRADE);
-    }
-
-    private function _setupAndCheckMatches($feed, $type) {
-        if (!isset($_GET[$type])) {
-            return false;
-        }
-
-        $fakedFeed = "";
-        $fakePath = $_GET[$type];
-        $exploded = explode('@', $fakePath);
-        if (isset($exploded[1])) {
-            // Grab just fixture filename
-            $fakedFeed = $exploded[0];
-        } else if ($type === self::PARAM_FAIL) {
-            // Nothing @ given and ?_fail
-            // Largely for backwards compatibility with RW cukes
-            $fakePath = str_replace("/", "_", $fakePath);
-            $fakedFeed = $fakePath;
-        }
-
-        if ($this->_doesHaveMatches($feed . ".json", $fakedFeed)) {
-            return true;
-        }
-    }
-
-    /*
-     * Check if current feed matches fixture given
-     * Feed contains / which is convert to _ for fixture.
-     *
-     * @return bool
-     */
-    private function _doesHaveMatches($feed, $fakedFeed) {
-        if ($fakedFeed) {
-            $feed = str_replace("/", "_", $feed);
-            preg_match('/' . $fakedFeed . '/', $feed, $matches);
-            if (count($matches) > 0) {
-                // matches, so use the fixtureFile
-                return true;
-            }
-        }
-        return false;
+        return \Bamboo\Http\Base::findMatchingFeed($feed, Configuration::getFakeRequests());
     }
 
     /*

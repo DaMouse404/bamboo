@@ -11,7 +11,9 @@ class ProgrammesTest extends BambooClientTestCase
   private $_feedObject;
 
   public function setUp() {
-    parent::setupRequest("programmes@category_programmes");
+    parent::setup();
+
+    \Bamboo\Configuration::addFakeRequest('programmes', 'category_programmes');
     $this->_feedObject = new Programmes(array(), 'arts');
   }
 

@@ -11,7 +11,8 @@ class EpisodesTest extends BambooClientTestCase
   private $_feedObject;
 
   public function setUp() {
-    parent::setupRequest("episodes@groups_episodes");
+    parent::setup();
+    \Bamboo\Configuration::addFakeRequest('episodes', 'groups_episodes');
     $this->_feedObject = new Episodes(array(), 'p00zw1jd');
   }
 

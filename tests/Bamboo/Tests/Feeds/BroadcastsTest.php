@@ -9,7 +9,9 @@ class BroadcastsTest extends BambooClientTestCase
 {
 
     public function setUp() {
-        parent::setupRequest("broadcasts@channel_bbcone_broadcasts");
+        parent::setup();
+
+        \Bamboo\Configuration::addFakeRequest('broadcasts', 'channel_bbcone_broadcasts');
     }
 
     public function testBroadcastItemType() {

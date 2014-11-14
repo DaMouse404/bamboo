@@ -12,46 +12,57 @@ use Guzzle\Plugin\Cache\CachePlugin;
  */
 class Configuration
 {
-    /*
+    /**
      * URL prepended to all feeds for the service. Contains provider name and version.
      * @var string
      */
     private static $_baseUrl = '';
-    /*
+    /**
      *
      * @var CacheInterface
      */
     private static $_cache = false;
-    /*
+    /**
      * Used to set api_key and any other important feed info which is later merged over $_defaultParams.
      * @var array
      */
     private static $_config = array();
-    /*
+    /**
      * The HTTP Client to use to to do all the above except for error and fail states/responses.
      * @var object
      */
     private static $_failHttpClient;
-    /*
+    /**
      * The HTTP Client to use for normal unit tests, cukes and reading fixtures.
      * @var object
      */
     private static $_fakeHttpClient;
-    /*
+    /**
      * Hostname used for the request.
      * @var string
      */
     private static $_host = '';
-    /*
+    /**
      * The URL of the image to be used when no images are returned by iBL.
      * @var string
      */
     private static $_placeholderImageUrl = '';
-    /*
+    /**
      * Tells the HTTP Client what proxy it must route traffic through if necessary.
      * @var string
      */
     private static $_networkProxy = '';
+    /**
+    * Store list of partial feed names to fake with the respective fixture file name
+    * @var array
+    */
+    private static $_fakeRequests = array();
+    /**
+    * Store list of partial feed names to fail with the respective fixture file name
+    * @var array
+    */
+    private static $_failRequests = array();
+
 
     public static function setBaseUrl($baseUrl) {
         self::$_baseUrl = $baseUrl;
@@ -135,5 +146,29 @@ class Configuration
 
     public static function getNetworkProxy() {
         return self::$_networkProxy;
+    }
+
+    public static function addFakeRequest($feedMatcher, $fileName) {
+        self::$_fakeRequests[$feedMatcher] = $fileName;
+    }
+
+    public static function clearFakeRequests() {
+        self::$_fakeRequests = array();
+    }
+
+    public static function getFakeRequests() {
+        return self::$_fakeRequests;
+    }
+
+    public static function addFailRequest($feedMatcher, $fileName) {
+        self::$_failRequests[$feedMatcher] = $fileName;
+    }
+
+    public static function clearFailRequests() {
+        self::$_failRequests = array();
+    }
+
+    public static function getFailRequests() {
+        return self::$_failRequests;
     }
 }
