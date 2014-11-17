@@ -80,8 +80,10 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function requestAll($feeds) {
+        $baseUrl = Configuration::getBaseUrl();
+
         $firstFeed = array_shift(array_values($feeds));
-        $client = $this->getClient($firstFeed[0]);
+        $client = $this->getClient($baseUrl . $firstFeed[0] . ".json");
 
         try {
             $requests = array();
@@ -89,12 +91,12 @@ class Client
             $requestGroupKey = mb_substr(microtime(), 3, 4);
             foreach ($feeds as $feed) {
                 $params = array_merge($this->_defaultParams, Configuration::getConfig(), $feed[1]);
-                $baseUrl = Configuration::getBaseUrl();
                 $fullUrl = Configuration::getHost() . $baseUrl . $feed[0];
                 $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
                 Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
 
-                $requests[] = $this->_getRequestObject($client, $baseUrl, $feed[0], $params);
+                $feedUrl = $baseUrl . $feed[0] . ".json";
+                $requests[] = $this->_getRequestObject($client, $feedUrl, $params);
             }
 
             $responses = $client->send($requests);
@@ -113,14 +115,16 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params) {
-        $client = $this->getClient($feed);
         $params = array_merge($this->_defaultParams, Configuration::getConfig(), $params);
         $baseUrl = Configuration::getBaseUrl();
         $fullUrl = Configuration::getHost() . $baseUrl . $feed;
         Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
-            $request = $this->_getRequestObject($client, $baseUrl, $feed, $params);
+            $feedUrl = $baseUrl . $feed . ".json";
+            $client = $this->getClient($feedUrl);
+
+            $request = $this->_getRequestObject($client, $feedUrl, $params);
             $response = $request->send();
         } catch (\Exception $e) {
             $this->_parseRequestException($e, $feed);
@@ -131,8 +135,7 @@ class Client
         return $object;
     }
 
-    private function _getRequestObject($client, $baseUrl, $feed, $params) {
-        $feedUrl = $baseUrl . $feed . ".json";
+    private function _getRequestObject($client, $feedUrl, $params) {
         $networkProxy = Configuration::getNetworkProxy();
 
         return $client->get(
@@ -244,6 +247,8 @@ class Client
      * Return Client to use for this request.
      */
     public function getClient($feed) {
+        \Bamboo\Log::info('BAMBOO: Checking in client for: %s for faking', $feed);
+
         if ($this->_useFixture($feed) !== false) {
             return Configuration::getFakeHttpClient();
         }
@@ -251,7 +256,7 @@ class Client
         if ($this->_useFailure($feed) !== false) {
             return Configuration::getFailHttpClient();
         }
-
+        var_dump('Not faking feed',$feed);
         $client = new \Guzzle\Http\Client(Configuration::getHost());
 
         if (Configuration::getCache()) {
