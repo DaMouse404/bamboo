@@ -256,7 +256,7 @@ class Client
         if ($this->_useFailure($feed) !== false) {
             return Configuration::getFailHttpClient();
         }
-        var_dump('Not faking feed',$feed);
+
         $client = new \Guzzle\Http\Client(Configuration::getHost());
 
         if (Configuration::getCache()) {

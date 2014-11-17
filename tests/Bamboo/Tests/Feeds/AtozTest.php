@@ -9,7 +9,7 @@ class AtozTest extends BambooClientTestCase
 {
 
   public function setUp() {
-    parent::setup();
+    parent::setUp();
     \Bamboo\Configuration::addFakeRequest('atoz', 'atoz_a_programmes');
     $feedObject = new Atoz(array(), 'a');
     $this->_programmes = $feedObject->getElements();

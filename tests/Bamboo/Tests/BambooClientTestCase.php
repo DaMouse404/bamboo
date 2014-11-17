@@ -27,7 +27,7 @@ abstract class BambooClientTestCase extends BambooBaseTestCase
         parent::tearDown();
     }
 
-    public function setup() {
+    public function setUp() {
         $path =  dirname(__FILE__) . self::FIXTURE_PATH;
 
         $httpFake = new Fake();
@@ -37,7 +37,7 @@ abstract class BambooClientTestCase extends BambooBaseTestCase
         Configuration::setFakeHttpClient($httpFake);
 
         Client::getInstance()->setServiceProxy(true);
-        parent::setup();
+        parent::setUp();
     }
 
     protected function setupFailRequest($feed, $fixture, $errorClass = null, $statusCode = "") {

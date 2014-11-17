@@ -9,7 +9,7 @@ class BroadcastsTest extends BambooClientTestCase
 {
 
     public function setUp() {
-        parent::setup();
+        parent::setUp();
 
         \Bamboo\Configuration::addFakeRequest('broadcasts', 'channel_bbcone_broadcasts');
     }

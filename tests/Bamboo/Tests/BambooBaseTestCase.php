@@ -11,8 +11,8 @@ abstract class BambooBaseTestCase extends \PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function setup() {
-        parent::setup();
+    public function setUp() {
+        parent::setUp();
     }
 
 }
