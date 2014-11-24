@@ -24,8 +24,6 @@ use Bamboo\Exception\EmptyFeed;
 class Client
 {
 
-    const PARAM_DEGRADE = '_fake';
-    const PARAM_FAIL = '_fail';
     const LOCALE_LENGTH = 2;
 
     /*

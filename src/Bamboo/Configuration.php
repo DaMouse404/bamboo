@@ -160,7 +160,7 @@ class Configuration
         return self::$_fakeRequests;
     }
 
-    public static function addFailRequest($feedMatcher, $fileName) {
+    public static function addFailRequest($feedMatcher, $fileName = '') {
         self::$_failRequests[$feedMatcher] = $fileName;
     }
 
