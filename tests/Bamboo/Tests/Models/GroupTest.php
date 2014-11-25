@@ -96,10 +96,33 @@ class GroupTest extends BambooBaseTestCase
         $this->assertEquals(3, $group->getTotalEpisodeCount());
     }
 
+    public function testGetHeroImage () {
+        $group = $this->_createGroup();
+
+        $this->assertEquals('hero_image_dimensions=100x200', $group->getHeroImage(100,200));
+    }
+
+    public function testGetHeroImageDefaults () {
+        $group = $this->_createGroup();
+
+        $this->assertRegexp('/^hero_image_dimensions=\d+x\d+$/', $group->getHeroImage());
+    }
+
+    public function testGetHeroImageNoImage () {
+        $group = $this->_createGroup(
+            array ('images' => (object) array())
+        );
+
+        $this->assertEquals(false, $group->getHeroImage(100,200));
+    }
+
     private function _createGroup($params = array()) {
         $group = array(
             "id" => "fake_id",
-            "labels" => (object) array("editorial" => "Archive")
+            "labels" => (object) array("editorial" => "Archive"),
+            'images' => (object) array(
+                'hero' => 'hero_image_dimensions={recipe}'
+            )
         );
         return new Group((object) array_merge($group, $params));
     }
