@@ -35,7 +35,7 @@ class Categories extends Base
         return $categories;
     }
 
-    private function _getStaticData($feed) {
+    private function _getStaticData() {
         $filePath = dirname(__FILE__) . '/../Assets/categories.json';
         if ( !file_exists($filePath) ) {
             throw new NotFound('Could not find file in /Assets/ for feed: '. $feed);
