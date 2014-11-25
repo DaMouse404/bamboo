@@ -1,26 +1,6 @@
 {
   "categories": [
     {
-      "id": "arts",
-      "title": "Arts",
-      "kind": "genre"
-    },
-    {
-      "id": "cbbc",
-      "title": "CBBC",
-      "kind": "genre"
-    },
-    {
-      "id": "cbeebies",
-      "title": "CBeebies",
-      "kind": "genre"
-    },
-    {
-      "id": "comedy",
-      "title": "Comedy",
-      "kind": "genre"
-    },
-    {
       "id": "comedy-panel-shows",
       "title": "Panel Show Comedy",
       "contextual_title": "Panel Shows",
@@ -37,11 +17,6 @@
       "title": "Stand-Up Comedy",
       "contextual_title": "Stand-Up",
       "kind": "sub-genre"
-    },
-    {
-      "id": "documentaries",
-      "title": "Documentaries",
-      "kind": "genre"
     },
     {
       "id": "documentaries-arts",
@@ -80,11 +55,6 @@
       "kind": "sub-genre"
     },
     {
-      "id": "drama-and-soaps",
-      "title": "Drama & Soaps",
-      "kind": "genre"
-    },
-    {
       "id": "drama-classic-and-period",
       "title": "Classic & Period Drama",
       "contextual_title": "Classic & Period",
@@ -101,76 +71,6 @@
       "title": "Sci-Fi & Fantasy Drama",
       "contextual_title": "Sci-Fi & Fantasy",
       "kind": "sub-genre"
-    },
-    {
-      "id": "entertainment",
-      "title": "Entertainment",
-      "kind": "genre"
-    },
-    {
-      "id": "films",
-      "title": "Films",
-      "kind": "genre"
-    },
-    {
-      "id": "food",
-      "title": "Food",
-      "kind": "genre"
-    },
-    {
-      "id": "history",
-      "title": "History",
-      "kind": "genre"
-    },
-    {
-      "id": "lifestyle",
-      "title": "Lifestyle",
-      "kind": "genre"
-    },
-    {
-      "id": "music",
-      "title": "Music",
-      "kind": "genre"
-    },
-    {
-      "id": "news",
-      "title": "News",
-      "kind": "genre"
-    },
-    {
-      "id": "science-and-nature",
-      "title": "Science & Nature",
-      "kind": "genre"
-    },
-    {
-      "id": "sport",
-      "title": "Sport",
-      "kind": "genre"
-    },
-    {
-      "id": "audio-described",
-      "title": "Audio Described",
-      "kind": "accessibility"
-    },
-    {
-      "id": "signed",
-      "title": "Signed",
-      "kind": "accessibility"
-    },
-    {
-      "id": "northern-ireland",
-      "title": "Northern Ireland",
-      "kind": "regional"
-    },
-    {
-      "id": "scotland",
-      "title": "Scotland",
-      "kind": "regional"
-    },
-    {
-      "id": "wales",
-      "title": "Wales",
-      "kind": "regional"
     }
   ],
   "relationships": {
