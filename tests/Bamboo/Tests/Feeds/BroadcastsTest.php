@@ -2,14 +2,16 @@
 
 namespace Bamboo\Tests\Feeds;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Broadcasts;
 
-class BroadcastsTest extends BambooTestCase
+class BroadcastsTest extends BambooClientTestCase
 {
 
     public function setUp() {
-        parent::setupRequest("broadcasts@channel_bbcone_broadcasts");
+        parent::setUp();
+
+        \Bamboo\Configuration::addFakeRequest('broadcasts', 'channel_bbcone_broadcasts');
     }
 
     public function testBroadcastItemType() {

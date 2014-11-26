@@ -2,17 +2,18 @@
 
 namespace Bamboo\Tests\Feeds\Highlights;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Highlights\Channel;
 
-class ChannelTest extends BambooTestCase
+class ChannelTest extends BambooClientTestCase
 {
 
   private $_elements;
   private $_channel;
 
   public function setUp() {
-    parent::setupRequest("highlights@channel_highlights");
+    parent::setUp();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'channel_highlights');
     $feedObject = new Channel(array(), 'bbc_one_london');
     $this->_elements = $feedObject->getElements();
     $this->_channel = $feedObject->getChannel();

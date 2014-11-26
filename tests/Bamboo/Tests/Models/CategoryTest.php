@@ -2,10 +2,10 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Category;
 
-class CategoryTest extends BambooTestCase
+class CategoryTest extends BambooBaseTestCase
 {
     public function testCBBCIsChildrens() {
         $category = $this->_createCategory(array('id' => 'cbbc'));

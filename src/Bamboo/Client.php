@@ -2,7 +2,6 @@
 
 namespace Bamboo;
 
-use Guzzle\Http;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Plugin\Cache\DefaultCacheStorage;
 use Guzzle\Http\Exception\ClientErrorResponseException;
@@ -25,8 +24,6 @@ use Bamboo\Exception\EmptyFeed;
 class Client
 {
 
-    const PARAM_DEGRADE = '_fake';
-    const PARAM_FAIL = '_fail';
     const LOCALE_LENGTH = 2;
 
     /*
@@ -81,8 +78,10 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function requestAll($feeds) {
+        $baseUrl = Configuration::getBaseUrl();
+
         $firstFeed = array_shift(array_values($feeds));
-        $client = $this->getClient($firstFeed[0]);
+        $client = $this->getClient($baseUrl . $firstFeed[0] . ".json");
 
         try {
             $requests = array();
@@ -90,12 +89,12 @@ class Client
             $requestGroupKey = mb_substr(microtime(), 3, 4);
             foreach ($feeds as $feed) {
                 $params = array_merge($this->_defaultParams, Configuration::getConfig(), $feed[1]);
-                $baseUrl = Configuration::getBaseUrl();
                 $fullUrl = Configuration::getHost() . $baseUrl . $feed[0];
                 $log = 'BAMBOO: (#%s) Parallel iBL feed: %s.json?%s';
                 Log::info($log, $requestGroupKey, $fullUrl, http_build_query($params));
 
-                $requests[] = $this->_getRequestObject($client, $baseUrl, $feed[0], $params);
+                $feedUrl = $baseUrl . $feed[0] . ".json";
+                $requests[] = $this->_getRequestObject($client, $feedUrl, $params);
             }
 
             $responses = $client->send($requests);
@@ -114,14 +113,16 @@ class Client
      * Log Error...Translate Exception and throw
      */
     public function request($feed, $params) {
-        $client = $this->getClient($feed);
         $params = array_merge($this->_defaultParams, Configuration::getConfig(), $params);
         $baseUrl = Configuration::getBaseUrl();
         $fullUrl = Configuration::getHost() . $baseUrl . $feed;
         Log::info('Fetching iBL feed: %s.json?%s', $fullUrl, http_build_query($params));
 
         try {
-            $request = $this->_getRequestObject($client, $baseUrl, $feed, $params);
+            $feedUrl = $baseUrl . $feed . ".json";
+            $client = $this->getClient($feedUrl);
+
+            $request = $this->_getRequestObject($client, $feedUrl, $params);
             $response = $request->send();
         } catch (\Exception $e) {
             $this->_parseRequestException($e, $feed);
@@ -132,8 +133,7 @@ class Client
         return $object;
     }
 
-    private function _getRequestObject($client, $baseUrl, $feed, $params) {
-        $feedUrl = $baseUrl . $feed . ".json";
+    private function _getRequestObject($client, $feedUrl, $params) {
         $networkProxy = Configuration::getNetworkProxy();
 
         return $client->get(
@@ -245,16 +245,17 @@ class Client
      * Return Client to use for this request.
      */
     public function getClient($feed) {
+        \Bamboo\Log::info('BAMBOO: Checking in client for: %s for faking', $feed);
 
-        if ($this->_useFixture($feed)) {
+        if ($this->_useFixture($feed) !== false) {
             return Configuration::getFakeHttpClient();
         }
 
-        if ($this->_useFailure($feed)) {
+        if ($this->_useFailure($feed) !== false) {
             return Configuration::getFailHttpClient();
         }
 
-        $client = new Http\Client(Configuration::getHost());
+        $client = new \Guzzle\Http\Client(Configuration::getHost());
 
         if (Configuration::getCache()) {
             $client->addSubscriber(Configuration::getCache());
@@ -267,7 +268,7 @@ class Client
      * Check if the current feed matches ?_fail one
      */
     private function _useFailure($feed) {
-        return $this->_setupAndCheckMatches($feed, self::PARAM_FAIL);
+        return \Bamboo\Http\Base::findMatchingFeed($feed, Configuration::getFailRequests());
     }
 
     /*
@@ -275,48 +276,7 @@ class Client
      * Does part before @ pattern match current Feed?
      */
     private function _useFixture($feed) {
-        return $this->_setupAndCheckMatches($feed, self::PARAM_DEGRADE);
-    }
-
-    private function _setupAndCheckMatches($feed, $type) {
-        if (!isset($_GET[$type])) {
-            return false;
-        }
-
-        $fakedFeed = "";
-        $fakePath = $_GET[$type];
-        $exploded = explode('@', $fakePath);
-        if (isset($exploded[1])) {
-            // Grab just fixture filename
-            $fakedFeed = $exploded[0];
-        } else if ($type === self::PARAM_FAIL) {
-            // Nothing @ given and ?_fail
-            // Largely for backwards compatibility with RW cukes
-            $fakePath = str_replace("/", "_", $fakePath);
-            $fakedFeed = $fakePath;
-        }
-
-        if ($this->_doesHaveMatches($feed . ".json", $fakedFeed)) {
-            return true;
-        }
-    }
-
-    /*
-     * Check if current feed matches fixture given
-     * Feed contains / which is convert to _ for fixture.
-     *
-     * @return bool
-     */
-    private function _doesHaveMatches($feed, $fakedFeed) {
-        if ($fakedFeed) {
-            $feed = str_replace("/", "_", $feed);
-            preg_match('/' . $fakedFeed . '/', $feed, $matches);
-            if (count($matches) > 0) {
-                // matches, so use the fixtureFile
-                return true;
-            }
-        }
-        return false;
+        return \Bamboo\Http\Base::findMatchingFeed($feed, Configuration::getFakeRequests());
     }
 
     /*

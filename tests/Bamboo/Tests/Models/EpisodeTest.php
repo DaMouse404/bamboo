@@ -2,11 +2,11 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Version;
 use Bamboo\Models\Episode;
 
-class EpisodeTest extends BambooTestCase
+class EpisodeTest extends BambooBaseTestCase
 {
     public function testSlugWithEmptyTitle() {
         $episode = $this->_createEpisode(array('title' => ''));

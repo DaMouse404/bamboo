@@ -2,16 +2,17 @@
 
 namespace Bamboo\Tests\Feeds\Highlights;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Highlights\Tv;
 
-class TvTest extends BambooTestCase
+class TvTest extends BambooClientTestCase
 {
 
   private $_elements;
 
   public function setUp() {
-    parent::setupRequest("highlights@tv_highlights");
+    parent::setUp();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'tv_highlights');
     $feedObject = new Tv();
     $this->_elements = $feedObject->getElements();
   }

@@ -2,17 +2,18 @@
 
 namespace Bamboo\Tests\Feeds\Highlights;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Highlights\Category;
 
-class CategoryTest extends BambooTestCase
+class CategoryTest extends BambooClientTestCase
 {
 
   private $_elements;
   private $_category;
 
   public function setUp() {
-    parent::setupRequest("highlights@category_highlights");
+    parent::setUp();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'category_highlights');
     $feedObject = new Category(array(), 'arts');
     $this->_elements = $feedObject->getElements();
     $this->_category = $feedObject->getCategory();

@@ -2,12 +2,12 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Episode;
 use Bamboo\Models\Elements;
 use Bamboo\Configuration;
 
-class ElementsTest extends BambooTestCase
+class ElementsTest extends BambooBaseTestCase
 {
     /*
      * Using an Element Mock

@@ -4,7 +4,7 @@ namespace Bamboo\Tests;
 
 use \Bamboo\Client;
 
-class BaseParallelTest extends BambooTestCase
+class BaseParallelTest extends BambooClientTestCase
 {
 	private $originalClient;
 	public function setUp() {

@@ -37,9 +37,13 @@ class Fail extends Base implements GuzzleInterface
 
     public function get($feed, $params = array(), $queryParams = array()) {
         // Setup request object
-        $this->_buildPath($feed);
+        $this->_path = $this->_buildPath($feed, \Bamboo\Configuration::getFailRequests());
         Log::debug('BAMBOO: Failing feed: %s', $feed);
         return $this;
+    }
+
+    public function json() {
+
     }
 
     /*
@@ -76,29 +80,15 @@ class Fail extends Base implements GuzzleInterface
         throw $excep;
     }
 
-    public function json() {
-        // Return body of fixture, return array of data
-
-        return;
-    }
-
     private function _loadFixture() {
         //return body of fixture, return array of data
         // Split file so header is ignored
         $fixture = file_get_contents($this->_path);
         $contents = explode('UTF-8', $fixture);
 
-        $response = array();
-
-        if (isset($contents[1])) {
-            $response['head'] = $contents[0];
-            $response['body'] = $contents[1];
-        } else {
-            // No header found
-            $response['head'] = '';
-            $response['body'] = $fixture;
-        }
-
-        return $response;
+        return array(
+            'head' => $contents[0],
+            'body' => $contents[1]
+        );
     }
 }

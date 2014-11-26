@@ -6,7 +6,7 @@ use \Bamboo\Counter;
 use \Bamboo\CounterFake;
 
 
-class CounterTest extends BambooTestCase
+class CounterTest extends BambooBaseTestCase
 {
     public function testCounterGetterAndSetter() {
         $counter = new MockCounter;

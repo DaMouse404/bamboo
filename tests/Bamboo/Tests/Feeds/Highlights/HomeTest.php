@@ -2,16 +2,17 @@
 
 namespace Bamboo\Tests\Feeds\Highlights;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Highlights\Home;
 
-class HomeTest extends BambooTestCase
+class HomeTest extends BambooClientTestCase
 {
 
   private $_elements;
 
   public function setUp() {
-    parent::setupRequest("highlights@home_highlights");
+    parent::setUp();
+    \Bamboo\Configuration::addFakeRequest('highlights', 'home_highlights');
     $feedObject = new Home();
     $this->_elements = $feedObject->getElements();
   }

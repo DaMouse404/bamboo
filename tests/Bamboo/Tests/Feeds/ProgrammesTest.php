@@ -2,15 +2,16 @@
 
 namespace Bamboo\Tests\Feeds;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Programmes;
 
-class ProgrammesTest extends BambooTestCase
+class ProgrammesTest extends BambooClientTestCase
 {
     private $_programmes = array();
 
     public function setUp() {
-        parent::setupRequest("programmes@programmes_proms");
+        parent::setUp();
+        \Bamboo\Configuration::addFakeRequest('programmes', 'programmes_proms');
         $this->_programmes = new Programmes(array(), array('gggggggg'));
     }
 

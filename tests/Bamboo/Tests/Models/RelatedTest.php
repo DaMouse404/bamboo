@@ -2,14 +2,14 @@
 
 namespace Bamboo\Tests\Models;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Related;
 
-class RelatedTest extends BambooTestCase
+class RelatedTest extends BambooBaseTestCase
 {
     /**
      * This tests checks the generation of the related links model
-     * 
+     *
      * @access public
      * @return void
      */

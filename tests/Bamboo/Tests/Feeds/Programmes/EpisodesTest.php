@@ -2,16 +2,17 @@
 
 namespace Bamboo\Tests\Feeds\Programmes;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Programmes\Episodes;
 
-class EpisodesTest extends BambooTestCase
+class EpisodesTest extends BambooClientTestCase
 {
 
   private $_feedObject;
 
   public function setUp() {
-    parent::setupRequest("episodes@programmes_episodes");
+    parent::setUp();
+    \Bamboo\Configuration::addFakeRequest('episodes', 'programmes_episodes');
     $this->_feedObject = new Episodes(array(), 'b006m86d');
   }
 

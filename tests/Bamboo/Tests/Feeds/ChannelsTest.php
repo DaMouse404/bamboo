@@ -2,15 +2,17 @@
 
 namespace Bamboo\Tests\Feeds;
 
-use Bamboo\Tests\BambooTestCase;
+use Bamboo\Tests\BambooClientTestCase;
 use Bamboo\Feeds\Channels;
 
-class ChannelsTest extends BambooTestCase {
+class ChannelsTest extends BambooClientTestCase {
 
     private $_channels = array();
 
     public function setUp() {
-        parent::setupRequest("channels@channels");
+        parent::setUp();
+
+        \Bamboo\Configuration::addFakeRequest('channels', 'channels');
 
         $channelModel = new Channels();
 
