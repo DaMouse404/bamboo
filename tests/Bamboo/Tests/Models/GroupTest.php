@@ -20,8 +20,8 @@ class GroupTest extends BambooBaseTestCase
     }
 
     public function testEditorialLabel() {
-        $group = $this->_createGroup();
-        $this->assertEquals('Archive', $group->getEditorialLabel('editorial'));
+        $group = $this->_createGroup(array('editorial' => 'Archive'));
+        $this->assertEquals('Archive', $group->getEditorialLabel);
     }
 
     public function testStackedType() {
