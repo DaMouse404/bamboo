@@ -20,8 +20,13 @@ class GroupTest extends BambooBaseTestCase
     }
 
     public function testEditorialLabel() {
-        $group = $this->_createGroup(array('editorial' => 'Archive'));
-        $this->assertEquals('Archive', $group->getEditorialLabel);
+        $group = $this->_createGroup();
+        $this->assertEquals('Archive', $group->getEditorialLabel());
+    }
+
+    public function testBlankEditorialLabel() {
+        $group = $this->_createGroup(array('labels' => ''));
+        $this->assertEmpty($group->getEditorialLabel());
     }
 
     public function testStackedType() {
@@ -94,7 +99,7 @@ class GroupTest extends BambooBaseTestCase
     private function _createGroup($params = array()) {
         $group = array(
             "id" => "fake_id",
-            "labels" => array("editorial" => "Archive")
+            "labels" => (object) array("editorial" => "Archive")
         );
         return new Group((object) array_merge($group, $params));
     }
@@ -104,7 +109,7 @@ class GroupTest extends BambooBaseTestCase
         foreach ($episodes as $episode) {
             $links[] = (object) array('type' => $episode);
         }
-    return $links;
+        return $links;
     }
 
     private function _createRelatedLinks($kinds) {
