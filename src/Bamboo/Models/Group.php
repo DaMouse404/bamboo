@@ -99,6 +99,16 @@ class Group extends Elements
     }
 
     /**
+     * Get the editorial label
+     */
+    public function getEditorialLabel() {
+        if (isset($this->_labels->editorial)) {
+            return $this->_labels->editorial;
+        }
+        return "";
+    }
+
+    /**
      * @todo Not sure this is relevant any longer
      */
     public function getLabels() {
