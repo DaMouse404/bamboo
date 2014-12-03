@@ -30,18 +30,26 @@ class EpisodesTest extends BambooClientTestCase
     public function testMultiPid() {
         $feedObject = new Episodes(array(), array('a','b','c'));
 
-        $this->assertAttributeEquals('episodes/a,b,c', '_feed', $feedObject);
+        $this->assertAttributeEquals(
+            array(
+                'episodes/a',
+                'episodes/b',
+                'episodes/c'
+            ),
+            '_feeds',
+            $feedObject
+        );
     }
 
     public function testSinglePidArray() {
         $feedObject = new Episodes(array(), array('12345678'));
 
-        $this->assertAttributeEquals('episodes/12345678', '_feed', $feedObject);
+        $this->assertAttributeEquals(array('episodes/12345678'), '_feeds', $feedObject);
     }
 
     public function testSinglePid() {
         $feedObject = new Episodes(array(),'87654321');
 
-        $this->assertAttributeEquals('episodes/87654321', '_feed', $feedObject);
+        $this->assertAttributeEquals(array('episodes/87654321'), '_feeds', $feedObject);
     }
 }
