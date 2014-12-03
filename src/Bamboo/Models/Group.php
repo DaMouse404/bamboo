@@ -115,6 +115,14 @@ class Group extends Elements
         return $this->_labels;
     }
 
+    public function getHeroImage ($width = 976, $height = 230) {
+        if (isset($this->_images->hero)) {
+            return $this->getImage('hero', $width, $height);
+        }
+
+        return false;
+    }
+
     /**
      * Get the iStats type of the group
      */
