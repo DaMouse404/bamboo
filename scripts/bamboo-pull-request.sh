@@ -18,7 +18,7 @@ update_github() {
         STATUS="failure"
     fi
     POST="{\"state\":\"${STATUS}\",\"target_url\":\"${BUILD_URL}console\",\"description\":\"$2\"}"
-    curl --silent --insecure --data "$POST" https://api.github.com/repos/iplayer/bamboo/statuses/$SHA?access_token=$3
+    curl --silent --insecure --data "$POST" https://api.github.com/repos/BBC/bamboo/statuses/$SHA?access_token=$3
     set +e
 }
 
@@ -31,7 +31,7 @@ finish() {
 update_github 1 "Build in progress..." $ACCESS_TOKEN
 
 # Checkout repo
-curl -u $USERNAME:$PASSWORD https://api.github.com/repos/iplayer/bamboo/contents/scripts/configure-repo.sh | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
+curl -u $USERNAME:$PASSWORD https://api.github.com/repos/BBC/bamboo/contents/scripts/configure-repo.sh | ./jq '.content' --raw-output | base64 -di > configure-repo.sh
 chmod +x configure-repo.sh
 
 ./configure-repo.sh $ACCESS_TOKEN $CLONE_PASSWORD
