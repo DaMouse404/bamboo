@@ -4,7 +4,7 @@ REPOSITORY=bamboo
 BRANCH=develop
 USERNAME=$1
 PASSWORD=$2
-OWNER=iplayer
+OWNER=BBC
 
 while getopts ":b:u:p:o": opt; do
     case $opt in
