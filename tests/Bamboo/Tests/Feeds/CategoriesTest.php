@@ -7,64 +7,66 @@ use Bamboo\Feeds\Categories;
 
 class CategoriesTest extends BambooClientTestCase
 {
-  private $_category;
-  private $_categories;
+    private $_category;
+    private $_categories;
 
-  public function setUp() {
-    $feedObject = new Categories();
-    $this->_categories = $feedObject->getCategories();
-  }
-
-  public function testFeedType() {
-    $this->assertTrue(is_array($this->_categories));
-  }
-
-  public function testFeedSize() {
-    $this->assertEquals(
-        sizeof($this->_categories),
-        32
-    );
-  }
-
-  public function testFeedItemType() {
-    $this->assertInstanceOf(
-        "Bamboo\Models\Category",
-        array_pop($this->_categories)
-    );
-  }
-
-  public function testChildrenIsSet () {
-    $comedy = false;
-    foreach($this->_categories as $cat) {
-      if ($cat->getId() == 'comedy') {
-        $comedy = $cat;
-        break;
-      }
+    public function setUp() {
+        parent::setUp();
+        \Bamboo\Configuration::addFakeRequest('categories', 'categories');
+        $feedObject = new Categories();
+        $this->_categories = $feedObject->getCategories();
     }
 
-    $this->assertEquals(
-      3,
-      count($comedy->children)
-    );
-
-    $this->assertEquals(
-      'comedy-sitcoms',
-      $comedy->children[0]->getId()
-    );
-  }
-
-  public function testParentIsSet () {
-    $crime = false;
-    foreach($this->_categories as $cat) {
-      if ($cat->getId() == 'drama-crime') {
-        $crime = $cat;
-        break;
-      }
+    public function testFeedType() {
+        $this->assertTrue(is_array($this->_categories));
     }
-    $this->assertEquals(
-      'drama-and-soaps',
-      $crime->parent->getId()
-    );
-  }
+
+    public function testFeedSize() {
+        $this->assertEquals(
+            sizeof($this->_categories),
+            32
+        );
+    }
+
+    public function testFeedItemType() {
+        $this->assertInstanceOf(
+            "Bamboo\Models\Category",
+            array_pop($this->_categories)
+        );
+    }
+
+    public function testChildrenIsSet () {
+        $comedy = false;
+        foreach($this->_categories as $cat) {
+            if ($cat->getId() == 'comedy') {
+                $comedy = $cat;
+                break;
+            }
+        }
+
+        $this->assertEquals(
+            3,
+            count($comedy->children)
+        );
+
+        $this->assertEquals(
+            'comedy-sitcoms',
+            $comedy->children[0]->getId()
+        );
+    }
+
+    public function testParentIsSet () {
+        $crime = false;
+        foreach($this->_categories as $cat) {
+            if ($cat->getId() == 'drama-crime') {
+                $crime = $cat;
+                break;
+            }
+        }
+        $this->assertEquals(
+            'drama-and-soaps',
+            $crime->parent->getId()
+        );
+    }
 
 }

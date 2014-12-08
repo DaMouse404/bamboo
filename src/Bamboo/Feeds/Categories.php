@@ -4,7 +4,7 @@ namespace Bamboo\Feeds;
 
 use Bamboo\Models\Category;
 
-class Categories extends StaticBase
+class Categories extends Base
 {
 
     protected $_feed = 'categories';
@@ -16,8 +16,12 @@ class Categories extends StaticBase
     public function getCategories() {
         $categories = array();
         $index = array();
-        $relationships = $this->_response->relationships;
-        foreach ($this->_response->categories as $category) {
+        $staticData = $this->_getStaticData();
+        $relationships = $staticData->relationships;
+        foreach (array_merge(
+            $this->_response->categories,
+            $staticData->categories
+        ) as $category) {
             $category = new Category($category);
             $categories[$category->getId()] = $category;
         }
@@ -29,6 +33,14 @@ class Categories extends StaticBase
             }
         }
         return $categories;
+    }
+
+    private function _getStaticData() {
+        $filePath = dirname(__FILE__) . '/../Assets/categories.json';
+        if ( !file_exists($filePath) ) {
+            throw new NotFound('Could not find file in /Assets/ for feed: '. $feed);
+        }
+        return json_decode(file_get_contents($filePath));
     }
 
 }
