@@ -21,6 +21,10 @@ class Compilation extends Elements
     }
 
     public function getHeroImage($width = 336, $height = 189) {
-        return $this->getImage('hero', $width, $height);
+        if (empty($this->_images->hero)) {
+            return false;
+        } else {
+            return $this->getImage('hero', $width, $height);
+        }
     }
 }

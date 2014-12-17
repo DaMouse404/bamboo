@@ -24,6 +24,27 @@ class CompilationTest extends BambooBaseTestCase
         $this->assertEquals('cake_image', $compilation->getHeroImage());
     }
 
+    public function testNoImage () {
+
+        $compilation = new Models\Compilation((object) array());
+        $this->assertFalse($compilation->getHeroImage());
+
+        $compilation = new Models\Compilation(
+            (object) array(
+                'images' => (object) array()
+            )
+        );
+        $this->assertFalse($compilation->getHeroImage());
+
+        $compilation = new Models\Compilation(
+            (object) array(
+                'images' => (object) array (
+                    'hero' => ''
+                )
+            )
+        );
+        $this->assertFalse($compilation->getHeroImage());
+    }
 
     private function _createCompilation() {
         $compilation = (object) array (
