@@ -4,8 +4,14 @@
     "description": "PHP client library for iBL",
     "license": "proprietary",
     "require": {
-        "guzzle/guzzle": "v3.8.1"
+        "guzzle/guzzle": "v3.9.3"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/iplayer/guzzle3"
+        }
+    ],
     "require-dev": {
         "ext-curl": "*",
         "phpunit/phpunit": "4.*",
