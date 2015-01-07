@@ -73,8 +73,11 @@ class Configuration
      */
     public static function setCache($cache) {
         if (!!$cache) {
-            $cachePlugin = new CachePlugin($cache);
-            self::$_cache = $cachePlugin;
+            self::$_cache = new CachePlugin(
+                array(
+                    'storage' => new CacheStorage($cache)
+                )
+            );
         } else {
             self::$_cache = false;
         }
