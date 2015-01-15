@@ -46,7 +46,7 @@ class Configuration
      * Used to set custom image host
      * @var string
      */
-    private static $_imageHost = '';
+    private static $_imageHost = false;
     /**
      * The URL of the image to be used when no images are returned by iBL.
      * @var string

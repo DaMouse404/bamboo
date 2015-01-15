@@ -132,7 +132,7 @@ class ElementsTest extends BambooBaseTestCase
             'http://my-image-host.com/images/ic/336x189/legacy/episode/p01b2b5c.jpg'
         );
 
-        Configuration::setImageHost('');
+        Configuration::setImageHost(false);
     }
 
     /*
