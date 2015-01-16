@@ -226,7 +226,7 @@ class Elements extends Base
      *                       the custom imageHost specified within the Configuration class
      */
     private function _getAdjustedUrl($src) {
-        $customImageHost = Configuration::getImageHost();
+        $customImageHost = Configuration::getCustomImageHost();
 
         if (!!$customImageHost) {
             $src = preg_replace('/[a-zA-Z]+:\/\/[a-zA-Z.\-]+/', $customImageHost, $src);

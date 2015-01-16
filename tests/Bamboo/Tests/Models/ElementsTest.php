@@ -109,7 +109,7 @@ class ElementsTest extends BambooBaseTestCase
     }
 
     public function testGetImageWithCustomImageHost() {
-        Configuration::setImageHost('https://imagehost.co.uk');
+        Configuration::setCustomImageHost('https://imagehost.co.uk');
 
         $params = array('images' =>
             (object) array('standard' => 'http://ichef.live.bbci.co.uk/images/ic/{recipe}/legacy/episode/p01b2b5c.jpg')
@@ -121,7 +121,7 @@ class ElementsTest extends BambooBaseTestCase
             'https://imagehost.co.uk/images/ic/336x581/legacy/episode/p01b2b5c.jpg'
         );
 
-        Configuration::setImageHost('http://my-image-host.com');
+        Configuration::setCustomImageHost('http://my-image-host.com');
         $params = array('images' =>
             (object) array('standard' => 'https://image-chef.bbc.co.uk/images/ic/{recipe}/legacy/episode/p01b2b5c.jpg')
         );
@@ -132,7 +132,7 @@ class ElementsTest extends BambooBaseTestCase
             'http://my-image-host.com/images/ic/336x189/legacy/episode/p01b2b5c.jpg'
         );
 
-        Configuration::setImageHost(false);
+        Configuration::setCustomImageHost(false);
     }
 
     /*

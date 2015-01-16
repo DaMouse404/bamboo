@@ -49,13 +49,13 @@ class ConfigurationTest extends BambooBaseTestCase
         $this->assertEquals('Take Cake', Configuration::getHost());
     }
 
-    public function testImageHostGetterAndSetter() {
-        Configuration::setImageHost('Take Image Cake');
-        $this->assertEquals('Take Image Cake', Configuration::getImageHost());
-        Configuration::setImageHost(false);
+    public function testCustomImageHostGetterAndSetter() {
+        Configuration::setCustomImageHost('Take Image Cake');
+        $this->assertEquals('Take Image Cake', Configuration::getCustomImageHost());
+        Configuration::setCustomImageHost(false);
     }
 
-    public function tesSetLogger() {
+    public function testSetLogger() {
         $mockLogger = new MockConfigurationLogger;
         Configuration::setLogger($mockLogger);
         $this->assertAttributeEquals($mockLogger, '_logger', '\Bamboo\Log');
