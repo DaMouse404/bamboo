@@ -43,6 +43,11 @@ class Configuration
      */
     private static $_host = '';
     /**
+     * Used to set custom image host
+     * @var string
+     */
+    private static $_customImageHost = false;
+    /**
      * The URL of the image to be used when no images are returned by iBL.
      * @var string
      */
@@ -95,6 +100,10 @@ class Configuration
         self::$_host = $host;
     }
 
+    public static function setCustomImageHost($imageHost) {
+        self::$_customImageHost = $imageHost;
+    }
+
     public static function setFakeHttpClient($fakeHttpClient) {
         self::$_fakeHttpClient = $fakeHttpClient;
     }
@@ -133,6 +142,10 @@ class Configuration
 
     public static function getHost() {
         return self::$_host;
+    }
+
+    public static function getCustomImageHost() {
+        return self::$_customImageHost;
     }
 
     public static function getFakeHttpClient() {

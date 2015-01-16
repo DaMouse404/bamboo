@@ -61,7 +61,7 @@ class Elements extends Base
      * @return string
      */
     public function getStandardImage($width = 336, $height = 189) {
-        return $this->getImage('standard', $width, $height);
+        return $this->_getAdjustedUrl($this->getImage('standard', $width, $height));
     }
 
     /**
@@ -71,7 +71,7 @@ class Elements extends Base
      */
     public function getStandardImageRecipe() {
         if (isset($this->_images->standard) && !empty($this->_images->standard)) {
-            return $this->_images->standard;
+            return $this->_getAdjustedUrl($this->_images->standard);
         }
 
         return Configuration::getPlaceholderImageUrl();
@@ -89,10 +89,12 @@ class Elements extends Base
      */
     public function getImage($type = 'standard', $width = 336, $height = 581) {
         if (isset($this->_images->$type) && !empty($this->_images->$type)) {
-            return str_replace(
-                '{recipe}',
-                $this->_getRecipe($width, $height),
-                $this->_images->$type
+            return $this->_getAdjustedUrl(
+                str_replace(
+                    '{recipe}',
+                    $this->_getRecipe($width, $height),
+                    $this->_images->$type
+                )
             );
         }
 
@@ -213,6 +215,24 @@ class Elements extends Base
      */
     private function _getRecipe($width, $height) {
         return is_numeric($width) ? "{$width}x{$height}":$width;
+    }
+
+    /**
+     * Replaces the image host with the image host specified within the Configuration class
+     *
+     * @param  string  $src  The original URL of the image
+     * @access private
+     * @return string        The adjusted URL of the image, having replaced the original host
+     *                       the custom imageHost specified within the Configuration class
+     */
+    private function _getAdjustedUrl($src) {
+        $customImageHost = Configuration::getCustomImageHost();
+
+        if (!!$customImageHost) {
+            $src = preg_replace('/[a-zA-Z]+:\/\/[a-zA-Z.\-]+/', $customImageHost, $src);
+        }
+
+        return $src;
     }
 
 }
