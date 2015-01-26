@@ -4,10 +4,11 @@ namespace Bamboo\Models;
 
 class Programme extends Elements
 {
-  
+
      // @codingStandardsIgnoreStart
     protected $_initial_children = array();
     protected $_count = 0;
+    protected $_search_links = array();
     // @codingStandardsIgnoreEnd
 
     /**
@@ -63,5 +64,9 @@ class Programme extends Elements
         }
         return "";
         // @codingStandardsIgnoreEnd
+    }
+
+    public function getSearchLinks() {
+        return $this->_search_links;
     }
 }
