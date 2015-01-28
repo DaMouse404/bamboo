@@ -14,6 +14,7 @@ class Episode extends Elements
     protected $_tleo_type;
     protected $_related_links;
     protected $_external_link;
+    protected $_search_links;
     // @codingStandardsIgnoreEnd
     protected $_duration;
     protected $_film = false;
@@ -21,6 +22,10 @@ class Episode extends Elements
     protected $_stacked;
     protected $_guidance;
     protected $_promoted;
+
+    public function getSearchLinks() {
+        return $this->_search_links;
+    }
 
     /**
      * Is the episode stacked
