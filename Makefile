@@ -25,11 +25,9 @@ node_modules:
 fixtures: node_modules
 	@echo "Generating Fixtures"
 	node scripts/fixtures.js $(FIXTURATOR_FLAGS)
-
 phpcs: vendor
 	@echo "PHP Codesniffer"
 	./vendor/bin/phpcs --standard=$(PHPCS_STANDARD) $(PHPCS_OPTIONS) $(PHPCS_PATH)
-
 
 phpunit: vendor
 	@echo "PHP Unit"
@@ -38,3 +36,14 @@ phpunit: vendor
 codeclimate: test
 	@echo "Sending data to Code Climate"
 	./vendor/bin/test-reporter --coverage-report=./coverage/clover.xml
+
+badges:
+	mkdir badges
+
+coverage-badge: node_modules phpunit badges
+	@echo "Generating Coverage Badge"
+	node scripts/coverage-badge.js ./coverage/clover.xml ./badges/coverage.svg
+
+build-badge: node_modules phpunit badges
+	@echo "Generating Build Badge"
+	node scripts/build-badge.js "$(BUILD_STATUS)" ./badges/build.svg
