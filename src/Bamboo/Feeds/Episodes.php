@@ -52,4 +52,11 @@ class Episodes extends BaseParallel
 
         return $episodes;
     }
+
+     /*
+    * Returns the raw episodes response
+    */
+    public function getRawEpisodes() {
+        return $this->_response->episodes;
+    }
 }
