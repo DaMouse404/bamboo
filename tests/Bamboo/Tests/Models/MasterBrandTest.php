@@ -7,7 +7,7 @@ use Bamboo\Models\MasterBrand;
 
 class MasterBrandTest extends BambooBaseTestCase
 {
-    public function testUnsetProperties() {
+    public function testMasterBrandWithNoData() {
         $masterBrand = $this->_createMasterBrand(array());
 
         $this->assertEquals($masterBrand->getId(), '');
@@ -16,7 +16,9 @@ class MasterBrandTest extends BambooBaseTestCase
         $this->assertEquals($masterBrand->getSmallTitle(), '');
         $this->assertEquals($masterBrand->getMediumTitle(), '');
         $this->assertEquals($masterBrand->getLongTitle(), '');
+    }
 
+    public function testMasterBrandTitleWithNoData() {
         $params =  array('titles' => (object) array());
         $masterBrand = $this->_createMasterBrand($params);
 
@@ -25,7 +27,7 @@ class MasterBrandTest extends BambooBaseTestCase
         $this->assertEquals($masterBrand->getLongTitle(), '');
     }
 
-    public function testSetProperties() {
+    public function testMasterBrandWithData() {
         $params = array(
             'id' => 'p00st1ck',
             'ident_id' => 'b4rdw3ll',

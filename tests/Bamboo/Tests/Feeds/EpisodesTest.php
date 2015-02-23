@@ -53,10 +53,10 @@ class EpisodesTest extends BambooClientTestCase
         $this->assertAttributeEquals(array('episodes/87654321'), '_feeds', $feedObject);
     }
 
-    public function testGetRawEpisodes() {
+    public function testGetRawEpisodesData() {
         \Bamboo\Configuration::addFakeRequest('episodes', 'episodes_proms');
         $feedObject = new Episodes(array(), '12345678');
-        $rawEpisodes = $feedObject->getRawEpisodes();
+        $rawEpisodes = $feedObject->getRawEpisodesData();
         $this->assertEquals($rawEpisodes[0]->id, 'p014mxpr');
     }
 }
