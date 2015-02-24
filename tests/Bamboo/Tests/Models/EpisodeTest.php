@@ -271,17 +271,6 @@ class EpisodeTest extends BambooBaseTestCase
         $this->assertEquals(0, $stub->getDurationInMins());
     }
 
-    public function testGetMasterBrandAttribution() {
-        $episode = $this->_createEpisode(
-            (object) array(
-                'master_brand' => (object) array(
-                    'attribution' => 'bbc_two_wales'
-                 )
-            )
-        );
-        $this->assertEquals('bbc_two_wales', $episode->getMasterBrandAttribution());
-    }
-
     public function testGetRelatedLinks() {
         $related = $this->_createVersions(array('priority_content', 'external'));
         $episode = $this->_createEpisode(array('related_links' => $related));

@@ -108,73 +108,11 @@ class Elements extends Base
      */
     public function getMasterBrand() {
         // @codingStandardsIgnoreStart
-        if (isset($this->_master_brand->titles)) {
-            $titles = $this->_master_brand->titles;
-            if (isset($titles->small)) {
-                return $titles->small;
-            }
+        if (isset($this->_master_brand)) {
+            return new MasterBrand($this->_master_brand);
         }
         // @codingStandardsIgnoreEnd
-        return "";
-    }
-
-    /**
-     * Get the master brand id
-     *
-     * @return string
-     */
-    public function getMasterBrandId() {
-        // @codingStandardsIgnoreStart
-        if (isset($this->_master_brand->id)) {
-            return $this->_master_brand->id;
-        }
-        // @codingStandardsIgnoreEnd
-        return "";
-    }
-
-    /**
-     * Get the 'medium' master brand label
-     *
-     * @return string
-     */
-    public function getMediumMasterBrand() {
-        // @codingStandardsIgnoreStart
-        if (isset($this->_master_brand->titles)) {
-            $titles = $this->_master_brand->titles;
-            if (isset($titles->medium)) {
-                return $titles->medium;
-            }
-        }
-        // @codingStandardsIgnoreEnd
-        return "";
-    }
-
-    /**
-     * Get the master brand attribution
-     *
-     * @return string
-     */
-    public function getMasterBrandAttribution() {
-        // @codingStandardsIgnoreStart
-        if (isset($this->_master_brand->attribution)) {
-            return $this->_master_brand->attribution;
-        }
-        // @codingStandardsIgnoreEnd
-        return "";
-    }
-
-    /**
-     * Get the master brand ident's id
-     *
-     * @return string
-     */
-    public function getMasterBrandIdentId() {
-        // @codingStandardsIgnoreStart
-        if (isset($this->_master_brand->ident_id)) {
-            return $this->_master_brand->ident_id;
-        }
-        // @codingStandardsIgnoreEnd
-        return "";
+        return new MasterBrand((object) array());
     }
 
     /**

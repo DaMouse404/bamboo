@@ -4,6 +4,7 @@ namespace Bamboo\Tests\Models;
 
 use Bamboo\Tests\BambooBaseTestCase;
 use Bamboo\Models\Episode;
+use Bamboo\Models\MasterBrand;
 use Bamboo\Models\Elements;
 use Bamboo\Configuration;
 
@@ -51,27 +52,12 @@ class ElementsTest extends BambooBaseTestCase
     }
 
     public function testGetMasterBrand() {
+        $params = array('master_brand' => (object) array('id' => 'p00st1ck'));
+        $element = $this->_createElement($params);
+        $this->assertInstanceOf('Bamboo\Models\MasterBrand', $element->getMasterBrand());
+
         $element = $this->_createElement(array());
-        $this->assertEquals($element->getMasterBrand(), '');
-        $this->assertEquals($element->getMediumMasterBrand(), '');
-
-        $params =  array('master_brand' => (object) array('titles' => (object) array()));
-        $element = $this->_createElement($params);
-        $this->assertEquals($element->getMasterBrand(), '');
-        $this->assertEquals($element->getMediumMasterBrand(), '');
-
-        $params =  array(
-            'master_brand' => (object) array(
-                'titles' => (object) array(
-                    'small' => 'BBC Two',
-                    'medium' => 'BBC Two England'
-                )
-            )
-        );
-        $element = $this->_createElement($params);
-
-        $this->assertEquals($element->getMasterBrand(), 'BBC Two');
-        $this->assertEquals($element->getMediumMasterBrand(), 'BBC Two England');
+        $this->assertInstanceOf('Bamboo\Models\MasterBrand', $element->getMasterBrand());
     }
 
     public function testGetImage() {
@@ -143,43 +129,6 @@ class ElementsTest extends BambooBaseTestCase
         $mockedEpisode = $this->_mockEpisode($params);
 
         $this->assertEquals($mockedEpisode->getType(), 'episode_large');
-    }
-
-    public function testGetEpisodeMasterBrandId() {
-
-        $mockedEpisode = $this->_mockEpisode(array());
-        $this->assertEquals($mockedEpisode->getMasterBrandId(), '');
-
-        $params =  array('master_brand' => (object) array('id' => 'bbc_two'));
-        $mockedEpisode = $this->_mockEpisode($params);
-
-        $this->assertEquals($mockedEpisode->getMasterBrandId(), 'bbc_two');
-    }
-
-
-    public function testGetEpisodeMasterBrandAttribution() {
-
-        $mockedEpisode = $this->_mockEpisode(array());
-        $this->assertEquals($mockedEpisode->getMasterBrandAttribution(), '');
-
-        $params =  array('master_brand' => (object) array('attribution'=>'bbc_two'));
-        $mockedEpisode = $this->_mockEpisode($params);
-
-        $this->assertEquals($mockedEpisode->getMasterBrandAttribution(), 'bbc_two');
-    }
-
-    public function testGetEpisodeMasterBrandIdentId() {
-        $params =  array('master_brand' => (object) array('ident_id'=>'1234'));
-        $mockedEpisode = $this->_mockEpisode($params);
-
-        $this->assertEquals($mockedEpisode->getMasterBrandIdentId(), '1234');
-    }
-
-    public function testGetEpisodeMasterBrandIdentIdMissing() {
-        $params =  array('master_brand' => (object) array());
-        $mockedEpisode = $this->_mockEpisode($params);
-
-        $this->assertEmpty($mockedEpisode->getMasterBrandIdentId());
     }
 
     public function testFetchStatus() {
