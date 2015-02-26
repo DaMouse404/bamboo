@@ -30,12 +30,12 @@ class MasterBrand extends Base
     }
 
     /**
-     * Get the 'long' master brand label
+     * Get the 'large' master brand label
      *
      * @return string
      */
-    public function getLongTitle() {
-        return $this->_getTitle('long');
+    public function getLargeTitle() {
+        return $this->_getTitle('large');
     }
 
     /**

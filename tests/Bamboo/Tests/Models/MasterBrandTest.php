@@ -15,7 +15,7 @@ class MasterBrandTest extends BambooBaseTestCase
         $this->assertEquals($masterBrand->getAttribution(), '');
         $this->assertEquals($masterBrand->getSmallTitle(), '');
         $this->assertEquals($masterBrand->getMediumTitle(), '');
-        $this->assertEquals($masterBrand->getLongTitle(), '');
+        $this->assertEquals($masterBrand->getLargeTitle(), '');
     }
 
     public function testMasterBrandTitleWithNoData() {
@@ -24,7 +24,7 @@ class MasterBrandTest extends BambooBaseTestCase
 
         $this->assertEquals($masterBrand->getSmallTitle(), '');
         $this->assertEquals($masterBrand->getMediumTitle(), '');
-        $this->assertEquals($masterBrand->getLongTitle(), '');
+        $this->assertEquals($masterBrand->getLargeTitle(), '');
     }
 
     public function testMasterBrandWithData() {
@@ -35,7 +35,7 @@ class MasterBrandTest extends BambooBaseTestCase
             'titles' => (object) array(
                 'small' => 'BBC One',
                 'medium' => 'BBC One England',
-                'long' => 'BBC One England Planet Earth'
+                'large' => 'BBC One England Planet Earth'
             )
         );
         $masterBrand = $this->_createMasterBrand($params);
@@ -45,7 +45,7 @@ class MasterBrandTest extends BambooBaseTestCase
         $this->assertEquals($masterBrand->getAttribution(), 'bbc_one');
         $this->assertEquals($masterBrand->getSmallTitle(), 'BBC One');
         $this->assertEquals($masterBrand->getMediumTitle(), 'BBC One England');
-        $this->assertEquals($masterBrand->getLongTitle(), 'BBC One England Planet Earth');
+        $this->assertEquals($masterBrand->getLargeTitle(), 'BBC One England Planet Earth');
     }
 
     private function _createMasterBrand($params) {
